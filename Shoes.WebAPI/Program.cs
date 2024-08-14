@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shoes.Bussines.DependencyResolver;
+using Shoes.Core.Entities.Concrete;
 using Shoes.DataAccess.Concrete.SqlServer;
 using System.Security.Claims;
 using System.Text;
@@ -15,6 +18,10 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
+builder.Services.AddIdentity<AppUser, AppRole>()
+      .AddEntityFrameworkStores<AppDBContext>()
+      .AddDefaultTokenProviders();
+builder.Services.AddAllScoped();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
@@ -71,7 +78,7 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 #endregion
-var corsRuls = "http://localhost:3000";
+var corsRuls = builder.Configuration.GetValue<string>("Domain:Name");
 
 
 builder.Services.AddCors(o =>

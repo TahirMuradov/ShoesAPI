@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shoes.Core.Entities.Concrete;
 
 namespace Shoes.Entites
 {
-    public class User
+    public class User:AppUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

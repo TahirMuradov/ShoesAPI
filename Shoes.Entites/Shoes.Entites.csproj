@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Shoes.Core\Shoes.Core.csproj" />
+  </ItemGroup>
+
 </Project>

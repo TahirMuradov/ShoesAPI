@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shoes.Core\Shoes.Core.csproj" />
     <ProjectReference Include="..\Shoes.Entites\Shoes.Entites.csproj" />
   </ItemGroup>
 
