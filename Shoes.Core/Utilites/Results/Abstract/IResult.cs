@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Shoes.Core.Utilites.Abstract
+namespace Shoes.Core.Utilites.Results.Abstract
 {
     public interface IResult
     {

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Shoes.Core.Utilites.Results.Concrete;
 
-namespace Shoes.Core.Utilites.Concrete.ErrorResults
+namespace Shoes.Core.Utilites.Results.Concrete.ErrorResults
 {
-    public class ErrorDataResult<T>:DataResult<T>
+    public class ErrorDataResult<T> : DataResult<T>
     {
         public ErrorDataResult(T data, string message, HttpStatusCode statusCode) : base(data, false, message, statusCode)
         {

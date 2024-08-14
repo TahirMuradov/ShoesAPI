@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Shoes.Core.Utilites.Results.Concrete;
 
-namespace Shoes.Core.Utilites.Concrete.SuccessResults
+namespace Shoes.Core.Utilites.Results.Concrete.SuccessResults
 {
-    public class SuccessResult:Result
+    public class SuccessResult : Result
     {
         public SuccessResult(string message, HttpStatusCode statusCode) : base(true, message, statusCode)
         {

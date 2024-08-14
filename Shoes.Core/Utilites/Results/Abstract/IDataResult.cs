@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shoes.Core.Utilites.Abstract
+namespace Shoes.Core.Utilites.Results.Abstract
 {
     public interface IDataResult<T> : IResult
     {
