@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Shoes.Entites
 {
-    public class Category
+    public class ShippingMethod
     {
         public Guid Id { get; set; }
-        public List<CategoryLanguage> CategoryLanguages { get; set; }
-        public List<SubCategory> SubCategories { get; set; }
-
+        public List<Order> Orders { get; set; }
+        public decimal discountPrice { get; set; }
+        public decimal price { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using Shoes.Bussines.DependencyResolver;
 using Shoes.Core.Entities.Concrete;
 using Shoes.DataAccess.Concrete.SqlServer;
+using Shoes.Entites;
 using System.Security.Claims;
 using System.Text;
 
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
-builder.Services.AddIdentity<AppUser, AppRole>()
+builder.Services.AddIdentity<User, AppRole>()
       .AddEntityFrameworkStores<AppDBContext>()
       .AddDefaultTokenProviders();
 builder.Services.AddAllScoped();
@@ -78,7 +79,7 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 #endregion
-var corsRuls = builder.Configuration.GetValue<string>("Domain:Name");
+var corsRuls = builder.Configuration.GetValue<string>("Domain:Front");
 
 
 builder.Services.AddCors(o =>
