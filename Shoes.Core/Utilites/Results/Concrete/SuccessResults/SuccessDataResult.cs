@@ -21,7 +21,9 @@ namespace Shoes.Core.Utilites.Results.Concrete.SuccessResults
         public SuccessDataResult(string message, HttpStatusCode statusCode) : base(default, true, message, statusCode)
         {
         }
-
+        public SuccessDataResult(List<string> message, HttpStatusCode statusCode) : base(default, true, message, statusCode)
+        {
+        }
         public SuccessDataResult(HttpStatusCode statusCode) : base(default, true, statusCode)
         {
         }

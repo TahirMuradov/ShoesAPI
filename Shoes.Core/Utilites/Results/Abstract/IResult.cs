@@ -7,5 +7,6 @@ namespace Shoes.Core.Utilites.Results.Abstract
         public bool IsSuccess { get; }
         public HttpStatusCode StatusCode { get; }
         public string Message { get; }
+        public List<string> Messages { get; }
     }
 }

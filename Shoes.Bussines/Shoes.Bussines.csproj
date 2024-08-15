@@ -12,9 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstarct\" />
-    <Folder Include="Concrete\" />
-    <Folder Include="FluentValidations\" />
+    <ProjectReference Include="..\Shoes.DataAccess\Shoes.DataAccess.csproj" />
+    <ProjectReference Include="..\Shoes.Entites\Shoes.Entites.csproj" />
   </ItemGroup>
 
 </Project>

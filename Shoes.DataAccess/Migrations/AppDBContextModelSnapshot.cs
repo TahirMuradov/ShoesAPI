@@ -233,7 +233,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.CategoryLanguage", b =>
@@ -257,7 +257,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("CategoryLanguages");
+                    b.ToTable("CategoryLanguages", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.Order", b =>
@@ -318,7 +318,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("ShippingMethodId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.PaymentMethod", b =>
@@ -332,7 +332,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("PaymentMethods");
+                    b.ToTable("PaymentMethods", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.PaymentMethodLanguage", b =>
@@ -356,7 +356,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("PaymentMethodId");
 
-                    b.ToTable("PaymentMethodLanguages");
+                    b.ToTable("PaymentMethodLanguages", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.Picture", b =>
@@ -376,7 +376,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Pictures");
+                    b.ToTable("Pictures", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.Product", b =>
@@ -397,7 +397,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.ProductLanguage", b =>
@@ -425,7 +425,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductLanguage");
+                    b.ToTable("ProductLanguage", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.ShippingMethod", b =>
@@ -442,7 +442,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShippingMethods");
+                    b.ToTable("ShippingMethods", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.ShippingMethodLanguage", b =>
@@ -466,7 +466,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("DeliveryMethodId");
 
-                    b.ToTable("ShippingMethodLanguages");
+                    b.ToTable("ShippingMethodLanguages", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.Size", b =>
@@ -480,7 +480,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.SizeProduct", b =>
@@ -504,7 +504,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("SizeProducts");
+                    b.ToTable("SizeProducts", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.SoldProduct", b =>
@@ -547,7 +547,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("SoldProducts");
+                    b.ToTable("SoldProducts", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.SubCategory", b =>
@@ -563,7 +563,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories");
+                    b.ToTable("SubCategories", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.SubCategoryLanguage", b =>
@@ -587,7 +587,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("SubCategoryLanguages");
+                    b.ToTable("SubCategoryLanguages", (string)null);
                 });
 
             modelBuilder.Entity("Shoes.Entites.SubCategoryProduct", b =>
@@ -608,7 +608,7 @@ namespace Shoes.DataAccess.Migrations
 
                     b.HasIndex("SubCategoryId");
 
-                    b.ToTable("SubCategoryProducts");
+                    b.ToTable("SubCategoryProducts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

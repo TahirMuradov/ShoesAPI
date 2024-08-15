@@ -13,8 +13,11 @@ namespace Shoes.Core.Utilites.Results.Concrete
         public T Data { get; }
 
 
-
-        public DataResult(T data, bool Issuccess, string message, HttpStatusCode statusCode) : base(Issuccess, message, statusCode)
+        public DataResult(T data, bool Issuccess, string message, HttpStatusCode statusCode) : base(Issuccess,message, statusCode)
+        {
+            Data = data;
+        }
+        public DataResult(T data, bool Issuccess, List<string> messages, HttpStatusCode statusCode) : base(Issuccess,messages, statusCode)
         {
             Data = data;
         }

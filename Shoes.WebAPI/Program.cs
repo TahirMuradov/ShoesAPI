@@ -1,12 +1,15 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shoes.Bussines.CustomLaunguageManager;
 using Shoes.Bussines.DependencyResolver;
 using Shoes.Core.Entities.Concrete;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
+using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 
@@ -78,6 +81,22 @@ builder.Services.AddAuthentication(auth =>
         NameClaimType = ClaimTypes.Email
     };
 });
+#endregion
+
+#region Fluent Validation Registration add services to the container.
+builder.Services/*.AddControllers(options => options.Filters.Add<ValidationFilters>())*/
+    .AddFluentValidation(configuration =>
+    {
+        //configuration.RegisterValidatorsFromAssemblyContaining<LoginDTOValidation>();
+        configuration.DisableDataAnnotationsValidation = true;
+        configuration.LocalizationEnabled = true;
+        configuration.AutomaticValidationEnabled = false;
+        configuration.DisableDataAnnotationsValidation = true;
+        configuration.ValidatorOptions.LanguageManager = new ValidationLanguageManager();
+        configuration.ValidatorOptions.LanguageManager.Culture = new CultureInfo("az");
+    })
+ ;
+
 #endregion
 var corsRuls = builder.Configuration.GetValue<string>("Domain:Front");
 
