@@ -12,6 +12,9 @@ namespace Shoes.Bussines.CustomLaunguageManager
 
             #region CategoryValidationMessages
             #region CategoryAddValidationMessages
+ 
+
+
             AddTranslation("az", "LangCodeContentLengthMismatch", "Dil kodu və Məzmun uzunluqları bərabər olmalıdır!");
             AddTranslation("ru", "LangCodeContentLengthMismatch", "Длины LangCode и Content должны быть равны!");
             AddTranslation("en", "LangCodeContentLengthMismatch", "The length of LangCode and Content must be equal!");

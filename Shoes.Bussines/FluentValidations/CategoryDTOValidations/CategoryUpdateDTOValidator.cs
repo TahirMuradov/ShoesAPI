@@ -8,6 +8,7 @@ namespace Shoes.Bussines.FluentValidations.CategoryDTOValidations
     {
         public CategoryUpdateDTOValidator(string langCode)
         {
+           
             RuleFor(dto => dto.Id)
                 .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("IdIsRequired", new CultureInfo(langCode)))
                 .Must(id => Guid.TryParse(id.ToString(), out _)).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidGuid", new CultureInfo(langCode)));

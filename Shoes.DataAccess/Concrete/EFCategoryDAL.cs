@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
@@ -65,15 +66,19 @@ namespace Shoes.DataAccess.Concrete
             }
         }
 
-        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode)
+        public async Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode,int page=1)
         {
-            IQueryable<Category> categoryQuery = _dBContext.Categories.AsNoTracking().AsSplitQuery();
-            return new SuccessDataResult<IQueryable<GetCategoryDTO>>(data: categoryQuery.Select(x => new GetCategoryDTO
-            {
-                Id = x.Id,
-                Content = x.CategoryLanguages.FirstOrDefault(x => x.LangCode == LangCode).Content
-            }),
-               statusCode:HttpStatusCode.OK );
+            IQueryable<GetCategoryDTO> categoryQuery = _dBContext.Categories.AsNoTracking().AsSplitQuery()
+                .Select(x=>new GetCategoryDTO
+                {
+                    Id = x.Id,
+                    Content=x.CategoryLanguages.FirstOrDefault(x=>x.LangCode==LangCode).Content
+                });
+          var returnData= await PaginatedList<GetCategoryDTO>.CreateAsync(categoryQuery, page, 10);
+            return new SuccessDataResult<PaginatedList<GetCategoryDTO>>(data:returnData,HttpStatusCode.OK);
+
+
+
         }
 
         public IDataResult<GetCategoryDTO> GetCategory(Guid Id, string LangCode)

@@ -9,7 +9,7 @@ namespace Shoes.Bussines.FluentValidations.CategoryDTOValidations
     {
         public CategoryAddDTOValidator(string langCode)
         {
-         
+      
             RuleFor(dto => dto.LangCode)
                 .Must((dto, langCodes) => langCodes != null && dto.Content != null && langCodes.Count == dto.Content.Count)
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangCodeContentLengthMismatch", new CultureInfo(langCode)));

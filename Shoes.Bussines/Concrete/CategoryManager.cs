@@ -1,16 +1,11 @@
 ﻿using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.FluentValidations.CategoryDTOValidations;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.DataAccess.Abstarct;
-using Shoes.Entites;
 using Shoes.Entites.DTOs.CategoryDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoes.Bussines.Concrete
 {
@@ -27,29 +22,48 @@ namespace Shoes.Bussines.Concrete
         {
             CategoryAddDTOValidator validationRules = new CategoryAddDTOValidator(langCode);
             var result=validationRules.Validate(categoryDTO);
-            if (!result.IsValid)
-                return new ErrorResult(statusCode:HttpStatusCode.UnsupportedMediaType);
+            if (!result.IsValid||langCode is null)
+                return new ErrorResult(messages:result.Errors.Select(x=>x.ErrorMessage).ToList(),statusCode:HttpStatusCode.BadRequest);
             return _categoryDAL.AddCategory(categoryDTO);
         }
 
+   
+
         public IResult DeleteCategory(Guid Id , string langCode)
         {
-           return _categoryDAL.DeleteCategory(Id);
+            if (Id==default(Guid) || string.IsNullOrEmpty(langCode))
+                return new ErrorResult(statusCode: HttpStatusCode.BadRequest);
+            return _categoryDAL.DeleteCategory(Id);
         }
 
-        public IDataResult<List<GetCategoryDTO>> GetAllCategory(string LangCode)
+    
+
+        public async Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode, int page = 1)
+
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(LangCode) || page <= 0)
+                return new ErrorDataResult<PaginatedList<GetCategoryDTO>>(statusCode: HttpStatusCode.BadRequest);
+
+            return await _categoryDAL.GetAllCategoryAsync(LangCode, page);
         }
 
-        public IDataResult<GetCategoryDTO> GetCategory(string Id, string LangCode)
+        public IDataResult<GetCategoryDTO> GetCategory(Guid Id, string LangCode)
         {
-            throw new NotImplementedException();
+            if (Id == default(Guid) || string.IsNullOrEmpty(LangCode))
+                return new ErrorDataResult<GetCategoryDTO>(statusCode: HttpStatusCode.BadRequest);
+            return _categoryDAL.GetCategory(Id, LangCode);
         }
 
-        public IResult UpdateCategory(UpdateCategoryDTO updateCategory , string langCode)
+        public IResult UpdateCategory(UpdateCategoryDTO updateCategory ,string LangCode)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(LangCode))
+                return new ErrorResult(HttpStatusCode.BadRequest);
+            CategoryUpdateDTOValidator validationRules = new CategoryUpdateDTOValidator(LangCode);
+            var result=validationRules.Validate(updateCategory);
+            if (!result.IsValid)
+                return new ErrorResult(messages: result.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
+
+            return _categoryDAL.UpdateCategory(updateCategory);
         }
     }
 }
