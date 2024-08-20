@@ -60,6 +60,16 @@ namespace Shoes.Bussines.CustomLaunguageManager
 
             #endregion
             #endregion
+            #region SizeValidationMessages
+            AddTranslation("az", "NewSizeNumberIsRequiredd", "Yeni ölçü boş ola bilməz!!");
+            AddTranslation("az", "SizeNumberIsRequiredd", "Ölçü boş ola bilməz!!");
+            AddTranslation("ru", "NewSizeNumberIsRequiredd", "Новый размер не может быть пустым!!");
+            AddTranslation("en", "NewSizeNumberIsRequiredd", "New size cannot be empty!!");
+
+            AddTranslation("ru", "SizeNumberIsRequiredd", "Размер не может быть пустым!!");
+            AddTranslation("en", "SizeNumberIsRequiredd", "Size cannot be empty!!");
+
+            #endregion
         }
     }
 }

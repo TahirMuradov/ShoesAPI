@@ -11,6 +11,8 @@ namespace Shoes.Bussines.DependencyResolver
         public static void AddAllScoped(this IServiceCollection services) {
             services.AddScoped<ICategoryDAL, EFCategoryDAL>();
             services.AddScoped<ICategoryService, CategoryManager>();
+            services.AddScoped<ISizeService, SizeManager>();
+            services.AddScoped<ISizeDAL, EFSizeDAL>();
         }
     }
 }
