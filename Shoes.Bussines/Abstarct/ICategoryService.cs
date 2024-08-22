@@ -1,11 +1,6 @@
 ﻿using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Entites.DTOs.CategoryDTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoes.Bussines.Abstarct
 {

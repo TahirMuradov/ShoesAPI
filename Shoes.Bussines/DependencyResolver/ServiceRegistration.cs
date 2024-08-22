@@ -13,6 +13,8 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<ICategoryService, CategoryManager>();
             services.AddScoped<ISizeService, SizeManager>();
             services.AddScoped<ISizeDAL, EFSizeDAL>();
+            services.AddScoped<ISubCategoryService, SubCategoryManager>();
+            services.AddScoped<ISubCategoryDAL, EFSubCategoryDAL>();
         }
     }
 }

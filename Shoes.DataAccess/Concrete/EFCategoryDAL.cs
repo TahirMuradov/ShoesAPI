@@ -26,16 +26,16 @@ namespace Shoes.DataAccess.Concrete
             {
                 Category category = new Category();
                 _dBContext.Categories.Add(category);
-                for (int i = 0; i < categoryDTO.LangCode.Count; i++)
+                foreach (var lang in categoryDTO.LangContent)
                 {
-                    CategoryLanguage categoryLanguage= new CategoryLanguage()
+                    CategoryLanguage categoryLanguage = new()
                     {
-                        LangCode = categoryDTO.LangCode[i],
-                        Content = categoryDTO.Content[i],
-                        CategoryId=category.Id
+                        CategoryId = category.Id,
+                        Content = lang.Value,
+                        LangCode = lang.Key
                     };
                     _dBContext.CategoryLanguages.Add(categoryLanguage);
-
+                    
                 }
                 _dBContext.SaveChanges();
               

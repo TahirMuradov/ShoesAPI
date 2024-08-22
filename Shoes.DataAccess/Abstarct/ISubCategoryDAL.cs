@@ -1,0 +1,16 @@
+﻿using Shoes.Core.Helpers.PageHelper;
+using Shoes.Core.Utilites.Results.Abstract;
+using Shoes.Entites.DTOs.SubCategoryDTOs;
+
+namespace Shoes.DataAccess.Abstarct
+{
+    public interface ISubCategoryDAL
+    {
+        public IResult AddSubCategory(AddSubCategoryDTO addCategory);
+        public IResult UpdateSubCategory(UpdateSubCategoryDTO updateCategory);
+        public IResult DeleteSubCategory(Guid Id);
+        public IDataResult<GetSubCategoryDTO> GetSubCategory(Guid Id, string LangCode);
+        public Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryAsync(string LangCode, int page = 1);
+
+    }
+}

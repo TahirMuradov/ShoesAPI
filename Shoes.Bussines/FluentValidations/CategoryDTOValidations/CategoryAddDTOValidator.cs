@@ -9,23 +9,22 @@ namespace Shoes.Bussines.FluentValidations.CategoryDTOValidations
     {
         public CategoryAddDTOValidator(string langCode)
         {
-      
-            RuleFor(dto => dto.LangCode)
-                .Must((dto, langCodes) => langCodes != null && dto.Content != null && langCodes.Count == dto.Content.Count)
-                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangCodeContentLengthMismatch", new CultureInfo(langCode)));
+            // Validate that LangContent is not null and contains at least three entries
+            RuleFor(dto => dto.LangContent)
+                .NotNull()
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("ContentEmpty", new CultureInfo(langCode)))
+                .Must(langContent => langContent != null && langContent.Count >= 3)
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangContentTooShort", new CultureInfo(langCode)));
 
-            RuleFor(dto => dto.LangCode)
-            .Must(langCodes => langCodes != null && langCodes.Count >= 3)
-                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangCodeLengthTooShort", new CultureInfo(langCode)));
-
-            RuleFor(dto => dto.Content)
-            .Must(content => content != null && content.Count >= 3)
-                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("ContentLengthTooShort", new CultureInfo(langCode)));
-
-           
-            RuleForEach(dto => dto.LangCode)
-                .Must(langCode => new[] { "az", "ru", "en" }.Contains(langCode))
+            // Validate that each key in LangContent is a valid language code
+            RuleForEach(dto => dto.LangContent.Keys)
+                .Must(key => new[] { "az", "ru", "en" }.Contains(key))
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidLangCode", new CultureInfo(langCode)));
+
+            // Validate that each value in LangContent is not null or empty
+            RuleForEach(dto => dto.LangContent.Values)
+                .NotEmpty()
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("ContentEmpty", new CultureInfo(langCode)));
         }
     }
 }
