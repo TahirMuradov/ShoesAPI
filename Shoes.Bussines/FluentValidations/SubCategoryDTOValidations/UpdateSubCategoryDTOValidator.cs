@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using Microsoft.Extensions.Configuration;
+using Shoes.Core.Helpers;
 using Shoes.Entites.DTOs.SubCategoryDTOs;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,8 @@ namespace Shoes.Bussines.FluentValidations.SubCategoryDTOValidations
     {
         public UpdateSubCategoryDTOValidator(string langCode)
         {
+
+            var SupportedLaunguages = ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>();
             RuleFor(dto => dto.Id)
                .NotEmpty()
                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("SubCategoryIdInvalid", new CultureInfo(langCode)))
@@ -23,12 +27,12 @@ namespace Shoes.Bussines.FluentValidations.SubCategoryDTOValidations
             RuleFor(dto => dto.LangContent)
                 .NotNull()
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangSubCategoryContentTooShort", new CultureInfo(langCode)))
-                .Must(langContent => langContent != null && langContent.Count <= 3 &&langContent.Count>0)
+                .Must(langContent => langContent != null &&langContent.Count==SupportedLaunguages.Length)
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangSubCategoryContentTooShort", new CultureInfo(langCode)));
 
             // Validate each key in LangContent
             RuleForEach(dto => dto.LangContent.Keys)
-                .Must(key => new[] { "az", "ru", "en" }.Contains(key))
+                .Must(key =>    SupportedLaunguages.Contains(key))
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidLangCode", new CultureInfo(langCode)));
 
             // Validate each value in LangContent

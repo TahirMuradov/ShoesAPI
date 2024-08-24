@@ -75,7 +75,7 @@ namespace Shoes.DataAccess.Concrete
                     Content=x.CategoryLanguages.FirstOrDefault(x=>x.LangCode==LangCode).Content
                 });
           var returnData= await PaginatedList<GetCategoryDTO>.CreateAsync(categoryQuery, page, 10);
-            return new SuccessDataResult<PaginatedList<GetCategoryDTO>>(data:returnData,HttpStatusCode.OK);
+            return new SuccessDataResult<PaginatedList<GetCategoryDTO>>(response:returnData,HttpStatusCode.OK);
 
 
 
@@ -87,7 +87,7 @@ namespace Shoes.DataAccess.Concrete
             
             if (categoryQuery is null)
                 return new ErrorDataResult<GetCategoryDTO>(statusCode: HttpStatusCode.NotFound);
-            return new SuccessDataResult<GetCategoryDTO>(data: new GetCategoryDTO
+            return new SuccessDataResult<GetCategoryDTO>(response: new GetCategoryDTO
             {
                 Id = categoryQuery.Id,
                 Content = categoryQuery.CategoryLanguages.FirstOrDefault(x => x.LangCode == LangCode).LangCode

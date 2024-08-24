@@ -1,21 +1,20 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Shoes.Core.Helpers;
-using Shoes.Entites.DTOs.CategoryDTOs;
+using Shoes.Entites.DTOs.PaymentMethodDTOs;
 using System.Globalization;
 
-namespace Shoes.Bussines.FluentValidations.CategoryDTOValidations
+namespace Shoes.Bussines.FluentValidations.PaymentMethodDTOValidations
 {
-    public class CategoryUpdateDTOValidator : AbstractValidator<UpdateCategoryDTO>
+    public class UpdatePaymentMethodDTOValidation:AbstractValidator<UpdatePaymentMethodDTO>
     {
-        public CategoryUpdateDTOValidator(string langCode)
+        public UpdatePaymentMethodDTOValidation(string langCode)
         {
 
             var SupportedLaunguages = ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>();
-
             RuleFor(dto => dto.Id)
-                .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("IdIsRequired", new CultureInfo(langCode)))
-                .Must(id => Guid.TryParse(id.ToString(), out _)).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidGuid", new CultureInfo(langCode)));
+            .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("IdIsRequired", new CultureInfo(langCode)))
+            .Must(id => Guid.TryParse(id.ToString(), out _)).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidGuid", new CultureInfo(langCode)));
 
             RuleFor(dto => dto.Lang)
                 .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangDictionaryIsRequired", new CultureInfo(langCode)));
@@ -30,4 +29,3 @@ namespace Shoes.Bussines.FluentValidations.CategoryDTOValidations
         }
     }
 }
-

@@ -83,7 +83,7 @@ namespace Shoes.DataAccess.Concrete
                         Content = x.SubCategoryLanguages.FirstOrDefault(x => x.LangCode == LangCode).Content
                     });
                 var returnData = await PaginatedList<GetSubCategoryDTO>.CreateAsync(SubcategoryQuery, page, 10);
-                return new SuccessDataResult<PaginatedList<GetSubCategoryDTO>>(data: returnData, HttpStatusCode.OK);
+                return new SuccessDataResult<PaginatedList<GetSubCategoryDTO>>(response: returnData, HttpStatusCode.OK);
 
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace Shoes.DataAccess.Concrete
                     ;
                 if (subCategory is null)              
                 return new ErrorDataResult<GetSubCategoryDTO>(HttpStatusCode.NotFound);
-                return new SuccessDataResult<GetSubCategoryDTO>(data:new GetSubCategoryDTO
+                return new SuccessDataResult<GetSubCategoryDTO>(response:new GetSubCategoryDTO
                 {
                     Id = subCategory.Id,
                     Content = subCategory.SubCategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content

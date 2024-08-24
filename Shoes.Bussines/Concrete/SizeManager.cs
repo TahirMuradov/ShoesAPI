@@ -1,5 +1,7 @@
-﻿using Shoes.Bussines.Abstarct;
+﻿using Microsoft.Extensions.Configuration;
+using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.FluentValidations.SizeDTOValidations;
+using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
@@ -11,6 +13,24 @@ namespace Shoes.Bussines.Concrete
 {
     public class SizeManager : ISizeService
     {
+        private string[] SupportedLaunguages
+        {
+            get
+            {
+
+                return ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>();
+
+
+            }
+        }
+
+        private string DefaultLaunguage
+        {
+            get
+            {
+                return ConfigurationHelper.config.GetSection("SupportedLanguage:Default").Get<string>();
+            }
+        }
         private readonly ISizeDAL _sizeDAL;
 
         public SizeManager(ISizeDAL sizeDAL)
@@ -20,8 +40,8 @@ namespace Shoes.Bussines.Concrete
 
         public IResult AddSize(AddSizeDTO addSizeDTO, string langCode)
         {
-            if (string.IsNullOrEmpty(langCode))
-                return new ErrorResult(statusCode: HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(langCode) || !SupportedLaunguages.Contains(langCode))
+                langCode = DefaultLaunguage;
             AddSizeDTOValidation validationRules = new AddSizeDTOValidation(langCode);
             var result=validationRules.Validate(addSizeDTO);
             if (!result.IsValid) { 
@@ -55,7 +75,8 @@ namespace Shoes.Bussines.Concrete
 
         public IResult UpdateSize(UpdateSizeDTO updateSizeDTO, string langCode)
         {
-          if (!string.IsNullOrEmpty(langCode)) return new ErrorResult(statusCode: HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(langCode) || !SupportedLaunguages.Contains(langCode))
+                langCode = DefaultLaunguage;
             SizeUpdateDTOValidation validationRules = new(langCode);
             var validationResult=validationRules.Validate(updateSizeDTO);
             if (!validationResult.IsValid)

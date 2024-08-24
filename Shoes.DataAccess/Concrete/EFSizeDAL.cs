@@ -79,7 +79,7 @@ namespace Shoes.DataAccess.Concrete
                   Size=x.SizeNumber
                 });
             var returnData = await PaginatedList< GetSizeDTO>.CreateAsync(sizeQuery, page, 10);
-            return new SuccessDataResult<PaginatedList<GetSizeDTO>>(data: returnData, HttpStatusCode.OK);
+            return new SuccessDataResult<PaginatedList<GetSizeDTO>>(response: returnData, HttpStatusCode.OK);
         }
 
         public IDataResult<GetSizeDTO> GetSize(Guid Id)
@@ -89,7 +89,7 @@ namespace Shoes.DataAccess.Concrete
                 return new ErrorDataResult<GetSizeDTO>(statusCode: HttpStatusCode.NotFound);
            
 
-            return new SuccessDataResult<GetSizeDTO>(data: new GetSizeDTO
+            return new SuccessDataResult<GetSizeDTO>(response: new GetSizeDTO
             {
                 Id = sizeQuery.Id,
                 Size = sizeQuery.SizeNumber

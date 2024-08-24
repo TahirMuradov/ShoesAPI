@@ -10,11 +10,11 @@ namespace Shoes.Core.Utilites.Results.Concrete.SuccessResults
 {
     public class SuccessDataResult<T> : DataResult<T>
     {
-        public SuccessDataResult(T data, string message, HttpStatusCode statusCode) : base(data, true, message, statusCode)
+        public SuccessDataResult(T response, string message, HttpStatusCode statusCode) : base(response, true, message, statusCode)
         {
         }
 
-        public SuccessDataResult(T data, HttpStatusCode statusCode) : base(data, true, statusCode)
+        public SuccessDataResult(T response, HttpStatusCode statusCode) : base(response, true, statusCode)
         {
         }
 

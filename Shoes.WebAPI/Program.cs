@@ -2,11 +2,13 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Shoes.Bussines.CustomLaunguageManager;
 using Shoes.Bussines.DependencyResolver;
 using Shoes.Core.Entities.Concrete;
+using Shoes.Core.Helpers;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
 using System.Globalization;
@@ -16,7 +18,8 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+ConfigurationHelper.Initialize(builder.Configuration);
+Console.WriteLine(ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Value);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
@@ -103,7 +106,7 @@ var corsRuls = builder.Configuration.GetValue<string>("Domain:Front");
 
 builder.Services.AddCors(o =>
 {
-    o.AddPolicy(corsRuls,
+    o.AddPolicy( corsRuls,
          p =>
          {
              p.AllowAnyHeader();

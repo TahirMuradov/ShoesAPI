@@ -15,6 +15,9 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<ISizeDAL, EFSizeDAL>();
             services.AddScoped<ISubCategoryService, SubCategoryManager>();
             services.AddScoped<ISubCategoryDAL, EFSubCategoryDAL>();
+            services.AddScoped<IPaymentMethodDAL, EFPaymentMethodDAL>();
+            services.AddScoped<IPaymentMethodService, PaymentMethodManager>();
+
         }
     }
 }

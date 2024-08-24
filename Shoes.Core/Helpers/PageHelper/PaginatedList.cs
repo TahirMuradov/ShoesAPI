@@ -29,7 +29,7 @@ namespace Shoes.Core.Helpers.PageHelper
         {
             int count = await source.CountAsync();
             if (pageSize == 0) pageSize = count;
-            var items = await source.Take(((pageIndex - 1) * pageSize)..pageSize).ToListAsync();
+            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
     }
