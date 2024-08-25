@@ -68,35 +68,48 @@ namespace Shoes.Bussines.CustomLaunguageManager
             #region AddSubCategoryValidationMessages
             // Azerbaijani
             AddTranslation("az", "CategoryIdInvalid", "Kateqoriya  boş  ola bilməz!");
-            AddTranslation("az", "LangContentTooShort", $"Dil Məzmun siyahısının uzunluğu {supportedLaunguages.Length} olmalıdır!");
-            AddTranslation("az", "InvalidLangCode", $"Dil Kodları yalnız {languagesList} ola bilər!");
-            AddTranslation("az", "ContentEmpty", "Məzmun boş ola bilməz!");
+   
+  
+           
 
             // Russian
             AddTranslation("ru", "CategoryIdInvalid", "Категория не может быть пустой!");
-            AddTranslation("ru", "LangContentTooShort", $"Длина списка языкового контента должна быть {supportedLaunguages}!");
-            AddTranslation("ru", "InvalidLangCode", $"Коды языков могут быть только {languagesList}!");
-            AddTranslation("ru", "ContentEmpty", "Контент не может быть пустым!");
+   
+      
+         
 
 
             // English
             AddTranslation("en", "CategoryIdInvalid", "Category cannot be empty!");
-            AddTranslation("en", "LangContentTooShort", $"The length of the language content list must be {supportedLaunguages.Length}!");
-            AddTranslation("en", "InvalidLangCode",  $"Language codes can only be {languagesList}!");
-            AddTranslation("en", "ContentEmpty", "Content cannot be empty!");
+    
+       
+         
 
             #endregion
             #region UpdateSubCategoryValidationMessages
             AddTranslation("az", "SubCategoryIdInvalid", "Alt Kateqoriya məzmunu boş  ola bilməz!");
             AddTranslation("az", "LangSubCategoryContentTooShort", "Alt Kateqoriya id-si boş  ola bilməz!");
+
             AddTranslation("ru", "SubCategoryIdInvalid", "Содержимое подкатегории не может быть пустым!");
             AddTranslation("ru", "LangSubCategoryContentTooShort", "ID подкатегории не может быть пустым!");
+
             AddTranslation("en", "SubCategoryIdInvalid", "Subcategory content cannot be empty!");
             AddTranslation("en", "LangSubCategoryContentTooShort", "Subcategory ID cannot be empty!");
 
             #endregion
             #endregion
-            #region PaymentMethodValidationMessages
+            #region ShippingMethodValidationMessages
+
+            AddTranslation("az", "DisCountNegativeNumberCheck", "Endirimli Qiymet  0-dan kiçik ola bilməz!");
+            AddTranslation("az", "PriceNegativeNumberCheck", "Qiymət  0-a bərabər və ya kiçik ola bilməz!");
+
+            AddTranslation("en", "DisCountNegativeNumberCheck", "Discount price cannot be less than 0!");
+            AddTranslation("en", "PriceNegativeNumberCheck", "Price cannot be equal to or less than 0!");
+
+            AddTranslation("ru", "DisCountNegativeNumberCheck", "Цена со скидкой не может быть меньше 0!");
+            AddTranslation("ru", "PriceNegativeNumberCheck", "Цена не может быть равна 0 или меньше 0!");
+
+
 
             #endregion
         }

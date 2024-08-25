@@ -101,9 +101,21 @@ namespace Shoes.DataAccess.Concrete
                 {
                     var checkedLangCode = checkedMethod.PaymentMethodLanguages.FirstOrDefault(x => x.LangCode == newContent.Key);
                     if (checkedLangCode is null)
-                        continue;
+                    {
+                        PaymentMethodLanguage NewLaunguage = new PaymentMethodLanguage()
+                        {
+                            Content = newContent.Value,
+                            LangCode = newContent.Key,
+                            PaymentMethodId=checkedMethod.Id
+                        };
+                        _appDBContext.PaymentMethodLanguages.Add(NewLaunguage);
+
+                    }else
+                    {
+
                     checkedLangCode.Content = newContent.Value;
                     _appDBContext.PaymentMethodLanguages.Update(checkedLangCode);
+                    }
                 }
                 _appDBContext.SaveChanges();
                 return new SuccessResult(HttpStatusCode.OK);

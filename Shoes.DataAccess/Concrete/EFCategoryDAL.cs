@@ -105,10 +105,24 @@ namespace Shoes.DataAccess.Concrete
                 {
                     CategoryLanguage categoryLanguage = category.CategoryLanguages.FirstOrDefault(x => x.LangCode == item.Key);
                     if (categoryLanguage is null)
-                        continue;
+                    {
+                        CategoryLanguage NewLanguage = new CategoryLanguage()
+                        {
+                            CategoryId = category.Id,
+                            LangCode = item.Key,
+                            Content = item.Value
+                        };
+                        _dBContext.CategoryLanguages.Add(NewLanguage);
+
+                    }
+                    else
+                    {
+
                     categoryLanguage.LangCode = item.Key;
                     categoryLanguage.Content = item.Value;
                     _dBContext.CategoryLanguages.Update(categoryLanguage);
+                    }
+                     
 
                 }
                 _dBContext.SaveChanges();

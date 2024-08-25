@@ -127,9 +127,22 @@ namespace Shoes.DataAccess.Concrete
                 {
                     var subCategoryLang = data.SubCategoryLanguages.FirstOrDefault(x => x.LangCode == lang.Key);
                     if (subCategoryLang is null)
-                   continue;
+                    {
+                        SubCategoryLanguage NewLanguage = new SubCategoryLanguage()
+                        {
+                            LangCode = lang.Key,
+                            Content = lang.Value,
+                            SubCategoryId=data.Id,
+                            
+                        };
+                        _appDBContext.SubCategoryLanguages.Add(NewLanguage);
+                    }else
+                    {
+
                     subCategoryLang.Content = lang.Value;
                     _appDBContext.SubCategoryLanguages.Update(subCategoryLang);
+                    }
+               
                 }
                 _appDBContext.SaveChanges();
                 return new SuccessResult(HttpStatusCode.OK);
