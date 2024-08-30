@@ -19,7 +19,7 @@ namespace Shoes.Core.Helpers.FileHelper
        file.CopyTo(fileStream);
             return path;
         }
-        public static List<string> PhotoFileSaveRangeAsync(this IFormFileCollection file)
+        public static List<string> PhotoFileSaveRange(this IFormFileCollection file)
         {
          List<string>urls = new List<string>();
             Parallel.ForEach(file, x => { 

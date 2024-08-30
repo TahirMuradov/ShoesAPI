@@ -227,7 +227,7 @@ namespace Shoes.DataAccess.Concrete
             }
             if (updateProductDTO.NewPictures is not null)
             {
-              List<string> newUrls=  FileHeleper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
+              List<string> newUrls=  FileHeleper.PhotoFileSaveRange(updateProductDTO.NewPictures);
                 Parallel.ForEach(newUrls, url =>
                 {
                     Picture picture = new Picture()
