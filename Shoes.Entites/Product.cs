@@ -7,6 +7,7 @@
 
         public decimal DiscountPrice { get; set; }
         public decimal Price { get; set; }
+
         public List<Picture> Pictures { get; set; }
         public List<SizeProduct> SizeProducts { get; set; }
         public List<SubCategoryProduct> SubCategories { get; set; }

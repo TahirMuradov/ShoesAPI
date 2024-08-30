@@ -25,6 +25,8 @@ namespace Shoes.DataAccess.Concrete.SqlServer
         public DbSet<Order> Orders { get; set; }
         public DbSet<Picture> Pictures { get; set; }
         public DbSet<SoldProduct> SoldProducts { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductLanguage> ProductLanguages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
