@@ -9,8 +9,7 @@ namespace Shoes.Bussines.FluentValidations.SizeDTOValidations
         public AddSizeDTOValidation(string langCode)
         {
             RuleFor(x => x.Size)
-                .NotEmpty()
-                .Must(size => size !<=0).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("SizeNumberIsRequiredd", new CultureInfo(langCode)));
+               .GreaterThan(0).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("SizeNumberIsRequiredd", new CultureInfo(langCode)));
             
 
 

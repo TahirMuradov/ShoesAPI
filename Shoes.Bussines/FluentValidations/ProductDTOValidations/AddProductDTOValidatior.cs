@@ -63,11 +63,11 @@ namespace Shoes.Bussines.FluentValidations.ProductDTOValidations
                 .NotEmpty()
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("SubCategoryİsRequired", new CultureInfo(LangCode)));
 
-            // Validate Pictures
-            RuleFor(x => x.Pictures)
-                .NotNull()
-                .NotEmpty()
-                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PictureİsRequired", new CultureInfo(LangCode)));
+            //// Validate Pictures
+            //RuleFor(x => x.Pictures)
+            //    .NotNull()
+            //    .NotEmpty()
+            //    .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PictureİsRequired", new CultureInfo(LangCode)));
         }
     }
 }

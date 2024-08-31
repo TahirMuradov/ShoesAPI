@@ -6,7 +6,7 @@ namespace Shoes.Core.Helpers.FileHelper
 {
     public static class FileHeleper
     {
-        public static  string SaveFile(this IFormFile file, bool IsOrderPdf)
+        public static  async Task<string> SaveFileAsync(this IFormFile file, bool IsOrderPdf)
         {
             string filePath = IsOrderPdf ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\OrderPDFs\\") :
                 Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
@@ -16,16 +16,16 @@ namespace Shoes.Core.Helpers.FileHelper
             }
             var path = filePath + Guid.NewGuid().ToString() + file.FileName;
             using FileStream fileStream = new(Path.Combine(wwwrootGetPath.GetwwwrootPath + path), FileMode.Create);
-       file.CopyTo(fileStream);
+       await file.CopyToAsync(fileStream);
             return path;
         }
-        public static List<string> PhotoFileSaveRange(this IFormFileCollection file)
+        public static async Task<List<string>> PhotoFileSaveRangeAsync(this IFormFileCollection file)
         {
          List<string>urls = new List<string>();
-            Parallel.ForEach(file, x => { 
+           Parallel.ForEach(file, async x => { 
                 
                 
-                urls.Add(SaveFile(x, false));
+                urls.Add(await SaveFileAsync(x, false));
             });
             return urls;
         }

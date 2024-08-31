@@ -6,9 +6,9 @@ namespace Shoes.DataAccess.Abstarct
 {
     public interface IProductDAL
     {
-        public IResult AddProduct(AddProductDTO addProductDTO);
+        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO);
         public IResult DeleteProduct(Guid Id);
-        public IResult UpdateProduct(UpdateProductDTO updateProductDTO);
+        public Task<IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO);
         public Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboardAsync(string LangCode,int page=1);
         public Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId, Guid SizeId ,string LangCode ,int Page=1, decimal minPrice = 0, decimal maxPrice = 0);
         public IDataResult<GetDetailProductDTO> GetProductDetail(Guid Id, string LangCode);

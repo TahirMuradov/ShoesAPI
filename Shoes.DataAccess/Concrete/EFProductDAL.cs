@@ -22,7 +22,7 @@ namespace Shoes.DataAccess.Concrete
             _appDBContext = appDBContext;
         }
 
-        public IResult AddProduct(AddProductDTO addProductDTO)
+        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Shoes.DataAccess.Concrete
                         ProductId = product.Id,
                         LangCode = i.Key,
                         Title = i.Value,
-                        Description = addProductDTO.ProductName.GetValueOrDefault(i.Key),
+                        Description = addProductDTO.Description.GetValueOrDefault(i.Key),
 
                     };
                     _appDBContext.ProductLanguages.Add(productLanguage);
@@ -74,21 +74,22 @@ namespace Shoes.DataAccess.Concrete
                     _appDBContext.SubCategoryProducts.Add(subCategoryProduct);
                 });
                _appDBContext.SaveChanges();
-                return new SuccessResult(HttpStatusCode.OK);
+                return new SuccessDataResult<Guid>(response:product.Id,HttpStatusCode.OK);
 
             }
             catch (Exception ex)
             {
 
-                return new ErrorResult(message:ex.Message, HttpStatusCode.BadRequest);
+                return new ErrorDataResult<Guid>(message:ex.Message, HttpStatusCode.BadRequest);
             }
         }
 
         public IResult DeleteProduct(Guid Id)
         {
-         Product product=_appDBContext.Products.FirstOrDefault(x => x.Id == Id);
+         Product product=_appDBContext.Products.Include(x=>x.Pictures).FirstOrDefault(x => x.Id == Id);
             if (product is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
+            FileHeleper.RemoveFileRange(product.Pictures.Select(x=>x.Url).ToList());
             _appDBContext.Products.Remove(product);
             _appDBContext.SaveChanges(); 
             return new SuccessResult(HttpStatusCode.OK);
@@ -96,7 +97,7 @@ namespace Shoes.DataAccess.Concrete
 
         public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId, Guid SizeId,string LangCode,int page, decimal minPrice=0, decimal maxPrice = 0)
         {
-            IQueryable<Product> productQuery = _appDBContext.Products.AsSplitQuery().AsNoTracking();
+            IQueryable<Product> productQuery = _appDBContext.Products.AsNoTracking().AsQueryable();
             if (subCategoryId != default)
             {
              
@@ -133,17 +134,30 @@ namespace Shoes.DataAccess.Concrete
 
         public async Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboardAsync(string LangCode, int page)
         {
-            IQueryable<GetProductDashboardDTO> productQuery = _appDBContext.Products.AsSplitQuery().AsNoTracking().Select(x => new GetProductDashboardDTO
-            {
-               Id= x.Id,
-               DisCount= x.DiscountPrice,
-               Price= x.Price,
-               ProductCode=x.ProductCode,
-               SubCategory=x.SubCategories.Select(y=>y.SubCategory.SubCategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content).ToList(),
-               ProductTitle= x.ProductLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Title,
-               SizeAndCount = x.SizeProducts.Select(ps => new KeyValuePair<int, int>(ps.Size.SizeNumber, ps.StockCount)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value),
-               
-            });
+            var productQuery = _appDBContext.Products.AsNoTracking().
+                 Include(x => x.SizeProducts)
+                 .Include(x => x.ProductLanguages)
+                 .Include(x => x.Pictures)
+                 .Include(x => x.SubCategories)
+                 .ThenInclude(x => x.SubCategory.SubCategoryLanguages)
+                 .AsQueryable().Select(x => new GetProductDashboardDTO
+                 {
+                     Id = x.Id,
+                     PictureUrls = x.Pictures.Select(y => y.Url).ToList(),
+ 
+                DisCount = x.DiscountPrice,
+                     Price = x.Price,
+                     ProductCode = x.ProductCode,
+                     SubCategory = x.SubCategories.Select(y => y.SubCategory.SubCategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content).ToList(),
+                     ProductTitle = x.ProductLanguages.FirstOrDefault(y => y.LangCode == LangCode).Title,
+                     Sizes = x.SizeProducts.Select(ps => new GetProductSizeInfoDTO
+                     {
+                         SizeId = ps.SizeId,
+                         SizeNumber = ps.Size.SizeNumber,
+                         StockCount = ps.StockCount,
+                     }).ToList(),
+
+                 }) ;
             var resultData = await PaginatedList<GetProductDashboardDTO>.CreateAsync(productQuery, page, 10);
             return new SuccessDataResult<PaginatedList<GetProductDashboardDTO>>(response: resultData, HttpStatusCode.OK);
         }
@@ -215,7 +229,12 @@ namespace Shoes.DataAccess.Concrete
              Id=  p.Id,
                ProductName = p.ProductLanguages.ToDictionary(pl => pl.LangCode, pl => pl.Title),
                Description = p.ProductLanguages.ToDictionary(pl => pl.LangCode, pl => pl.Description),
-               Sizes = p.SizeProducts.ToDictionary(sp => sp.SizeId, sp => sp.Size.SizeNumber),
+               Sizes = p.SizeProducts.Select(x=>new GetProductSizeInfoDTO
+               {
+                   SizeId = x.SizeId,
+                   SizeNumber=x.Size.SizeNumber,
+                   StockCount=x.StockCount
+               }).ToList(),
              DiscountPrice=  p.DiscountPrice,
               Price= p.Price,
              ProductCode=  p.ProductCode,
@@ -230,9 +249,9 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessDataResult<GetDetailProductDashboardDTO>(product, HttpStatusCode.OK);
         }
 
-        public IResult UpdateProduct(UpdateProductDTO updateProductDTO)
+        public async Task< IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO)
         {
-            Product product = _appDBContext.Products.AsSplitQuery().FirstOrDefault(x => x.Id == updateProductDTO.Id);
+            Product product = await _appDBContext.Products.AsSplitQuery().FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
             var pivot = _appDBContext.SubCategoryProducts.Where(x => x.ProductId == product.Id);
             if (product is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
@@ -249,8 +268,8 @@ namespace Shoes.DataAccess.Concrete
             }
             if (updateProductDTO.NewPictures is not null)
             {
-              List<string> newUrls=  FileHeleper.PhotoFileSaveRange(updateProductDTO.NewPictures);
-                Parallel.ForEach(newUrls, url =>
+              List<string> newUrls=  await FileHeleper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
+                Parallel.ForEach(newUrls, async url =>
                 {
                     Picture picture = new Picture()
                     {
@@ -258,7 +277,7 @@ namespace Shoes.DataAccess.Concrete
                         Url = url,
 
                     };
-                    _appDBContext.Pictures.Add(picture);
+                  await  _appDBContext.Pictures.AddAsync(picture);
                 });
                 
             }
@@ -341,7 +360,7 @@ namespace Shoes.DataAccess.Concrete
             if (updateProductDTO.SubCategoriesID is not null)
             {
 
-                Parallel.ForEach(updateProductDTO.SubCategoriesID, i =>
+                Parallel.ForEach(updateProductDTO.SubCategoriesID, async i =>
                 {
                     var ProductSubCategory = product.SubCategories.FirstOrDefault(x=>x.Id==i);
                     if (ProductSubCategory is  null)
@@ -351,7 +370,7 @@ namespace Shoes.DataAccess.Concrete
                             ProductId = product.Id,
                             SubCategoryId = ProductSubCategory.Id
                         };
-                        _appDBContext.SubCategoryProducts.Add(subCategoryProduct);
+                     await   _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
                        
                     }                
                 
@@ -367,7 +386,7 @@ namespace Shoes.DataAccess.Concrete
             
                 
             }
-        _appDBContext.SaveChanges();
+     await   _appDBContext.SaveChangesAsync();
             return new SuccessResult(HttpStatusCode.OK);
         }
     }

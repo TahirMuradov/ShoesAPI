@@ -41,7 +41,7 @@ namespace Shoes.Bussines.Concrete
             _productDAL = productDAL;
         }
 
-        public IResult AddProduct(AddProductDTO addProductDTO, string LangCode)
+        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO, string LangCode)
         {
             if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
@@ -50,7 +50,7 @@ namespace Shoes.Bussines.Concrete
             if (!validationResult.IsValid)
             {
                 List<string> errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-                return new ErrorResult(errors, HttpStatusCode.BadRequest);
+                return new ErrorDataResult<Guid>(errors, HttpStatusCode.BadRequest);
                 
             }
             return _productDAL.AddProduct(addProductDTO);
@@ -103,18 +103,18 @@ namespace Shoes.Bussines.Concrete
             return _productDAL.GetProductDetailDashboard(id, LangCode);
         }
 
-        public IResult UpdateProduct(UpdateProductDTO updateProductDTO, string LangCode)
+        public async Task<IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO, string LangCode)
         {
             if (!string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
             UpdateProductDTOValidator validationRules =new UpdateProductDTOValidator(LangCode);
-            var validationResult= validationRules.Validate(updateProductDTO);
+            var validationResult= await validationRules.ValidateAsync(updateProductDTO);
             if (!validationResult.IsValid)
             {
                 List<string> errors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
                 return new ErrorResult(errors, HttpStatusCode.BadRequest);
             }
-            return _productDAL.UpdateProduct(updateProductDTO);
+            return await _productDAL.UpdateProductAsync(updateProductDTO);
 
         }
     }

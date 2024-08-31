@@ -1,4 +1,5 @@
-﻿using FluentValidation.Resources;
+﻿using FluentValidation;
+using FluentValidation.Resources;
 using Microsoft.Extensions.Configuration;
 using Shoes.Core.Helpers;
 
@@ -54,13 +55,13 @@ namespace Shoes.Bussines.CustomLaunguageManager
             #endregion
             #endregion
             #region SizeValidationMessages
-            AddTranslation("az", "NewSizeNumberIsRequiredd", "Yeni ölçü boş ola bilməz!!");
+            AddTranslation("az", "NewSizeNumberIsRequired", "Yeni ölçü boş ola bilməz!!");
             AddTranslation("az", "SizeNumberIsRequiredd", "Ölçü boş ola bilməz!!");
-            AddTranslation("ru", "NewSizeNumberIsRequiredd", "Новый размер не может быть пустым!!");
-            AddTranslation("en", "NewSizeNumberIsRequiredd", "New size cannot be empty!!");
+            AddTranslation("ru", "NewSizeNumberIsRequired", "Новый размер не может быть пустым!!");
+            AddTranslation("en", "NewSizeNumberIsRequired", "New size cannot be empty!!");
 
-            AddTranslation("ru", "SizeNumberIsRequiredd", "Размер не может быть пустым!!");
-            AddTranslation("en", "SizeNumberIsRequiredd", "Size cannot be empty!!");
+            AddTranslation("ru", "SizeNumberIsRequired", "Размер не может быть пустым!!");
+            AddTranslation("en", "SizeNumberIsRequired", "Size cannot be empty!!");
 
             #endregion
 
@@ -176,6 +177,23 @@ namespace Shoes.Bussines.CustomLaunguageManager
 
 
 
+            #endregion
+            #region PictureValidationsMessage
+           AddTranslation("az", "ProductIdRequired", "Məhsul ID tələb olunur.");
+            AddTranslation("ru", "ProductIdRequired", "Требуется идентификатор продукта.");
+            AddTranslation("en", "ProductIdRequired", "Product ID is required.");
+
+            AddTranslation("az", "PicturesRequired", "Ən azı bir şəkil tələb olunur.");
+            AddTranslation("ru", "PicturesRequired", "Требуется хотя бы одно изображение.");
+            AddTranslation("en", "PicturesRequired", "At least one picture is required.");
+
+            AddTranslation("az", "EmptyFileNotAllowed", "Boş fayllara icazə verilmir.");
+            AddTranslation("ru", "EmptyFileNotAllowed", "Пустые файлы недопустимы.");
+            AddTranslation("en", "EmptyFileNotAllowed", "Empty files are not allowed.");
+
+            AddTranslation("az", "InvalidImageFormat", "Yalnız JPEG və PNG formatlarına icazə verilir.");
+            AddTranslation("ru", "InvalidImageFormat", "Допускаются только форматы JPEG и PNG.");
+            AddTranslation("en", "InvalidImageFormat", "Only JPEG and PNG formats are allowed.");
             #endregion
 
         }

@@ -17,20 +17,20 @@ namespace Shoes.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult AddProduct(AddProductDTO addProductDTO, [FromHeader] string LangCode)
+        public IActionResult AddProduct([FromForm]AddProductDTO addProductDTO, [FromHeader] string LangCode)
         {
             var result = _productService.AddProduct(addProductDTO,LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpPut("[action]")]
-        public IActionResult UpdateProduct(UpdateProductDTO updateProductDTO, [FromHeader] string LangCode)
+        public async Task<IActionResult> UpdateProduct([FromForm]UpdateProductDTO updateProductDTO, [FromHeader] string LangCode)
         {
-            var result = _productService.UpdateProduct(updateProductDTO, LangCode);
+            var result = await _productService.UpdateProductAsync(updateProductDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
 
         }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(Guid id)
+        [HttpDelete("[action]")]
+        public IActionResult DeleteProduct([FromQuery]Guid id)
         {
             var result=_productService.DeleteProduct(id);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
@@ -42,10 +42,23 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess?Ok(result):BadRequest(result);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllProduct([FromBody] GetProductFilterParamsDTO filterParamsDTO ,  [FromHeader] string LangCode)
+        public async Task<IActionResult> GetAllProduct([FromQuery] GetProductFilterParamsDTO filterParamsDTO ,[FromHeader] string LangCode)
         {
-            var result = await _productService.GetAllProductAsync(filterParamsDTO.subCategoryId, filterParamsDTO. SizeId, LangCode, filterParamsDTO. page, filterParamsDTO.minPrice, filterParamsDTO.maxPrice);
+            var result = await _productService.GetAllProductAsync( filterParamsDTO.subCategoryId,filterParamsDTO. SizeId, LangCode, filterParamsDTO. page, filterParamsDTO.minPrice, filterParamsDTO.maxPrice);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetProductDetail([FromQuery] Guid Id, [FromHeader] string LangCode)
+        {
+            var result = _productService.GetProductDetail(Id, LangCode);
+            return result.IsSuccess ? Ok(result) :BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetProductDetailDashboard([FromQuery] Guid id, [FromHeader] string LangCode)
+        {
+
+            var result=_productService.GetProductDetailDashboard(id, LangCode);
+            return result.IsSuccess?Ok(result):BadRequest(result) ;
         }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Shoes.Entites.DTOs.ProductDTOs
 {
+
     public class AddProductDTO
     {
        
@@ -14,5 +16,6 @@ namespace Shoes.Entites.DTOs.ProductDTOs
         public string ProductCode { get; set; }
         public List<Guid> SubCategories { get; set; }
         public IFormFileCollection Pictures { get; set; }
+     
     }
 }

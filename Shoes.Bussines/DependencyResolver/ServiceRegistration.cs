@@ -21,6 +21,8 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<IShippingMethodDAL, EFShippingMethodDAL>();
             services.AddScoped<IProductDAL, EFProductDAL>();
             services.AddScoped<IProductService,ProductManager>();
+            services.AddScoped<IPictureDAL, EFPictureDAL>();
+            services.AddScoped<IPictureService, PictureManager>();
 
         }
     }

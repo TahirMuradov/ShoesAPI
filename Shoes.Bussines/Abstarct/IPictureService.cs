@@ -2,13 +2,12 @@
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Entites.DTOs.PictureDTOs;
 
-namespace Shoes.DataAccess.Abstarct
+namespace Shoes.Bussines.Abstarct
 {
-    public interface IPictureDAL
+    public interface IPictureService
     {
-        public Task<IResult> AddPictureAsync(AddPictureDTO addPictureDTO);
+        public Task<IResult> AddPictureAsync(AddPictureDTO addPictureDTO,string LangCode);
         public IResult DeletePicture(Guid Id);
         public Task<IDataResult<PaginatedList<GetPictureDTO>>> GetAllPictureAsync(int page);
-
     }
 }
