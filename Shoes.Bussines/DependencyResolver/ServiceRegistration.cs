@@ -19,6 +19,8 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<IPaymentMethodService, PaymentMethodManager>();
             services.AddScoped<IShippingMethodService, ShippingMethodManager>();
             services.AddScoped<IShippingMethodDAL, EFShippingMethodDAL>();
+            services.AddScoped<IProductDAL, EFProductDAL>();
+            services.AddScoped<IProductService,ProductManager>();
 
         }
     }

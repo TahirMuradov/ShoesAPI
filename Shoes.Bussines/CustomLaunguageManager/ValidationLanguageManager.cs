@@ -112,6 +112,72 @@ namespace Shoes.Bussines.CustomLaunguageManager
 
 
             #endregion
+
+            #region ProductDtoValidation
+
+            AddTranslation("az", "DisCountChecked", "Endirimli Qiymət 0-dan kiçik ola bilməz!");
+            AddTranslation("az", "PriceChecked", " Qiymət 0-dan böyük olamalıdır!");
+            AddTranslation("az", "PictureİsRequired", "Məhsulun şəklini əlavə edin!");
+            AddTranslation("az", "SubCategoryİsRequired", "Məhsulun Kateqoriyasını əlavə edin!");
+            AddTranslation("az", "ProductCodeİsRequired", "Məhsulun Kodu əlavə edin!");
+
+            AddTranslation("ru", "DisCountChecked", "Цена со скидкой не может быть меньше 0!");
+            AddTranslation("ru", "PriceChecked", "Цена должна быть больше 0!");
+            AddTranslation("ru", "PictureİsRequired", "Добавьте изображение продукта!");
+            AddTranslation("ru", "SubCategoryİsRequired", "Добавьте категорию продукта!");
+            AddTranslation("ru", "ProductCodeİsRequired", "Добавьте код продукта!");
+
+            AddTranslation("en", "DisCountChecked", "Discounted price cannot be less than 0!");
+            AddTranslation("en", "PriceChecked", "Price must be greater than 0!");
+            AddTranslation("en", "PictureİsRequired", "Please add a product image!");
+            AddTranslation("en", "SubCategoryİsRequired", "Please add a product category!");
+            AddTranslation("en", "ProductCodeİsRequired", "Please add a product code!");
+            //update dto validation message
+            // Azerbaijani
+            AddTranslation("az", "IdRequired", "Id boş olmamalıdır!");
+            AddTranslation("az", "IdInvalid", "Id düzgün deyil!");
+            AddTranslation("az", "ProductNameRequired", "Məhsul adı boş olmamalıdır!");
+            AddTranslation("az", "DescriptionRequired", "Məhsul açıqlaması boş olmamalıdır!");
+            AddTranslation("az", "SubCategoriesIDRequired", "Kateqoriya boş olmamalıdır!");
+            AddTranslation("az", "SubCategoriesIDLength", "Minimum 1 dənə kateqoriya olmalıdır!");
+            AddTranslation("az", "PictureUrlsOrNewPicturesRequired", "Məhsul şəkli əlavə edilməlidir!");
+            AddTranslation("az", "SizesRequired", "Ölçü boş olmamalıdır!");
+                  AddTranslation("az", "DiscountPriceInvalid", "Endirimli Qiymət 0-dan kiçik ola bilməz!");
+            AddTranslation("az", "PriceInvalid", "Qiymət 0-dan böyük olmalıdır!");
+            AddTranslation("az", "ProductCodeRequired", "Məhsul kodu boş olmamalıdır!");
+
+            // Russian
+            AddTranslation("ru", "IdRequired", "Id не может быть пустым!");
+            AddTranslation("ru", "IdInvalid", "Id некорректен!");
+            AddTranslation("ru", "ProductNameRequired", "Название продукта не может быть пустым!");
+            AddTranslation("ru", "DescriptionRequired", "Описание продукта не может быть пустым!");
+            AddTranslation("ru", "SubCategoriesIDRequired", "Категория не может быть пустой!");
+            AddTranslation("ru", "SubCategoriesIDLength", "Должна быть хотя бы одна категория!");
+            AddTranslation("ru", "PictureUrlsOrNewPicturesRequired", "Необходимо добавить изображение продукта!");
+            AddTranslation("ru", "SizesRequired", "Размеры не могут быть пустыми!");
+            AddTranslation("ru", "DiscountPriceInvalid", "Скидочная цена не может быть меньше 0!");
+            AddTranslation("ru", "PriceInvalid", "Цена должна быть больше 0!");
+            AddTranslation("ru", "ProductCodeRequired", "Код продукта не может быть пустым!");
+
+
+            // English
+            AddTranslation("en", "IdRequired", "Id cannot be null or empty!");
+            AddTranslation("en", "IdInvalid", "Id cannot be invalid!");
+            AddTranslation("en", "ProductNameRequired", "Product name cannot be null or empty!");
+            AddTranslation("en", "DescriptionRequired", "Product description cannot be null or empty!");
+            AddTranslation("en", "SubCategoriesIDRequired", "Subcategories cannot be null or empty!");
+            AddTranslation("en", "SubCategoriesIDLength", "At least one subcategory is required!");
+            AddTranslation("en", "PictureUrlsOrNewPicturesRequired", "Product picture must be provided!");
+            AddTranslation("en", "SizesRequired", "Sizes cannot be null or empty!");
+            AddTranslation("en", "DiscountPriceInvalid", "Discount price cannot be less than 0!");
+            AddTranslation("en", "PriceInvalid", "Price must be greater than 0!");
+            AddTranslation("en", "ProductCodeRequired", "Product code cannot be null or empty!");
+
+
+
+
+            #endregion
+
         }
     }
 }

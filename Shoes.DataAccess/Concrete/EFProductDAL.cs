@@ -94,22 +94,44 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessResult(HttpStatusCode.OK);
         }
 
-        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProduct(string LangCode,int page)
+        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId, Guid SizeId,string LangCode,int page, decimal minPrice=0, decimal maxPrice = 0)
         {
-            IQueryable<GetAllProductDTO> productQuery = _appDBContext.Products.AsSplitQuery().AsNoTracking().Select(x => new GetAllProductDTO
+            IQueryable<Product> productQuery = _appDBContext.Products.AsSplitQuery().AsNoTracking();
+            if (subCategoryId != default)
+            {
+             
+                productQuery = productQuery.Where(x => x.SubCategories.Any(y => y.SubCategoryId == subCategoryId));
+            }
+            if (SizeId != default)
+            {
+                productQuery = productQuery.Where(x => x.SizeProducts.Any(y => y.SizeId == SizeId));
+            }
+            if (minPrice > 0 || maxPrice > 0)
+            {
+                if (minPrice > 0)
+                {
+                    productQuery = productQuery.Where(x => x.Price >= minPrice);
+                }
+
+                if (maxPrice > 0)
+                {
+                    productQuery = productQuery.Where(x => x.Price <= maxPrice);
+                }
+            }
+          IQueryable<GetAllProductDTO>  Result = productQuery.Select(x => new GetAllProductDTO
             {
                 Id = x.Id,
                 DisCount = x.DiscountPrice,
                 Price = x.Price,
                 ImgUrls = x.Pictures.Select(y => y.Url).ToList(),
                 Title = x.ProductLanguages.FirstOrDefault(y => y.LangCode == LangCode).Title,
-
             });
-            var resultData= await PaginatedList<GetAllProductDTO>.CreateAsync(productQuery,page,10);
+
+            var resultData= await PaginatedList<GetAllProductDTO>.CreateAsync(Result, page,10);
            return new SuccessDataResult<PaginatedList<GetAllProductDTO>>(response:resultData,HttpStatusCode.OK);    
         }
 
-        public async Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboard(string LangCode, int page)
+        public async Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboardAsync(string LangCode, int page)
         {
             IQueryable<GetProductDashboardDTO> productQuery = _appDBContext.Products.AsSplitQuery().AsNoTracking().Select(x => new GetProductDashboardDTO
             {
@@ -337,7 +359,7 @@ namespace Shoes.DataAccess.Concrete
                 Parallel.ForEach(product.SizeProducts, i =>
                 {
                     
-                    var isDeleteSubCategoryProdutc = updateProductDTO.SubCategoriesID.FirstOrDefault(x => x == i.SizeId);
+                    Guid isDeleteSubCategoryProdutc = updateProductDTO.SubCategoriesID.FirstOrDefault(x => x == i.SizeId);
                     if (isDeleteSubCategoryProdutc == default)
                         _appDBContext.SizeProducts.Remove(i);
 
