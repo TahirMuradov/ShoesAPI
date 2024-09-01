@@ -17,7 +17,7 @@ namespace Shoes.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult AddProduct([FromForm]AddProductDTO addProductDTO, [FromHeader] string LangCode)
+        public IActionResult AddProduct([FromBody]AddProductDTO addProductDTO, [FromHeader] string LangCode)
         {
             var result = _productService.AddProduct(addProductDTO,LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);

@@ -10,13 +10,14 @@ namespace Shoes.Core.Helpers.FileHelper
         {
             string filePath = IsOrderPdf ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\OrderPDFs\\") :
                 Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
+            
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
             }
-            var path = filePath + Guid.NewGuid().ToString() + file.FileName;
+            var path = IsOrderPdf? "/uploads/OrderPDFs/" + Guid.NewGuid().ToString() + file.FileName : "/uploads/ProductPhotos/" + Guid.NewGuid().ToString() + file.FileName;
             using FileStream fileStream = new(Path.Combine(wwwrootGetPath.GetwwwrootPath + path), FileMode.Create);
-       await file.CopyToAsync(fileStream);
+            await file.CopyToAsync(fileStream);
             return path;
         }
         public static async Task<List<string>> PhotoFileSaveRangeAsync(this IFormFileCollection file)

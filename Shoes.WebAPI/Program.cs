@@ -106,7 +106,7 @@ var corsRuls = builder.Configuration.GetValue<string>("Domain:Front");
 
 builder.Services.AddCors(o =>
 {
-    o.AddPolicy( corsRuls,
+    o.AddPolicy(corsRuls,
          p =>
          {
              p.AllowAnyHeader();
