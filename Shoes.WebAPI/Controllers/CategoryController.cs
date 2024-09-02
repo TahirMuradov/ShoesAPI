@@ -40,6 +40,11 @@ namespace Shoes.WebAPI.Controllers
         { var result=_categoryService.GetCategory(Id, langCode);
             return result.IsSuccess? Ok(result):BadRequest(result); 
         }
+        [HttpGet("[action]")]
+        public IActionResult GetCtegoryForUpdte([FromQuery] Guid Id)
+        {var result=_categoryService.GetCategoryForUpdate(Id);
+            return result.IsSuccess? Ok(result):BadRequest(result);
+        }
         [HttpPut("[action]")]
         public IActionResult UpdateCategory([FromBody]UpdateCategoryDTO updateCategoryDTO ,[FromHeader]string LangCode)
         {

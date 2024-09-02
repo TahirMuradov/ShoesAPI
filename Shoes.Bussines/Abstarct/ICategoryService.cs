@@ -10,6 +10,7 @@ namespace Shoes.Bussines.Abstarct
         public IResult AddCategory(AddCategoryDTO categoryDTO , string langCode);
         public IResult DeleteCategory(Guid Id, string langCode);
         public IResult UpdateCategory(UpdateCategoryDTO updateCategory, string langCode);
+        public IDataResult<GETCategoryForUpdateDTO> GetCategoryForUpdate(Guid Id);
         public IDataResult<GetCategoryDTO> GetCategory(Guid Id, string LangCode);
         public Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode, int page = 1);
     }

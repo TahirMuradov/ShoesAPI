@@ -100,5 +100,12 @@ namespace Shoes.Bussines.Concrete
 
             return _categoryDAL.UpdateCategory(updateCategory);
         }
+
+        public IDataResult<GETCategoryForUpdateDTO> GetCategoryForUpdate(Guid Id)
+        {
+            if (Id == default)
+                return new ErrorDataResult<GETCategoryForUpdateDTO>(HttpStatusCode.NotFound);
+            return _categoryDAL.GetCategoryForUpdate(Id);
+        }
     }
 }

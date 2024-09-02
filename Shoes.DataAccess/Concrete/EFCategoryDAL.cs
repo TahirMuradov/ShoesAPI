@@ -94,6 +94,17 @@ namespace Shoes.DataAccess.Concrete
             }, statusCode: HttpStatusCode.OK);
         }
 
+        public IDataResult<GETCategoryForUpdateDTO> GetCategoryForUpdate(Guid Id)
+        {
+            var category = _dBContext.Categories.Include(x=>x.CategoryLanguages).FirstOrDefault(x => x.Id == Id);
+            if (category is null) return new ErrorDataResult<GETCategoryForUpdateDTO>(statusCode: HttpStatusCode.NotFound);
+            return new SuccessDataResult<GETCategoryForUpdateDTO>(response: new GETCategoryForUpdateDTO
+            {
+                Id = category.Id,
+                Content = category.CategoryLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Content)).ToDictionary<string, string>()
+            }, HttpStatusCode.OK) ;
+        }
+
         public IResult UpdateCategory(UpdateCategoryDTO updateCategory)
         {
             try
