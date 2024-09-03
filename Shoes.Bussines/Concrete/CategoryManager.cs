@@ -5,6 +5,7 @@ using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
+using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
 using Shoes.DataAccess.Abstarct;
 using Shoes.Entites.DTOs.CategoryDTOs;
 using System.Net;
@@ -106,6 +107,13 @@ namespace Shoes.Bussines.Concrete
             if (Id == default)
                 return new ErrorDataResult<GETCategoryForUpdateDTO>(HttpStatusCode.NotFound);
             return _categoryDAL.GetCategoryForUpdate(Id);
+        }
+
+        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode)
+        {
+            if (string.IsNullOrEmpty(LangCode)||!SupportedLaunguages.Contains(LangCode))
+                LangCode= DefaultLaunguage;
+        return _categoryDAL.GetAllCategory(LangCode);
         }
     }
 }

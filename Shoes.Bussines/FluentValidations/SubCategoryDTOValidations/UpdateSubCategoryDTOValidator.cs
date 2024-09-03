@@ -23,6 +23,12 @@ namespace Shoes.Bussines.FluentValidations.SubCategoryDTOValidations
                .Must(id => id != Guid.Empty)
                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("SubCategoryIdInvalid", new CultureInfo(langCode)));
 
+            // Validate that CategoryId is not null, empty, or the default value
+            RuleFor(dto => dto.CategoryId)
+                .NotEmpty()
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("CategoryIdInvalid", new CultureInfo(langCode)))
+                .Must(id => id != Guid.Empty)
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("CategoryIdInvalid", new CultureInfo(langCode)));
             // Validate that LangContent contains exactly three entries and the keys are valid language codes
             RuleFor(dto => dto.LangContent)
                 .NotNull()

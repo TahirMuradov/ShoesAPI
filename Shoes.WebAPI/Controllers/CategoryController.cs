@@ -30,7 +30,13 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllCategory([FromHeader] string langCode, [FromQuery] int page = 1)
+        public IActionResult GetAllCategory([FromHeader] string LangCode)
+        {
+            var result= _categoryService.GetAllCategory(LangCode);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllCategoryForTable([FromHeader] string langCode, [FromQuery] int page = 1)
         {
             var result=await _categoryService.GetAllCategoryAsync(langCode, page);
             return result.IsSuccess? Ok(result):BadRequest(result);
@@ -41,8 +47,9 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess? Ok(result):BadRequest(result); 
         }
         [HttpGet("[action]")]
-        public IActionResult GetCtegoryForUpdte([FromQuery] Guid Id)
-        {var result=_categoryService.GetCategoryForUpdate(Id);
+        public IActionResult GetCategoryForUpdate([FromQuery] Guid Id)
+        {
+            var result=_categoryService.GetCategoryForUpdate(Id);
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpPut("[action]")]

@@ -6,6 +6,7 @@ namespace Shoes.Bussines.Abstarct
 {
     public interface ISubCategoryService
     {
+        public IDataResult<GetSubCategoryForUpdateDTO> GetSubCategoryForUpdate(Guid Id);
         public IResult AddSubCategory(AddSubCategoryDTO addCategory,string LangCode);
         public IResult UpdateSubCategory(UpdateSubCategoryDTO updateCategory,string langCode);
         public IResult DeleteSubCategory(Guid Id);

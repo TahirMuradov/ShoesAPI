@@ -12,6 +12,7 @@ namespace Shoes.DataAccess.Abstarct
         public IDataResult<GetCategoryDTO> GetCategory(Guid Id, string LangCode);
         public IDataResult<GETCategoryForUpdateDTO> GetCategoryForUpdate(Guid Id);
         public Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode,int page=1);
+        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode);
 
     }
 }

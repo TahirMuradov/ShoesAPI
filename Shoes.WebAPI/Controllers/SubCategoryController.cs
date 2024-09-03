@@ -14,6 +14,12 @@ namespace Shoes.WebAPI.Controllers
         {
             _subCategoryService = subCategoryService;
         }
+        [HttpGet("[action]")]
+        public IActionResult GetSubCategoryForUpdate(Guid Id)
+        {
+            var resutl=_subCategoryService.GetSubCategoryForUpdate(Id);
+            return resutl.IsSuccess? Ok(resutl):BadRequest(resutl);
+        }
 
         [HttpPost("[action]")]
         public IActionResult AddSubCategory([FromBody] AddSubCategoryDTO subCategoryDTO, [FromHeader] string LangCode)
@@ -41,9 +47,9 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllSubCategory( [FromHeader] string LangCode)
+        public async Task<IActionResult> GetAllSubCategory([FromQuery]int page, [FromHeader] string LangCode)
         {
-            var result = await _subCategoryService.GetAllSubCategoryAsync(LangCode);
+            var result = await _subCategoryService.GetAllSubCategoryAsync(LangCode,page);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
 

@@ -66,6 +66,16 @@ namespace Shoes.DataAccess.Concrete
             }
         }
 
+        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode)
+        {
+            IQueryable<GetCategoryDTO> data=_dBContext.Categories.AsNoTracking().AsSplitQuery().Select(x=> new GetCategoryDTO
+            {
+                Id = x.Id,
+                Content=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content
+            });
+            return new SuccessDataResult<IQueryable<GetCategoryDTO>>(response: data, HttpStatusCode.OK);    
+        }
+
         public async Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode,int page=1)
         {
             IQueryable<GetCategoryDTO> categoryQuery = _dBContext.Categories.AsNoTracking().AsSplitQuery()

@@ -98,7 +98,7 @@ namespace Shoes.DataAccess.Concrete
             try
             {
                var subCategory = _appDBContext.SubCategories
-                    .Include(x => x.SubCategoryLanguages)               
+                                 .Include(x => x.SubCategoryLanguages)               
                     .FirstOrDefault(x => x.Id == Id)      
                     ;
                 if (subCategory is null)              
@@ -107,12 +107,40 @@ namespace Shoes.DataAccess.Concrete
                 {
                     Id = subCategory.Id,
                     Content = subCategory.SubCategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content
+               
+                    
                 }, HttpStatusCode.OK);
             }
             catch (Exception ex)
             {
 
                 return new ErrorDataResult<GetSubCategoryDTO>(message: ex.Message, statusCode: HttpStatusCode.OK);
+            }
+        }
+
+        public IDataResult<GetSubCategoryForUpdateDTO> GetSubCategoryForUpdate(Guid Id)
+        {
+            try
+            {
+                var subCategory = _appDBContext.SubCategories
+                                  .Include(x => x.SubCategoryLanguages)
+                     .FirstOrDefault(x => x.Id == Id)
+                     ;
+                if (subCategory is null)
+                    return new ErrorDataResult<GetSubCategoryForUpdateDTO>(HttpStatusCode.NotFound);
+                return new SuccessDataResult<GetSubCategoryForUpdateDTO>(response: new GetSubCategoryForUpdateDTO
+                {
+                    Id = subCategory.Id,
+                    CategoryId = subCategory.CategoryId,
+                    Content = subCategory.SubCategoryLanguages.Select(x=> new KeyValuePair<string,string>(x.LangCode,x.Content)).ToDictionary()
+
+
+                }, HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+
+                return new ErrorDataResult<GetSubCategoryForUpdateDTO>(message: ex.Message, statusCode: HttpStatusCode.OK);
             }
         }
 
@@ -123,6 +151,11 @@ namespace Shoes.DataAccess.Concrete
                 var data = _appDBContext.SubCategories.Include(x => x.SubCategoryLanguages).FirstOrDefault(x => x.Id == updateCategory.Id);
                 if (data is null)
               return new ErrorResult(HttpStatusCode.NotFound);
+                if (data.CategoryId!=updateCategory.CategoryId)
+                {
+                    data.CategoryId = updateCategory.CategoryId;
+                    _appDBContext.SubCategories.Update(data);
+                }
                 foreach (var lang in updateCategory.LangContent)
                 {
                     var subCategoryLang = data.SubCategoryLanguages.FirstOrDefault(x => x.LangCode == lang.Key);
