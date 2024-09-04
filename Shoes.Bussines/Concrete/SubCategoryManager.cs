@@ -63,13 +63,13 @@ namespace Shoes.Bussines.Concrete
 
         }
 
-        public async Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryAsync(string LangCode, int page = 1)
+        public async Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryForTableAsync(string LangCode, int page = 1)
         {
             if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
             if (page <= 0)
                 page = 1;
-            return await _subCategoryDAL.GetAllSubCategoryAsync(LangCode: LangCode,page: page);
+            return await _subCategoryDAL.GetAllSubCategoryForTableAsync(LangCode: LangCode,page: page);
 
         }
 
@@ -102,6 +102,13 @@ namespace Shoes.Bussines.Concrete
             if (Id == default)
                 return new ErrorDataResult<GetSubCategoryForUpdateDTO>(HttpStatusCode.BadRequest);
             return _subCategoryDAL.GetSubCategoryForUpdate(Id);
+        }
+
+        public IDataResult<IQueryable<GetSubCategoryDTO>> GetAllSubCategory(string LangCode)
+        {
+            if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
+                LangCode = DefaultLaunguage;
+            return _subCategoryDAL.GetAllSubCategory(LangCode);
         }
     }
 }

@@ -72,7 +72,18 @@ namespace Shoes.DataAccess.Concrete
             }
         }
 
-        public async Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryAsync(string LangCode, int page = 1)
+        public IDataResult<IQueryable<GetSubCategoryDTO>> GetAllSubCategory(string LangCode)
+        {
+            IQueryable<GetSubCategoryDTO> SubcategoryQuery = _appDBContext.SubCategories.AsNoTracking().AsSplitQuery()
+                 .Select(x => new GetSubCategoryDTO
+                 {
+                     Id = x.Id,
+                     Content = x.SubCategoryLanguages.FirstOrDefault(x => x.LangCode == LangCode).Content
+                 });
+            return new SuccessDataResult<IQueryable<GetSubCategoryDTO>>(response: SubcategoryQuery, HttpStatusCode.OK);
+        }
+
+        public async Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryForTableAsync(string LangCode, int page = 1)
         {
             try
             {

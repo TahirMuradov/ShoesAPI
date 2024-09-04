@@ -8,7 +8,8 @@ namespace Shoes.DataAccess.Abstarct
     {
         public IResult AddSize(AddSizeDTO addSizeDTO);
         public IResult UpdateSize(UpdateSizeDTO updateSizeDTO );
-        public Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeAsync(int page);
+        public Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeForTableAsync(int page);
+        public IDataResult<IQueryable<GetSizeForUpdateDTO>> GetAllSize();
         public IDataResult<GetSizeForUpdateDTO> GetSize(Guid Id);
      public IResult DeleteSize(Guid Id);
     }

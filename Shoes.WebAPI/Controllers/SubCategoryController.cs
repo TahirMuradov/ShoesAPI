@@ -47,11 +47,16 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllSubCategory([FromQuery]int page, [FromHeader] string LangCode)
+        public async Task<IActionResult> GetAllSubCategoryForTable([FromQuery]int page, [FromHeader] string LangCode)
         {
-            var result = await _subCategoryService.GetAllSubCategoryAsync(LangCode,page);
+            var result = await _subCategoryService.GetAllSubCategoryForTableAsync(LangCode,page);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
-
+        [HttpGet("[action]")]
+        public  IActionResult GetAllSubCategory( [FromHeader] string LangCode)
+        {
+            var result = _subCategoryService.GetAllSubCategory(LangCode);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
     }
 }

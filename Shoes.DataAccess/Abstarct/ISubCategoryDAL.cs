@@ -11,7 +11,8 @@ namespace Shoes.DataAccess.Abstarct
         public IResult DeleteSubCategory(Guid Id);
         public IDataResult<GetSubCategoryDTO> GetSubCategory(Guid Id, string LangCode);
         public IDataResult<GetSubCategoryForUpdateDTO> GetSubCategoryForUpdate(Guid Id);
-        public Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryAsync(string LangCode, int page = 1);
+        public Task<IDataResult<PaginatedList<GetSubCategoryDTO>>> GetAllSubCategoryForTableAsync(string LangCode, int page = 1);
+        public IDataResult<IQueryable<GetSubCategoryDTO>> GetAllSubCategory(string LangCode);
 
     }
 }

@@ -62,7 +62,18 @@ namespace Shoes.DataAccess.Concrete
            
         }
 
-        public async Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeAsync(int page)
+        public IDataResult<IQueryable<GetSizeForUpdateDTO>> GetAllSize()
+        {
+            IQueryable<GetSizeForUpdateDTO> sizeQuery = _appDBContext.Sizes.AsNoTracking()
+               .Select(x => new GetSizeForUpdateDTO
+               {
+                   Id = x.Id,
+                   Size = x.SizeNumber
+               });
+            return new SuccessDataResult<IQueryable<GetSizeForUpdateDTO>>(response:sizeQuery,HttpStatusCode.OK);
+        }
+
+        public async Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeForTableAsync(int page)
         {
             IQueryable<GetSizeDTO> sizeQuery = _appDBContext.Sizes.AsNoTracking().Include(x=>x.SizeProducts)
                 .Select(x => new GetSizeDTO

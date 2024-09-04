@@ -40,10 +40,17 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest();
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetAllSize([FromQuery] int page)
+        public async Task<IActionResult> GetAllSizeForTable([FromQuery] int page)
         {
-            var result = await _sizeService.GetAllSizeAsync(page);
+            var result = await _sizeService.GetAllSizeForTableAsync(page);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetAllSize()
+        {
+            var result = _sizeService.GetAllSize();
+
+            return result.IsSuccess?Ok(result):BadRequest(result);
         }
     }
 }

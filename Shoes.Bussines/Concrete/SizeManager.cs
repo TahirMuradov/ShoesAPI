@@ -60,9 +60,9 @@ namespace Shoes.Bussines.Concrete
             return _sizeDAL.DeleteSize(Id);
         }
 
-        public async Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeAsync(int page)
+        public async Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeForTableAsync(int page)
         {
-          return await _sizeDAL.GetAllSizeAsync(page);
+          return await _sizeDAL.GetAllSizeForTableAsync(page);
         }
 
         public IDataResult<GetSizeForUpdateDTO> GetSize(Guid Id)
@@ -85,6 +85,11 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorResult(messages:errors,statusCode: HttpStatusCode.BadRequest);
             }
             return _sizeDAL.UpdateSize(updateSizeDTO);
+        }
+
+        public IDataResult<IQueryable<GetSizeForUpdateDTO>> GetAllSize()
+        {
+            return _sizeDAL.GetAllSize();   
         }
     }
 }
