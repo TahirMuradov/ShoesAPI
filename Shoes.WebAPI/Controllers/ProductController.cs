@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Shoes.Bussines.Abstarct;
-using Shoes.Entites.DTOs.PictureDTOs;
 using Shoes.Entites.DTOs.ProductDTOs;
 
 namespace Shoes.WebAPI.Controllers

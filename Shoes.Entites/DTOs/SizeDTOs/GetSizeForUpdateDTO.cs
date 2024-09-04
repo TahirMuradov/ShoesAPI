@@ -1,9 +1,8 @@
 ﻿namespace Shoes.Entites.DTOs.SizeDTOs
 {
-    public class GetSizeDTO
+    public class GetSizeForUpdateDTO
     {
         public Guid Id { get; set; }
         public int Size { get; set; }
-        public  int StockCount { get; set; }
     }
 }

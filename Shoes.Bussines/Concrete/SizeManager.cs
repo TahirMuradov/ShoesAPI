@@ -65,10 +65,10 @@ namespace Shoes.Bussines.Concrete
           return await _sizeDAL.GetAllSizeAsync(page);
         }
 
-        public IDataResult<GetSizeDTO> GetSize(Guid Id)
+        public IDataResult<GetSizeForUpdateDTO> GetSize(Guid Id)
         {
             if (Id == default)
-                return new ErrorDataResult<GetSizeDTO>(HttpStatusCode.BadRequest);
+                return new ErrorDataResult<GetSizeForUpdateDTO>(HttpStatusCode.BadRequest);
             return _sizeDAL.GetSize(Id);
 
         }

@@ -43,7 +43,7 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> GetAllSize([FromQuery] int page)
         {
             var result = await _sizeService.GetAllSizeAsync(page);
-            return result.IsSuccess ? Ok(result) : BadRequest();
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
     }
 }

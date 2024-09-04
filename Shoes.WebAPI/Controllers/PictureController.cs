@@ -1,6 +1,4 @@
-﻿using iText.IO.Util;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Shoes.Bussines.Abstarct;
 using Shoes.Entites.DTOs.PictureDTOs;
 

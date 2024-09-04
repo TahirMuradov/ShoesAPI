@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
@@ -7,15 +6,8 @@ using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
 using Shoes.DataAccess.Abstarct;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
-using Shoes.Entites.DTOs.CategoryDTOs;
 using Shoes.Entites.DTOs.SizeDTOs;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoes.DataAccess.Concrete
 {
@@ -72,27 +64,30 @@ namespace Shoes.DataAccess.Concrete
 
         public async Task<IDataResult<PaginatedList<GetSizeDTO>>> GetAllSizeAsync(int page)
         {
-            IQueryable<GetSizeDTO> sizeQuery = _appDBContext.Sizes.AsNoTracking()
+            IQueryable<GetSizeDTO> sizeQuery = _appDBContext.Sizes.AsNoTracking().Include(x=>x.SizeProducts)
                 .Select(x => new GetSizeDTO
                 {
                     Id = x.Id,
-                  Size=x.SizeNumber
+                  Size=x.SizeNumber,
+                  StockCount=x.SizeProducts.Select(x=>x.StockCount).Sum()
                 });
             var returnData = await PaginatedList< GetSizeDTO>.CreateAsync(sizeQuery, page, 10);
             return new SuccessDataResult<PaginatedList<GetSizeDTO>>(response: returnData, HttpStatusCode.OK);
         }
 
-        public IDataResult<GetSizeDTO> GetSize(Guid Id)
+        public IDataResult<GetSizeForUpdateDTO> GetSize(Guid Id)
         {
-            var sizeQuery = _appDBContext.Sizes.FirstOrDefault(x=>x.Id==Id);
+            var sizeQuery = _appDBContext.Sizes.AsNoTracking().FirstOrDefault(x=>x.Id==Id);
             if (sizeQuery is null)
-                return new ErrorDataResult<GetSizeDTO>(statusCode: HttpStatusCode.NotFound);
+                return new ErrorDataResult<GetSizeForUpdateDTO>(statusCode: HttpStatusCode.NotFound);
            
 
-            return new SuccessDataResult<GetSizeDTO>(response: new GetSizeDTO
+            return new SuccessDataResult<GetSizeForUpdateDTO>(response: new GetSizeForUpdateDTO
             {
                 Id = sizeQuery.Id,
                 Size = sizeQuery.SizeNumber
+            
+
             }, statusCode: HttpStatusCode.OK);
 
             
