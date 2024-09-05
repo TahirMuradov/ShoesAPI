@@ -6,7 +6,7 @@ namespace Shoes.Bussines.Abstarct
 {
     public interface IProductService
     {
-        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO,string LangCode);
+        public Task<IResult> AddProductAsync(AddProductDTO addProductDTO, string LangCode);
         public IResult DeleteProduct(Guid Id);
         public Task<IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO, string LangCode);
         public Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboardAsync(string LangCode, int page=1);

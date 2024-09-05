@@ -10,7 +10,7 @@ using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
 using Shoes.DataAccess.Abstarct;
 using Shoes.Entites.DTOs.ProductDTOs;
 using System.Net;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+
 
 namespace Shoes.Bussines.Concrete
 {
@@ -41,7 +41,7 @@ namespace Shoes.Bussines.Concrete
             _productDAL = productDAL;
         }
 
-        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO, string LangCode)
+        public async Task<IResult> AddProductAsync(AddProductDTO addProductDTO,string LangCode)
         {
             if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
@@ -53,7 +53,7 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorDataResult<Guid>(errors, HttpStatusCode.BadRequest);
                 
             }
-            return _productDAL.AddProduct(addProductDTO);
+            return await _productDAL.AddProductAsync(addProductDTO);
 
         }
 

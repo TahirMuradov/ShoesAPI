@@ -47,6 +47,7 @@ namespace Shoes.WebAPI.Controllers
         }
         [HttpGet("[action]")]
         public IActionResult GetAllSize()
+        
         {
             var result = _sizeService.GetAllSize();
 

@@ -15,7 +15,7 @@ namespace Shoes.Core.Helpers.FileHelper
             {
                 Directory.CreateDirectory(filePath);
             }
-            var path = IsOrderPdf? "/uploads/OrderPDFs/" + Guid.NewGuid().ToString() + file.FileName : "/uploads/ProductPhotos/" + Guid.NewGuid().ToString() + file.FileName;
+            var path = IsOrderPdf? "/uploads/OrderPDFs/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ','_') : "/uploads/ProductPhotos/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ', '_');
             using FileStream fileStream = new(Path.Combine(wwwrootGetPath.GetwwwrootPath + path), FileMode.Create);
             await file.CopyToAsync(fileStream);
             return path;
@@ -34,7 +34,7 @@ namespace Shoes.Core.Helpers.FileHelper
         {
             foreach (var path in FilePaths)
             {
-                string filePath = Path.Combine(wwwrootGetPath.GetwwwrootPath + path);
+                string filePath = Path.Combine(wwwrootGetPath.GetwwwrootPath, path.Replace('/','\\'));
                 if (File.Exists(filePath))
                 {
                     File.Delete(filePath);

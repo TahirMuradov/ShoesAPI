@@ -22,7 +22,7 @@ namespace Shoes.DataAccess.Concrete
             _appDBContext = appDBContext;
         }
 
-        public IDataResult<Guid> AddProduct(AddProductDTO addProductDTO)
+        public async Task<IResult> AddProductAsync(AddProductDTO addProductDTO)
         {
             try
             {
@@ -35,7 +35,7 @@ namespace Shoes.DataAccess.Concrete
                     
                  };
                 _appDBContext.Products.Add(product);
-                Parallel.ForEach(addProductDTO.ProductName, i =>
+                foreach (var i in addProductDTO.ProductName)
                 {
                     ProductLanguage productLanguage = new ProductLanguage()
                     {
@@ -45,35 +45,48 @@ namespace Shoes.DataAccess.Concrete
                         Description = addProductDTO.Description.GetValueOrDefault(i.Key),
 
                     };
-                    _appDBContext.ProductLanguages.Add(productLanguage);
-                });
-                Parallel.ForEach(addProductDTO.Sizes, i =>
+                 await   _appDBContext.ProductLanguages.AddAsync(productLanguage);
+                }
+                foreach (var i in addProductDTO.Sizes)
                 {
                     if (i.Value == 0)
-                        return;
-                    bool sizeCheceked = _appDBContext.Sizes.AsNoTracking().Any(x => x.Id == i.Key);
-                    if (!sizeCheceked) return;
+                        continue;
+                    bool sizeCheceked =await _appDBContext.Sizes.AsNoTracking().AnyAsync(x => x.Id == i.Key);
+                    if (!sizeCheceked) continue;
                     SizeProduct sizeProduct = new SizeProduct()
                     {
                         ProductId = product.Id,
                         SizeId = i.Key,
                         StockCount = i.Value
                     };
-                    _appDBContext.SizeProducts.Add(sizeProduct);
-                });
-                Parallel.ForEach(addProductDTO.SubCategories, i =>
+                   await _appDBContext.SizeProducts.AddAsync(sizeProduct);
+
+                }
+                foreach (var i in addProductDTO.SubCategories)
                 {
-                    bool CheckedSubCategory = _appDBContext.SubCategories.AsNoTracking().Any(x => x.Id == i);
-                    if (!CheckedSubCategory) return;
+                    bool CheckedSubCategory =await _appDBContext.SubCategories.AsNoTracking().AnyAsync(x => x.Id == i);
+                    if (!CheckedSubCategory) continue;
                     SubCategoryProduct subCategoryProduct = new SubCategoryProduct()
                     {
                         ProductId = product.Id,
                         SubCategoryId = i,
 
                     };
-                    _appDBContext.SubCategoryProducts.Add(subCategoryProduct);
-                });
-               _appDBContext.SaveChanges();
+                    await _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
+
+                }
+                List<string> photoUrls = await FileHeleper.PhotoFileSaveRangeAsync(addProductDTO.Pictures);
+                foreach (string url in photoUrls)
+                {
+                    Picture picture = new Picture()
+                    {
+                        ProductId = product.Id,
+                        Url = url
+                    };
+                 await  _appDBContext.Pictures.AddAsync(picture);
+                }
+                
+             await   _appDBContext.SaveChangesAsync();
                 return new SuccessDataResult<Guid>(response:product.Id,HttpStatusCode.OK);
 
             }

@@ -8,9 +8,9 @@ namespace Shoes.Entites.DTOs.ProductDTOs
     {
         [ModelBinder(BinderType =typeof(ModelBindingDictinory<string,string>))]
         public Dictionary<string,string> ProductName { get; set; }
-        [ModelBinder(BinderType = typeof(ModelBindingDictinory<string, string>))]
+        [ModelBinder(BinderType = typeof(ModelBindingDictinory<string,string>))]
         public Dictionary<string,string> Description { get; set; }
-        [ModelBinder(BinderType = typeof(ModelBindingDictinory<Guid, string>))]
+        [ModelBinder(BinderType = typeof(ModelBindingDictinory<Guid,int>))]
         public Dictionary<Guid, int> Sizes { get; set; }
         public decimal DiscountPrice { get; set; }
         public decimal Price { get; set; }
