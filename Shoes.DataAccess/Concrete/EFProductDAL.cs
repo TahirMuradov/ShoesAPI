@@ -231,17 +231,17 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessDataResult<GetDetailProductDTO>(dto, HttpStatusCode.OK);
         }
 
-        public IDataResult<GetDetailProductDashboardDTO> GetProductDetailDashboard(Guid id, string LangCode)
+        public IDataResult<GetDetailProductDashboardDTO> GetProductDetailDashboard(Guid id)
         {
             var product = _appDBContext.Products
            .AsNoTracking()
            .AsSplitQuery()
-           .Where(p => p.Id == id)
+         
            .Select(p => new GetDetailProductDashboardDTO
            {
              Id=  p.Id,
-               ProductName = p.ProductLanguages.ToDictionary(pl => pl.LangCode, pl => pl.Title),
-               Description = p.ProductLanguages.ToDictionary(pl => pl.LangCode, pl => pl.Description),
+               ProductName = p.ProductLanguages.Select(x=>new KeyValuePair<string,string>(x.LangCode,x.Title)).ToDictionary(),
+               Description = p.ProductLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Description)).ToDictionary(),
                Sizes = p.SizeProducts.Select(x=>new GetProductSizeInfoDTO
                {
                    SizeId = x.SizeId,
@@ -251,7 +251,7 @@ namespace Shoes.DataAccess.Concrete
              DiscountPrice=  p.DiscountPrice,
               Price= p.Price,
              ProductCode=  p.ProductCode,
-               SubCategories = p.SubCategories.Select(sc => sc.SubCategory.SubCategoryLanguages.FirstOrDefault(scl => scl.LangCode == LangCode).Content).ToList(),
+               SubCategories = p.SubCategories.Select(sc => sc.SubCategory.CategoryId).ToList(),
                PictureUrls = p.Pictures.Select(pic => pic.Url).ToList()
            })
            .FirstOrDefault(x=>x.Id==id);
@@ -264,25 +264,32 @@ namespace Shoes.DataAccess.Concrete
 
         public async Task< IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO)
         {
-            Product product = await _appDBContext.Products.AsSplitQuery().FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
+            Product product = await _appDBContext.Products
+                .Include(x=>x.ProductLanguages)
+                .Include(x=>x.Pictures)
+                .Include(x=>x.SizeProducts)
+                              .Include(x=>x.SubCategories)
+                .AsSplitQuery().FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
             var pivot = _appDBContext.SubCategoryProducts.Where(x => x.ProductId == product.Id);
             if (product is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
             if (updateProductDTO.CurrentPictureUrls is not null)
             {
 
-                Parallel.ForEach(updateProductDTO.CurrentPictureUrls, url =>
+            
+                foreach (var url in updateProductDTO.CurrentPictureUrls)
                 {
                     if (!product.Pictures.Any(x => x.Url == url))
                     {
                         FileHeleper.RemoveFile(url);
                     }
-                });
+                }
             }
             if (updateProductDTO.NewPictures is not null)
             {
               List<string> newUrls=  await FileHeleper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
-                Parallel.ForEach(newUrls, async url =>
+           
+                foreach (string url in newUrls)
                 {
                     Picture picture = new Picture()
                     {
@@ -290,19 +297,18 @@ namespace Shoes.DataAccess.Concrete
                         Url = url,
 
                     };
-                  await  _appDBContext.Pictures.AddAsync(picture);
-                });
-                
+                    await _appDBContext.Pictures.AddAsync(picture);
+                }
             }
             if (updateProductDTO.ProductCode is not null)
                 product.ProductCode = updateProductDTO.ProductCode;
           product.DiscountPrice = updateProductDTO.DiscountPrice;
             product.Price = updateProductDTO.Price;
             if (updateProductDTO.Sizes is not null)
-            {
-                Parallel.ForEach(updateProductDTO.Sizes, size =>
+            {             
+                foreach (var size in updateProductDTO.Sizes)
                 {
-                    var productSizeChecked = product.SizeProducts.FirstOrDefault(x => x.Size.SizeNumber == size.Key);
+                    var productSizeChecked = product.SizeProducts.FirstOrDefault(x => x.SizeId == size.Key);
                     if (productSizeChecked != null)
                     {
                         productSizeChecked.StockCount = size.Value;
@@ -310,8 +316,8 @@ namespace Shoes.DataAccess.Concrete
                     }
                     else
                     {
-                    var checekdSize = _appDBContext.Sizes.AsSplitQuery().FirstOrDefault(x => x.SizeNumber == size.Key);
-                        if(checekdSize != null)
+                        var checekdSize = _appDBContext.Sizes.AsSplitQuery().FirstOrDefault(x => x.Id == size.Key);
+                        if (checekdSize != null)
                         {
                             SizeProduct sizeProduct = new SizeProduct()
                             {
@@ -321,33 +327,29 @@ namespace Shoes.DataAccess.Concrete
                             };
                             _appDBContext.SizeProducts.Add(sizeProduct);
                         }
-                        else
-                        {
-                            Size newSize= new Size()
-                            {
-                                SizeNumber = size.Key,
-                            };
-                            _appDBContext.Sizes.Add(newSize);
-                            SizeProduct sizeProduct = new SizeProduct()
-                            {
-                                ProductId = product.Id,
+                        //else
+                        //{
+                        //    Size newSize= new Size()
+                        //    {
+                        //        SizeNumber = size.Key,
+                        //    };
+                        //    _appDBContext.Sizes.Add(newSize);
+                        //    SizeProduct sizeProduct = new SizeProduct()
+                        //    {
+                        //        ProductId = product.Id,
 
-                                SizeId = newSize.Id,
-                                StockCount = size.Value,
-                            };
-                            _appDBContext.SizeProducts.Add(sizeProduct);
-                        }
+                        //        SizeId = newSize.Id,
+                        //        StockCount = size.Value,
+                        //    };
+                        //    _appDBContext.SizeProducts.Add(sizeProduct);
+                        //}
                     }
-
-               
-                  
-
-                });
+                }
             }
 
             if (updateProductDTO.Description is not null)
             {
-                Parallel.ForEach(updateProductDTO.Description, i =>
+                foreach(var i in updateProductDTO.Description)
                 {
                     var checkedLangCode = product.ProductLanguages.FirstOrDefault(x => x.LangCode == i.Key);
                     if (checkedLangCode != null)
@@ -368,34 +370,33 @@ namespace Shoes.DataAccess.Concrete
                         };
                         _appDBContext.ProductLanguages.Add(productLanguage);
                     }
-                });
+                }
+            
             }
             if (updateProductDTO.SubCategoriesID is not null)
             {
 
-                Parallel.ForEach(updateProductDTO.SubCategoriesID, async i =>
+                foreach (var i in updateProductDTO.SubCategoriesID)
                 {
-                    var ProductSubCategory = product.SubCategories.FirstOrDefault(x=>x.Id==i);
-                    if (ProductSubCategory is  null)
+                    var ProductSubCategory = product.SubCategories.FirstOrDefault(x => x.Id == i);
+                    if (ProductSubCategory is not null)
                     {
                         SubCategoryProduct subCategoryProduct = new SubCategoryProduct()
                         {
                             ProductId = product.Id,
                             SubCategoryId = ProductSubCategory.Id
                         };
-                     await   _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
-                       
-                    }                
-                
-                });
-                Parallel.ForEach(product.SizeProducts, i =>
+                        await _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
+
+                    }
+                }
+          
+                foreach (var i in product.SizeProducts)
                 {
-                    
                     Guid isDeleteSubCategoryProdutc = updateProductDTO.SubCategoriesID.FirstOrDefault(x => x == i.SizeId);
                     if (isDeleteSubCategoryProdutc == default)
                         _appDBContext.SizeProducts.Remove(i);
-
-                });
+                }
             
                 
             }

@@ -11,7 +11,7 @@ namespace Shoes.Entites.DTOs.ProductDTOs
         public decimal DiscountPrice { get; set; }
         public decimal Price { get; set; }
         public string ProductCode { get; set; }
-        public List<string> SubCategories { get; set; }
+        public List<Guid> SubCategories { get; set; }
         public List<string> PictureUrls { get; set; }
     }
 }

@@ -95,17 +95,16 @@ namespace Shoes.Bussines.Concrete
            return _productDAL.GetProductDetail(Id, LangCode);
         }
 
-        public IDataResult<GetDetailProductDashboardDTO> GetProductDetailDashboard(Guid id, string LangCode)
+        public IDataResult<GetDetailProductDashboardDTO> GetProductDetailDashboard(Guid id)
         {
             if (id == default) return new ErrorDataResult<GetDetailProductDashboardDTO>(HttpStatusCode.BadRequest);
-            if (!string.IsNullOrEmpty(LangCode)||!SupportedLaunguages.Contains(LangCode))
-                LangCode = DefaultLaunguage;
-            return _productDAL.GetProductDetailDashboard(id, LangCode);
+         
+            return _productDAL.GetProductDetailDashboard(id);
         }
 
         public async Task<IResult> UpdateProductAsync(UpdateProductDTO updateProductDTO, string LangCode)
         {
-            if (!string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
+            if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
             UpdateProductDTOValidator validationRules =new UpdateProductDTOValidator(LangCode);
             var validationResult= await validationRules.ValidateAsync(updateProductDTO);

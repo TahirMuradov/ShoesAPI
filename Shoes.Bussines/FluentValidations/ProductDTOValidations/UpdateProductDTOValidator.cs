@@ -12,7 +12,7 @@ namespace Shoes.Bussines.FluentValidations.ProductDTOValidations
         {
             get
             {
-                return ConfigurationHelper.config.GetSection("SupportedLanguage:Languages").Get<string[]>();
+                return ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>();
             }
         }
         public UpdateProductDTOValidator(string LangCode)

@@ -53,11 +53,16 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) :BadRequest(result);
         }
         [HttpGet("[action]")]
-        public IActionResult GetProductDetailDashboard([FromQuery] Guid id, [FromHeader] string LangCode)
+        public IActionResult GetProductDetailDashboard([FromQuery] Guid id)
         {
 
-            var result=_productService.GetProductDetailDashboard(id, LangCode);
+            var result=_productService.GetProductDetailDashboard(id);
             return result.IsSuccess?Ok(result):BadRequest(result) ;
+        }
+        [HttpGet("[action]")]
+        public IActionResult GetProductForUpdate([FromQuery] Guid Id, [FromHeader] string LangCode)
+        {
+            return Ok();
         }
     }
 }
