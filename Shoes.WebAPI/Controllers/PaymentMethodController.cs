@@ -33,6 +33,12 @@ namespace Shoes.WebAPI.Controllers
                return result.IsSuccess ? Ok(result) :BadRequest(result);
         }
         [HttpGet("[action]")]
+        public IActionResult GetPaymentMethoForUpdate([FromQuery]Guid Id)
+        {
+            var result=_paymentMethodService.GetPaymentMethodForUpdate(Id);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
         public IActionResult GetPaymentMethod([FromQuery] Guid Id, [FromHeader] string LangCode)
         {
             var result = _paymentMethodService.GetPaymentMethod(Id, LangCode);

@@ -92,6 +92,22 @@ namespace Shoes.DataAccess.Concrete
             },HttpStatusCode.OK);
         }
 
+        public IDataResult<GetShippingMethodForUpdateDTO> GetShippingMethodForUpdate(Guid Id)
+        {
+            GetShippingMethodForUpdateDTO data = _appDBContext.ShippingMethods.Include(x => x.ShippingMethodLanguages).Select(x => new GetShippingMethodForUpdateDTO
+            {
+                discountPrice = x.discountPrice,
+                Id = x.Id,
+                LangContent = x.ShippingMethodLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Content)).ToDictionary(),
+                price = x.price
+
+            }).FirstOrDefault(x=>x.Id==Id);
+            if (data is null)
+                return new ErrorDataResult<GetShippingMethodForUpdateDTO>(HttpStatusCode.NotFound);
+            return new SuccessDataResult<GetShippingMethodForUpdateDTO>(response:data,HttpStatusCode.OK); 
+
+        }
+
         public IResult UpdateShippingMethod(UpdateShippingMethodDTO updateShipping)
         {
             try

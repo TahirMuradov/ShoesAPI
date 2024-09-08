@@ -58,6 +58,7 @@ namespace Shoes.DataAccess.Concrete
                 var PaymentMethodaQuery=_appDBContext.PaymentMethods.AsNoTracking().AsSplitQuery().Select(x=>new GetPaymentMethodDTO
                 {Id=x.Id,
                     Content = x.PaymentMethodLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content,
+                    IsApi=x.IsApi,
                     
                 });
                 var resultData=await PaginatedList<GetPaymentMethodDTO>.CreateAsync(PaymentMethodaQuery, page,10);
@@ -97,6 +98,7 @@ namespace Shoes.DataAccess.Concrete
                 var checkedMethod = _appDBContext.PaymentMethods.Include(x=>x.PaymentMethodLanguages).FirstOrDefault(x => x.Id == updatePayment.Id);
                 if (checkedMethod is null)
                     return new ErrorResult(HttpStatusCode.NotFound);
+                checkedMethod.IsApi=updatePayment.IsApi;
                 foreach (var newContent in updatePayment.Lang)
                 {
                     var checkedLangCode = checkedMethod.PaymentMethodLanguages.FirstOrDefault(x => x.LangCode == newContent.Key);
@@ -143,6 +145,19 @@ namespace Shoes.DataAccess.Concrete
 
                 return new ErrorResult(message:ex.Message, statusCode: HttpStatusCode.BadRequest);
             }
+        }
+
+        public IDataResult<GetPaymentMethodForUpdateDTO> GetPaymentMethodForUpdate(Guid Id)
+        {
+          var checekdPaymentMethod=_appDBContext.PaymentMethods.Include(x=>x.PaymentMethodLanguages).FirstOrDefault(x=>x.Id == Id);
+            if(checekdPaymentMethod is null)
+                return new ErrorDataResult<GetPaymentMethodForUpdateDTO>(HttpStatusCode.NotFound);
+            return new SuccessDataResult<GetPaymentMethodForUpdateDTO>(response: new GetPaymentMethodForUpdateDTO()
+            {
+                Id = checekdPaymentMethod.Id,
+                IsApi = checekdPaymentMethod.IsApi,
+                Content = checekdPaymentMethod.PaymentMethodLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Content)).ToDictionary()
+            }, HttpStatusCode.OK);
         }
     }
 }

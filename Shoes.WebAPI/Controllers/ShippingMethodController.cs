@@ -33,6 +33,14 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpGet("[action]")]
+        public IActionResult GetShippingMethodForUpdate([FromQuery]Guid Id) 
+        {
+            var result=_shippingMethodService.GetShippingMethodForUpdate(Id);
+            return result.IsSuccess?Ok(result):BadRequest(result);
+
+        }
+
+        [HttpGet("[action]")]
         public IActionResult GetShippingMethod([FromQuery]Guid Id, [FromHeader]string LangCode)
         {
             var result = _shippingMethodService.GetShippingMethod(Id, LangCode);

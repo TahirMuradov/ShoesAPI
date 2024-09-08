@@ -95,5 +95,12 @@ namespace Shoes.Bussines.Concrete
             }
             return _paymentMethodDAL.UpdatePaymenthod(updatePayment);
         }
+
+        public IDataResult<GetPaymentMethodForUpdateDTO> GetPaymentMethodForUpdate(Guid Id)
+        {
+            if (Id == default)
+                return new ErrorDataResult<GetPaymentMethodForUpdateDTO>(HttpStatusCode.BadRequest);
+            return _paymentMethodDAL.GetPaymentMethodForUpdate(Id);
+        }
     }
 }
