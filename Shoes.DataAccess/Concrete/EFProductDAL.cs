@@ -251,7 +251,7 @@ namespace Shoes.DataAccess.Concrete
              DiscountPrice=  p.DiscountPrice,
               Price= p.Price,
              ProductCode=  p.ProductCode,
-               SubCategories = p.SubCategories.Select(sc => sc.SubCategory.CategoryId).ToList(),
+               SubCategories = p.SubCategories.Select(sc => sc.SubCategory.Id).ToList(),
                PictureUrls = p.Pictures.Select(pic => pic.Url).ToList()
            })
            .FirstOrDefault(x=>x.Id==id);
@@ -268,23 +268,26 @@ namespace Shoes.DataAccess.Concrete
                 .Include(x=>x.ProductLanguages)
                 .Include(x=>x.Pictures)
                 .Include(x=>x.SizeProducts)
-                              .Include(x=>x.SubCategories)
-                .AsSplitQuery().FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
-            var pivot = _appDBContext.SubCategoryProducts.Where(x => x.ProductId == product.Id);
+                .Include(x=>x.SubCategories)
+               .FirstOrDefaultAsync(x => x.Id == updateProductDTO.Id);
+        
             if (product is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
-            if (updateProductDTO.CurrentPictureUrls is not null)
-            {
+         
 
             
-                foreach (var url in updateProductDTO.CurrentPictureUrls)
+                foreach (var url in product.Pictures)
                 {
-                    if (!product.Pictures.Any(x => x.Url == url))
+                    if (!updateProductDTO.CurrentPictureUrls.Any(x => x == url.Url))
                     {
-                        FileHeleper.RemoveFile(url);
+                     bool result=   FileHeleper.RemoveFile(url.Url);
+                        if (result)
+                        {
+                            _appDBContext.Pictures.Remove(url);
+                        }
                     }
                 }
-            }
+         
             if (updateProductDTO.NewPictures is not null)
             {
               List<string> newUrls=  await FileHeleper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
@@ -355,8 +358,9 @@ namespace Shoes.DataAccess.Concrete
                     if (checkedLangCode != null)
                     {
                         checkedLangCode.Description = i.Value;
-                        checkedLangCode.Title = updateProductDTO.Description.GetValueOrDefault(i.Key);
+                        checkedLangCode.Title = updateProductDTO.ProductName.GetValueOrDefault(i.Key);
 
+                   _appDBContext.ProductLanguages.Update(checkedLangCode);
                     }
                     else
                     {
@@ -364,7 +368,7 @@ namespace Shoes.DataAccess.Concrete
                         {
                             ProductId = product.Id,
                             Description = i.Value,
-                            Title = updateProductDTO.Description.GetValueOrDefault(i.Key),
+                            Title = updateProductDTO.ProductName.GetValueOrDefault(i.Key),
                             LangCode = i.Key,
 
                         };
@@ -376,28 +380,32 @@ namespace Shoes.DataAccess.Concrete
             if (updateProductDTO.SubCategoriesID is not null)
             {
 
-                foreach (var i in updateProductDTO.SubCategoriesID)
+                foreach (var i in product.SubCategories)
                 {
-                    var ProductSubCategory = product.SubCategories.FirstOrDefault(x => x.Id == i);
-                    if (ProductSubCategory is not null)
+                    var SubCategoryid = updateProductDTO.SubCategoriesID.FirstOrDefault(x => x == i.SubCategoryId);
+                    if (SubCategoryid ==default)
                     {
-                        SubCategoryProduct subCategoryProduct = new SubCategoryProduct()
-                        {
-                            ProductId = product.Id,
-                            SubCategoryId = ProductSubCategory.Id
-                        };
-                        await _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
-
+                        _appDBContext.SubCategoryProducts.Remove(i);   
                     }
+
                 }
-          
-                foreach (var i in product.SizeProducts)
+                foreach (var subCategoryId in updateProductDTO.SubCategoriesID)
                 {
-                    Guid isDeleteSubCategoryProdutc = updateProductDTO.SubCategoriesID.FirstOrDefault(x => x == i.SizeId);
-                    if (isDeleteSubCategoryProdutc == default)
-                        _appDBContext.SizeProducts.Remove(i);
+                    var subCategoryChecked = _appDBContext.SubCategories.FirstOrDefault(x => x.Id == subCategoryId);
+                    if (subCategoryChecked is null)
+                        continue;
+                    var productSubCategoryCheceked = product.SubCategories.FirstOrDefault(x => x.SubCategoryId == subCategoryId);
+                    if (productSubCategoryCheceked is not null)
+                        continue;
+                   SubCategoryProduct subCategoryProduct = new SubCategoryProduct()
+                   {
+                       ProductId=product.Id,
+                       SubCategoryId= subCategoryChecked.Id
+                   };
+                    _appDBContext.SubCategoryProducts.Add(subCategoryProduct);
                 }
             
+          
                 
             }
      await   _appDBContext.SaveChangesAsync();

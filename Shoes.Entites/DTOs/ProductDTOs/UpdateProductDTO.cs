@@ -18,7 +18,7 @@ namespace Shoes.Entites.DTOs.ProductDTOs
         public decimal DiscountPrice { get; set; }
         public decimal Price { get; set; }
         public string ProductCode { get; set; }
-        public List<string> CurrentPictureUrls { get; set; }
-        public IFormFileCollection NewPictures { get; set; }
+        public List<string>? CurrentPictureUrls { get; set; }
+        public IFormFileCollection? NewPictures { get; set; }
     }
 }

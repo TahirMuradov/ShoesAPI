@@ -1,12 +1,10 @@
-﻿using iText.IO.Util;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.FluentValidations.ProductDTOValidations;
 using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
-using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
 using Shoes.DataAccess.Abstarct;
 using Shoes.Entites.DTOs.ProductDTOs;
 using System.Net;

@@ -23,11 +23,10 @@ namespace Shoes.Core.Helpers.FileHelper
         public static async Task<List<string>> PhotoFileSaveRangeAsync(this IFormFileCollection file)
         {
          List<string>urls = new List<string>();
-           Parallel.ForEach(file, async x => { 
-                
-                
+        foreach (var x in file)
+            {
                 urls.Add(await SaveFileAsync(x, false));
-            });
+            }
             return urls;
         }
         public static bool RemoveFileRange(this List<string> FilePaths)
@@ -50,7 +49,7 @@ namespace Shoes.Core.Helpers.FileHelper
         }
         public static bool RemoveFile(this string FilePaths)
         {
-            string filePath = Path.Combine(wwwrootGetPath.GetwwwrootPath + FilePaths);
+            string filePath = Path.Combine(wwwrootGetPath.GetwwwrootPath + FilePaths.Replace("/","\\"));
             if (File.Exists(filePath))
             {
                 File.Delete(filePath);

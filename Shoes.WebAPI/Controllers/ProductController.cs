@@ -59,10 +59,6 @@ namespace Shoes.WebAPI.Controllers
             var result=_productService.GetProductDetailDashboard(id);
             return result.IsSuccess?Ok(result):BadRequest(result) ;
         }
-        [HttpGet("[action]")]
-        public IActionResult GetProductForUpdate([FromQuery] Guid Id, [FromHeader] string LangCode)
-        {
-            return Ok();
-        }
+    
     }
 }
