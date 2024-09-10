@@ -11,14 +11,19 @@ namespace Shoes.Bussines.FluentValidations.ShippingMethodDTOValidations
         public UpdateShippingMethodDTOValidation(string LangCode)
         {
             var SupportedLaunguages = ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>();
-           
-            // Validate that each key in LangContent is a valid language code
-            RuleFor(dto => dto.Lang.Keys)
-       .Must(keys =>keys.All(key =>(key is null && (SupportedLaunguages).Contains(null))) && keys.All(key => (SupportedLaunguages).Contains(key)))
-       .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidLangCode", new CultureInfo(LangCode)));
+
+            RuleFor(dto => dto.Lang)
+                 .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangDictionaryIsRequired", new CultureInfo(LangCode)));
+
+            RuleForEach(dto => dto.Lang)
+                .Must(pair => !string.IsNullOrEmpty(pair.Key) && !string.IsNullOrEmpty(pair.Value))
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("LangKeyAndValueRequired", new CultureInfo(LangCode)));
+
+            RuleForEach(dto => dto.Lang.Keys)
+                .Must(key => SupportedLaunguages.Contains(key))
+                .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("InvalidLangKey", new CultureInfo(LangCode)));
 
 
-          
         }
     }
 }

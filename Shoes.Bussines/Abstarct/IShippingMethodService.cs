@@ -6,7 +6,7 @@ namespace Shoes.Bussines.Abstarct
 {
     public interface IShippingMethodService
     {
-        public IResult AddShippingMethod(AddShippingMethodDTO addShipping,string LangCode);'
+        public IResult AddShippingMethod(AddShippingMethodDTO addShipping,string LangCode);
         public IDataResult<GetShippingMethodForUpdateDTO> GetShippingMethodForUpdate(Guid Id);
         public IResult UpdateShippingMethod(UpdateShippingMethodDTO updateShipping,string LangCode);
         public IResult DeleteShippingMethod(Guid Id);
