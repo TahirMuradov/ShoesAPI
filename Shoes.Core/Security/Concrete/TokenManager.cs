@@ -28,16 +28,22 @@ namespace Shoes.Core.Security.Concrete
         public async Task<Token> CreateAccessTokenAsync(AppUser User, List<string> roles)
         {
             Token token = new();
+           
+      
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()),
+                new Claim("Email", User.Email),
+                new Claim("UserName", User.UserName),
+                new Claim("FirstName", User.FirstName),
+                new Claim("LastName", User.LastName),
+                new Claim("Roles",string.Join(",", roles)),
+                new Claim("Adress",User.Adress),
+                new Claim("PhoneNumber",User.PhoneNumber)
             };
 
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+   
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
 
@@ -46,7 +52,7 @@ namespace Shoes.Core.Security.Concrete
                 issuer: _configuration["Token:Audience"],
                 audience: _configuration["Token:Issuer"],
                 expires: token.Expiration,
-                notBefore: DateTime.Now,
+                notBefore: DateTime.UtcNow,
                 claims: claims,
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 

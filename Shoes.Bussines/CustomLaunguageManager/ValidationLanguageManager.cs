@@ -195,6 +195,98 @@ namespace Shoes.Bussines.CustomLaunguageManager
             AddTranslation("ru", "InvalidImageFormat", "Допускаются только форматы JPEG и PNG.");
             AddTranslation("en", "InvalidImageFormat", "Only JPEG and PNG formats are allowed.");
             #endregion
+            #region AuthDtOsValidationMessages
+            AddTranslation("az", "FirstnameRequired", "Ad tələb olunur!");
+            AddTranslation("ru", "FirstnameRequired", "Имя обязательно!");
+            AddTranslation("en", "FirstnameRequired", "Firstname is required!");
+
+            AddTranslation("az", "LastnameRequired", "Soyad tələb olunur!");
+            AddTranslation("ru", "LastnameRequired", "Фамилия обязательна!");
+            AddTranslation("en", "LastnameRequired", "Lastname is required!");
+
+            AddTranslation("az", "EmailRequired", "Email tələb olunur!");
+            AddTranslation("ru", "EmailRequired", "Email обязателен!");
+            AddTranslation("en", "EmailRequired", "Email is required!");
+
+            AddTranslation("az", "EmailInvalid", "Email yanlışdır!");
+            AddTranslation("ru", "EmailInvalid", "Email недействителен!");
+            AddTranslation("en", "EmailInvalid", "Email is invalid!");
+
+            AddTranslation("az", "PhoneNumberRequired", "Telefon nömrəsi tələb olunur!");
+            AddTranslation("ru", "PhoneNumberRequired", "Номер телефона обязателен!");
+            AddTranslation("en", "PhoneNumberRequired", "Phone number is required!");
+
+            AddTranslation("az", "PhoneNumberInvalid", "Telefon nömrəsi yanlışdır!");
+            AddTranslation("ru", "PhoneNumberInvalid", "Номер телефона недействителен!");
+            AddTranslation("en", "PhoneNumberInvalid", "Phone number is invalid!");
+
+            AddTranslation("az", "AddressRequired", "Ünvan tələb olunur!");
+            AddTranslation("ru", "AddressRequired", "Адрес обязателен!");
+            AddTranslation("en", "AddressRequired", "Address is required!");
+
+            AddTranslation("az", "UsernameRequired", "İstifadəçi adı tələb olunur!");
+            AddTranslation("ru", "UsernameRequired", "Имя пользователя обязательно!");
+            AddTranslation("en", "UsernameRequired", "Username is required!");
+
+            AddTranslation("az", "PasswordRequired", "Şifrə tələb olunur!");
+            AddTranslation("ru", "PasswordRequired", "Пароль обязателен!");
+            AddTranslation("en", "PasswordRequired", "Password is required!");
+
+            AddTranslation("az", "ConfirmPasswordRequired", "Şifrə təsdiqi tələb olunur!");
+            AddTranslation("ru", "ConfirmPasswordRequired", "Подтверждение пароля обязательно!");
+            AddTranslation("en", "ConfirmPasswordRequired", "Confirm password is required!");
+
+            AddTranslation("az", "PasswordsDoNotMatch", "Şifrələr uyğun deyil!");
+            AddTranslation("ru", "PasswordsDoNotMatch", "Пароли не совпадают!");
+            AddTranslation("en", "PasswordsDoNotMatch", "Passwords do not match!");
+
+            AddTranslation("az", "UserIdRequired", "İstifadəçi ID-si tələb olunur!");
+            AddTranslation("ru", "UserIdRequired", "ID пользователя обязательно!");
+            AddTranslation("en", "UserIdRequired", "User ID is required!");
+
+            AddTranslation("az", "UserIdInvalid", "Yanlış istifadəçi ID-si!");
+            AddTranslation("ru", "UserIdInvalid", "Неверный ID пользователя!");
+            AddTranslation("en", "UserIdInvalid", "Invalid User ID!");
+
+            AddTranslation("az", "RoleIdRequired", "Rol ID-si tələb olunur!");
+            AddTranslation("ru", "RoleIdRequired", "ID роли обязательно!");
+            AddTranslation("en", "RoleIdRequired", "Role ID is required!");
+
+            AddTranslation("az", "RoleIdInvalid", "Yanlış rol ID-si!");
+            AddTranslation("ru", "RoleIdInvalid", "Неверный ID роли!");
+            AddTranslation("en", "RoleIdInvalid", "Invalid Role ID!");
+
+            AddTranslation("az", "UserIdRequired", "İstifadəçi ID-si tələb olunur!");
+            AddTranslation("ru", "UserIdRequired", "ID пользователя обязательно!");
+            AddTranslation("en", "UserIdRequired", "User ID is required!");
+
+            AddTranslation("az", "UserIdInvalid", "Yanlış istifadəçi ID-si!");
+            AddTranslation("ru", "UserIdInvalid", "Неверный ID пользователя!");
+            AddTranslation("en", "UserIdInvalid", "Invalid User ID!");
+
+            AddTranslation("az", "RoleIdRequired", "Rol ID-si tələb olunur!");
+            AddTranslation("ru", "RoleIdRequired", "ID роли обязательно!");
+            AddTranslation("en", "RoleIdRequired", "Role ID is required!");
+
+            AddTranslation("az", "RoleIdInvalid", "Yanlış rol ID-si!");
+            AddTranslation("ru", "RoleIdInvalid", "Неверный ID роли!");
+            AddTranslation("en", "RoleIdInvalid", "Invalid Role ID!");
+
+            AddTranslation("az", "EmailRequired", "E-poçt tələb olunur!");
+            AddTranslation("ru", "EmailRequired", "Электронная почта обязательна!");
+            AddTranslation("en", "EmailRequired", "Email is required!");
+
+            AddTranslation("az", "EmailInvalid", "Yanlış e-poçt formatı!");
+            AddTranslation("ru", "EmailInvalid", "Неверный формат электронной почты!");
+            AddTranslation("en", "EmailInvalid", "Invalid email format!");
+
+            AddTranslation("az", "PasswordRequired", "Şifrə tələb olunur!");
+            AddTranslation("ru", "PasswordRequired", "Пароль обязателен!");
+            AddTranslation("en", "PasswordRequired", "Password is required!");
+
+
+
+            #endregion
 
         }
     }
