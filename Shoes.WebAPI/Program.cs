@@ -1,16 +1,18 @@
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Shoes.Bussines;
 using Shoes.Bussines.CustomLaunguageManager;
 using Shoes.Bussines.DependencyResolver;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Helpers;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
+using Shoes.WebAPI.Services;
 using System.Globalization;
 using System.Security.Claims;
 using System.Text;
@@ -19,16 +21,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 ConfigurationHelper.Initialize(builder.Configuration);
-Console.WriteLine(ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Value);
-builder.Services.AddControllers();
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    List<CultureInfo> supportedCultures = ConfigurationHelper.config.GetSection("SupportedLanguage:Launguages").Get<string[]>()
+    .Select(x=>new CultureInfo(x)).ToList();
+        options.DefaultRequestCulture = new RequestCulture(ConfigurationHelper.config.GetSection("SupportedLanguage:Default").Get<string>());
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+builder.Services.AddControllers().AddDataAnnotationsLocalization().AddViewLocalization(); ;
 builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 builder.Services.AddIdentity<User, AppRole>()
       .AddEntityFrameworkStores<AppDBContext>()
-      .AddDefaultTokenProviders();
+        .AddDefaultTokenProviders()
+    .AddErrorDescriber<MultilanguageIdentityErrorDescriber>();
 builder.Services.AddAllScoped();
+builder.Services.AddTransient<ErrorMessageService>();
+builder.Services.AddTransient<IdentityErrorDescriber, MultilanguageIdentityErrorDescriber>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
@@ -128,7 +143,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCors(corsRuls);
-
+//get in ui culture Accept-Language: 
+app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 

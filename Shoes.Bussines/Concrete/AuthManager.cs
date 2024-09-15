@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using Microsoft.Extensions.Configuration;
 using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.AuthStatusMessages;
 using Shoes.Bussines.FluentValidations.AuthDTOValidations;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Helpers;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Security.Abstarct;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
@@ -256,16 +258,52 @@ namespace Shoes.Bussines.Concrete
 
                 if (identityResult.Succeeded)
                     return new SuccessDataResult<string>(statusCode: HttpStatusCode.OK, response: refreshToken);
-                else
-                {
-                    string responseMessage = string.Empty;
-                    foreach (var error in identityResult.Errors)
-                        responseMessage += $"{error.Description}. ";
-                    return new ErrorDataResult<string>(message: responseMessage, HttpStatusCode.BadRequest);
-                }
+                else               
+                   return new ErrorDataResult<string>(messages: identityResult.Errors.Select(x=>x.Description).ToList(), HttpStatusCode.BadRequest);
+                
             }
             else
                 return new ErrorDataResult<string>(AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
+        }
+
+        public async Task<IDataResult<PaginatedList< GetAllUserDTO>>> GetAllUser(int page)
+        {
+            IQueryable<GetAllUserDTO> query = _userManager.Users.Select(x => new GetAllUserDTO
+            {
+                Id = x.Id,
+                Adress = x.Adress,
+                Email = x.Email,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                PhoneNumber = x.PhoneNumber,
+                UserName = x.UserName
+
+            });
+            var result = await PaginatedList<GetAllUserDTO>.CreateAsync(query,  page,10);
+            return new SuccessDataResult<PaginatedList<GetAllUserDTO>>(response:result,HttpStatusCode.OK);
+           
+        }
+
+        public Task<IResult> ConfirmedEmail(string email, string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IResult> EditUserProfile(UpdateUserDTO updateUserDTO, string culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IResult> DeleteUser(Guid Id,string culture)
+        {
+            AppUser ChecekdUSerId = await _userManager.FindByIdAsync(Id.ToString());
+            if (ChecekdUSerId == null) return new ErrorResult(message: AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
+         IdentityResult result=   await _userManager.DeleteAsync(ChecekdUSerId);
+            if (result.Succeeded)           
+                return new SuccessResult(HttpStatusCode.OK);            
+            else         
+                return new ErrorResult(messages:result.Errors.Select(x=>x.Description).ToList(),HttpStatusCode.BadRequest);
+           
         }
     }
 }
