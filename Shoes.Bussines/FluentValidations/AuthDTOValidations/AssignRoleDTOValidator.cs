@@ -17,7 +17,7 @@ namespace Shoes.Bussines.FluentValidations.AuthDTOValidations
             // RoleId validation: must not be null or empty, and at least one role ID is required
             RuleFor(x => x.RoleId)
                 .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("RoleIdRequired", new CultureInfo(LangCode)))
-                .Must(x => x != null && x.Length > 0).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("RoleIdInvalid", new CultureInfo(LangCode)));
+                .Must(x => x != null && x !=default).WithMessage(ValidatorOptions.Global.LanguageManager.GetString("RoleIdInvalid", new CultureInfo(LangCode)));
         }
     }
 }

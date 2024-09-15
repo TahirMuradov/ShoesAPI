@@ -54,15 +54,15 @@ namespace Shoes.Bussines.Concrete
             _tokenService = tokenService;
             _emailHelper = emailHelper;
         }
-
+        
         public async Task<IResult> AssignRoleToUserAsnyc(AssignRoleDTO assignRoleDTO, string culture)
         {
             if (!SupportedLaunguages.Contains(culture))
                 culture = DefaultLaunguage;
-            AssignRoleDTOValidator validationRules=new AssignRoleDTOValidator(culture);
-            var validationResult=await validationRules.ValidateAsync(assignRoleDTO);
+            AssignRoleDTOValidator validationRules = new AssignRoleDTOValidator(culture);
+            var validationResult = await validationRules.ValidateAsync(assignRoleDTO);
             if (!validationResult.IsValid)
-                return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(),statusCode:HttpStatusCode.BadRequest);
+                return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), statusCode: HttpStatusCode.BadRequest);
 
             AppUser user = await _userManager.FindByIdAsync(assignRoleDTO.UserId.ToString());
             string responseMessage = string.Empty;
@@ -70,19 +70,12 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorResult(AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
             else
             {
-                foreach (var roleid in assignRoleDTO.RoleId)
-                {
-                    AppRole role = await _roleManager.FindByIdAsync(roleid.ToString());
-                    if (role == null)
-                        return new ErrorResult(AuthStatusMessage.RoleNotFound[culture], HttpStatusCode.NotFound);
-                    IdentityResult identityResult = await _userManager.AddToRoleAsync(user, role.Name);
-                    if (!identityResult.Succeeded)
-                    {
-                        foreach (var error in identityResult.Errors)
-                            responseMessage += $"{error.Description}. ";
-                        return new ErrorResult(message: responseMessage, HttpStatusCode.BadRequest);
-                    }
-                }
+                AppRole role = await _roleManager.FindByIdAsync(assignRoleDTO.RoleId.ToString());
+                if (role == null)
+                    return new ErrorResult(AuthStatusMessage.RoleNotFound[culture], HttpStatusCode.NotFound);
+                IdentityResult identityResult = await _userManager.AddToRoleAsync(user, role.Name);
+                if (!identityResult.Succeeded)
+                    return new ErrorResult(messages: identityResult.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
 
 
                 return new SuccessResult(HttpStatusCode.OK);
@@ -94,10 +87,10 @@ namespace Shoes.Bussines.Concrete
             if (!SupportedLaunguages.Contains(culture))
                 culture = DefaultLaunguage;
             LoginDTOValidation validationRules = new LoginDTOValidation(culture);
-            var ValidationResult=await validationRules.ValidateAsync(loginDTO);
+            var ValidationResult = await validationRules.ValidateAsync(loginDTO);
             if (!ValidationResult.IsValid)
-                return new ErrorDataResult<Token>(messages: ValidationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);           
-            
+                return new ErrorDataResult<Token>(messages: ValidationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
+
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
             if (user is null)
@@ -173,8 +166,8 @@ namespace Shoes.Bussines.Concrete
             if (!SupportedLaunguages.Contains(culture))
                 culture = DefaultLaunguage;
             RegisterDTOValidation validationRules = new RegisterDTOValidation(culture);
-            var validationResult=await validationRules.ValidateAsync(registerDTO);
-            if (!validationResult.IsValid)return new ErrorResult(messages:validationResult.Errors.Select(x=>x.ErrorMessage).ToList(),HttpStatusCode.BadRequest);
+            var validationResult = await validationRules.ValidateAsync(registerDTO);
+            if (!validationResult.IsValid) return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
             var checkEmail = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == registerDTO.Email);
             var checkUserName = await _userManager.FindByNameAsync(registerDTO.Username);
 
@@ -199,14 +192,33 @@ namespace Shoes.Bussines.Concrete
             IdentityResult identityResult = await _userManager.CreateAsync(newUser, registerDTO.Password);
 
             if (identityResult.Succeeded)
-            {string token=await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
- 
-                string confimationLink = $"{ConfigurationHelper.config.GetSection("Domain:Front").Get<string>()}/emailconfirm?email={newUser.Email}/token={token}";
-                var resultEmail = await _emailHelper.SendEmailAsync(newUser.Email,confimationLink,newUser.FirstName+newUser.LastName);
+            {
+                if (_userManager.Users.Count() == 1)
+                {
+                    if (_roleManager.Roles.Count() == 0)
+                    {
+
+                        AppRole appRole = new AppRole()
+                        {
+                            Name = "SuperAdmin"
+                        };
+                        AppRole appRole1 = new AppRole()
+                        {
+                            Name = "Admin"
+                        };
+                        await _roleManager.CreateAsync(appRole);
+                        await _roleManager.CreateAsync(appRole1);
+                    }
+                    await _userManager.AddToRoleAsync(newUser, "SuperAdmin");
+                }
+                string token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
+           
+                string confimationLink = $"{ConfigurationHelper.config.GetSection("Domain:Front").Get<string>()}/{culture}/auth/emailconfirmed/{newUser.Email}/{token}";
+                var resultEmail = await _emailHelper.SendEmailAsync(newUser.Email, confimationLink, newUser.FirstName + newUser.LastName);
                 if (!resultEmail.IsSuccess)
                 {
                     await _userManager.DeleteAsync(await _userManager.FindByEmailAsync(newUser.Email));
-                    return new ErrorResult(message:AuthStatusMessage.ConfirmationLinkNotSend.GetValueOrDefault(culture), HttpStatusCode.BadRequest);
+                    return new ErrorResult(message: AuthStatusMessage.ConfirmationLinkNotSend.GetValueOrDefault(culture), HttpStatusCode.BadRequest);
                 }
                 return new SuccessResult(message: AuthStatusMessage.RegistrationSuccess[culture], statusCode: HttpStatusCode.Created);
             }
@@ -224,11 +236,11 @@ namespace Shoes.Bussines.Concrete
             if (!SupportedLaunguages.Contains(culture))
                 culture = DefaultLaunguage;
             RemoveRoleUserDTOValidation validationRules = new RemoveRoleUserDTOValidation(culture);
-            var validationResult=await validationRules.ValidateAsync(removeRoleUserDTO);
+            var validationResult = await validationRules.ValidateAsync(removeRoleUserDTO);
             if (!validationResult.IsValid)
-            return new ErrorResult(messages:validationResult.Errors.Select(x=>x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
-                
-            
+                return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
+
+
             AppUser user = await _userManager.FindByIdAsync(removeRoleUserDTO.UserId.ToString());
             string responseMessage = string.Empty;
             if (user == null)
@@ -269,15 +281,15 @@ namespace Shoes.Bussines.Concrete
 
                 if (identityResult.Succeeded)
                     return new SuccessDataResult<string>(statusCode: HttpStatusCode.OK, response: refreshToken);
-                else               
-                   return new ErrorDataResult<string>(messages: identityResult.Errors.Select(x=>x.Description).ToList(), HttpStatusCode.BadRequest);
-                
+                else
+                    return new ErrorDataResult<string>(messages: identityResult.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
+
             }
             else
                 return new ErrorDataResult<string>(AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
         }
 
-        public async Task<IDataResult<PaginatedList< GetAllUserDTO>>> GetAllUserAsnyc(int page)
+        public async Task<IDataResult<PaginatedList<GetAllUserDTO>>> GetAllUserAsnyc(int page)
         {
             if (page < 1)
                 page = 1;
@@ -292,21 +304,24 @@ namespace Shoes.Bussines.Concrete
                 UserName = x.UserName
 
             });
-            var result = await PaginatedList<GetAllUserDTO>.CreateAsync(query,  page,10);
-            return new SuccessDataResult<PaginatedList<GetAllUserDTO>>(response:result,HttpStatusCode.OK);
-           
+            var result = await PaginatedList<GetAllUserDTO>.CreateAsync(query, page, 10);
+            return new SuccessDataResult<PaginatedList<GetAllUserDTO>>(response: result, HttpStatusCode.OK);
+
         }
 
 
-        public async Task<IResult> ChecekdConfirmedEmailTokenAsnyc(string email, string token,string culture)
+        public async Task<IResult> ChecekdConfirmedEmailTokenAsnyc(string email, string token, string culture)
         {
-            var checekedEmail=await _userManager.FindByEmailAsync(email);
-            if (checekedEmail is null) return new ErrorResult(message:AuthStatusMessage.UserNotFound.GetValueOrDefault(culture), HttpStatusCode.NotFound);
-            IdentityResult checekedResult=await _userManager.ConfirmEmailAsync(checekedEmail,token);
+            var checekedEmail = await _userManager.FindByEmailAsync(email);
+            if (checekedEmail is null) return new ErrorResult(message: AuthStatusMessage.UserNotFound.GetValueOrDefault(culture), HttpStatusCode.NotFound);
+
+            if (checekedEmail.EmailConfirmed)
+                return new ErrorResult(HttpStatusCode.BadRequest);
+            IdentityResult checekedResult = await _userManager.ConfirmEmailAsync(checekedEmail, token);
             if (checekedResult.Succeeded)
-            
+
                 return new SuccessResult(messages: checekedResult.Errors.Select(x => x.Description).ToList(), HttpStatusCode.OK);
-          
+
             else
                 return new ErrorResult(messages: checekedResult.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
 
@@ -317,7 +332,7 @@ namespace Shoes.Bussines.Concrete
         {
 
             var checekedUser = await _userManager.FindByIdAsync(updateUserDTO.UserId.ToString());
-            if (checekedUser is  null) return new ErrorResult(message: AuthStatusMessage.UserNotFound.GetValueOrDefault(culture), HttpStatusCode.NotFound);
+            if (checekedUser is null) return new ErrorResult(message: AuthStatusMessage.UserNotFound.GetValueOrDefault(culture), HttpStatusCode.NotFound);
             if (!string.IsNullOrEmpty(updateUserDTO.Firstname) && checekedUser.FirstName != updateUserDTO.Firstname)
                 checekedUser.FirstName = updateUserDTO.Firstname;
             if (!string.IsNullOrEmpty(updateUserDTO.Username) && checekedUser.UserName != updateUserDTO.Username)
@@ -330,10 +345,10 @@ namespace Shoes.Bussines.Concrete
                 checekedUser.PhoneNumber = updateUserDTO.PhoneNumber;
             if (!string.IsNullOrEmpty(updateUserDTO.CurrentPassword) && !string.IsNullOrEmpty(updateUserDTO.NewPassword))
             {
-                
-           IdentityResult changePassword= await _userManager.ChangePasswordAsync(checekedUser, updateUserDTO.CurrentPassword, updateUserDTO.NewPassword);
-           if(!changePassword.Succeeded)
-            return new ErrorResult(messages:changePassword.Errors.Select(x=>x.Description).ToList(), HttpStatusCode.BadRequest);    
+
+                IdentityResult changePassword = await _userManager.ChangePasswordAsync(checekedUser, updateUserDTO.CurrentPassword, updateUserDTO.NewPassword);
+                if (!changePassword.Succeeded)
+                    return new ErrorResult(messages: changePassword.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
             }
             IdentityResult UpdateUserResult = await _userManager.UpdateAsync(checekedUser);
 
@@ -343,16 +358,16 @@ namespace Shoes.Bussines.Concrete
 
         }
 
-        public async Task<IResult> DeleteUserAsnyc(Guid Id,string culture)
+        public async Task<IResult> DeleteUserAsnyc(Guid Id, string culture)
         {
             AppUser ChecekdUSerId = await _userManager.FindByIdAsync(Id.ToString());
             if (ChecekdUSerId == null) return new ErrorResult(message: AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
-         IdentityResult result=   await _userManager.DeleteAsync(ChecekdUSerId);
-            if (result.Succeeded)           
-                return new SuccessResult(HttpStatusCode.OK);            
-            else         
-                return new ErrorResult(messages:result.Errors.Select(x=>x.Description).ToList(),HttpStatusCode.BadRequest);
-           
+            IdentityResult result = await _userManager.DeleteAsync(ChecekdUSerId);
+            if (result.Succeeded)
+                return new SuccessResult(HttpStatusCode.OK);
+            else
+                return new ErrorResult(messages: result.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
+
         }
     }
 }

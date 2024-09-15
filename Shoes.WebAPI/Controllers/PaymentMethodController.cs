@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shoes.Bussines.Abstarct;
 using Shoes.Entites.DTOs.PaymentMethodDTOs;
 
@@ -6,6 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles ="Admin,SuperAdmin")]
     public class PaymentMethodController : ControllerBase
     {
         private readonly IPaymentMethodService _paymentMethodService;
