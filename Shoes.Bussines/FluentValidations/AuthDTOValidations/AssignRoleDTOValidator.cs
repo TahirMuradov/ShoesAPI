@@ -4,9 +4,9 @@ using System.Globalization;
 
 namespace Shoes.Bussines.FluentValidations.AuthDTOValidations
 {
-    public class AssingRoleDTOValidator: AbstractValidator<AssignRoleDTO>
+    public class AssignRoleDTOValidator: AbstractValidator<AssignRoleDTO>
     {
-        public AssingRoleDTOValidator(string LangCode)
+        public AssignRoleDTOValidator(string LangCode)
         {
 
             // UserId validation: must not be empty or default GUID value

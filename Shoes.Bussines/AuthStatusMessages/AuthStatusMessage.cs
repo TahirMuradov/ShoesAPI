@@ -66,8 +66,19 @@ namespace Shoes.Bussines.AuthStatusMessages
                 };
             }
         }
+        public static Dictionary<string, string> ConfirmationLinkNotSend
+        {
+            get
+            {
+                return new Dictionary<string, string>()
+                {
+ { "az", "Təsdiq Linki göndərilə bilmədi!Yenidən qeyydiyatdan keçməyə çalışın." },
+  { "ru", "Не удалось отправить ссылку для подтверждения. Попробуйте зарегистрироваться еще раз." },
+      { "en", "Verification Link could not be sent! Try registering again." },
+                };
+            }
+        }
 
 
-
-}
+    }
 }

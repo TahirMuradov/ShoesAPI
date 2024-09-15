@@ -49,7 +49,7 @@ namespace Shoes.Core.Helpers.EmailHelper.Concrete
                 {
 
                     await smtp.ConnectAsync(_configuration["EmailServices:ServiceName"], Convert.ToInt32(_configuration["EmailServices:ServicePort"]), MailKit.Security.SecureSocketOptions.StartTls);
-                    await smtp.AuthenticateAsync(_configuration["EmailServices:FromEmail"], _configuration["EmailServices:Password"]);//mail gonderen emailin sifre parolu
+                    await smtp.AuthenticateAsync(_configuration["EmailServices:FromEmail"], _configuration["EmailServices:FromEmailPassword"]);//mail gonderen emailin sifre parolu
                     await smtp.SendAsync(email);
                     await smtp.DisconnectAsync(true);
                 }

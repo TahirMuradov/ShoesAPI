@@ -16,7 +16,7 @@ namespace Shoes.WebAPI.Services
             var type = typeof(IdentityErrorMessageResource);
             var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName);
             _localizer = factory.Create(nameof(IdentityErrorMessageResource), assemblyName.Name);
-            Console.Write(_localizer["PasswordRequiresLower"]);
+   
         }
         public LocalizedString GetKey(string key)
         {

@@ -2,7 +2,7 @@
 
 namespace Shoes.Core.Helpers.EmailHelper.Abstract
 {
-    internal interface IEmailHelper
+    public interface IEmailHelper
     {
         public Task<IResult> SendEmailAsync(string userEmail, string confirmationLink, string UserName);
         public Task<IResult> SendEmailPdfAsync(string userEmail, string UserName, string pdfLink);

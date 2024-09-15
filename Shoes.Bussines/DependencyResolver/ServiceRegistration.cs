@@ -2,6 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.Concrete;
+using Shoes.Core.Helpers.EmailHelper.Abstract;
+using Shoes.Core.Helpers.EmailHelper.Concrete;
+using Shoes.Core.Security.Abstarct;
+using Shoes.Core.Security.Concrete;
 using Shoes.DataAccess.Abstarct;
 using Shoes.DataAccess.Concrete;
 
@@ -47,6 +51,9 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<IProductService,ProductManager>();
             services.AddScoped<IPictureDAL, EFPictureDAL>();
             services.AddScoped<IPictureService, PictureManager>();
+            services.AddScoped<IAuthService, AuthManager>();
+            services.AddScoped<ITokenService, TokenManager>();
+            services.AddScoped<IEmailHelper, EmailHelper>();
 
         }
     }

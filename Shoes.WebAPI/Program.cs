@@ -37,7 +37,7 @@ builder.Services.AddDbContext<AppDBContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
-builder.Services.AddIdentity<User, AppRole>()
+builder.Services.AddIdentity<AppUser, AppRole>()
       .AddEntityFrameworkStores<AppDBContext>()
         .AddDefaultTokenProviders()
     .AddErrorDescriber<MultilanguageIdentityErrorDescriber>();
