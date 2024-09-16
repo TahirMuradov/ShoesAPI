@@ -26,7 +26,7 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> Login(LoginDTO loginDTO, [FromHeader] string LangCode)
+        public async Task<IActionResult> Login([FromBody]LoginDTO loginDTO, [FromHeader] string LangCode)
         {
             var result= await _authService.LoginAsync(loginDTO, LangCode);
             return result.IsSuccess? Ok(result):BadRequest(result) ;

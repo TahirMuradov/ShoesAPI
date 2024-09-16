@@ -15,6 +15,7 @@ using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
 using Shoes.Entites;
 using Shoes.Entites.DTOs.AuthDTOs;
 using System.Net;
+using System.Web;
 
 namespace Shoes.Bussines.Concrete
 {
@@ -213,7 +214,7 @@ namespace Shoes.Bussines.Concrete
                 }
                 string token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
            
-                string confimationLink = $"{ConfigurationHelper.config.GetSection("Domain:Front").Get<string>()}/{culture}/auth/emailconfirmed/{newUser.Email}/{token}";
+                string confimationLink = $"{ConfigurationHelper.config.GetSection("Domain:Front").Get<string>()}/{culture}/auth/emailconfirmed/{HttpUtility.UrlEncode(newUser.Email)}/{HttpUtility.UrlEncode(token)}";
                 var resultEmail = await _emailHelper.SendEmailAsync(newUser.Email, confimationLink, newUser.FirstName + newUser.LastName);
                 if (!resultEmail.IsSuccess)
                 {

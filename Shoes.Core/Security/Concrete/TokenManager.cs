@@ -33,13 +33,13 @@ namespace Shoes.Core.Security.Concrete
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()),
+                new Claim("Id", User.Id.ToString()),
                 new Claim("Email", User.Email),
                 new Claim("UserName", User.UserName),
                 new Claim("FirstName", User.FirstName),
                 new Claim("LastName", User.LastName),
                 new Claim("Roles",string.Join(",", roles)),
-                new Claim("Adress",User.Adress),
+                new Claim("Address",User.Adress),
                 new Claim("PhoneNumber",User.PhoneNumber)
             };
 
