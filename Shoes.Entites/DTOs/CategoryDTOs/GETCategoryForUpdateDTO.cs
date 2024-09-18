@@ -3,6 +3,7 @@
     public class GETCategoryForUpdateDTO
     {
         public Guid Id { get; set; }
-        public Dictionary<string,string> Content { get; set; }
+        public bool IsFeatured { get; set; }
+        public Dictionary<string, string> Content { get; set; }
     }
 }

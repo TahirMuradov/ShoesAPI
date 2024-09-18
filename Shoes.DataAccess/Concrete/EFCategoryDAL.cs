@@ -24,7 +24,10 @@ namespace Shoes.DataAccess.Concrete
         {
             try
             {
-                Category category = new Category();
+                Category category = new Category()
+                {
+                    IsFeatured = categoryDTO.IsFeatured,
+                };
                 _dBContext.Categories.Add(category);
                 foreach (var lang in categoryDTO.LangContent)
                 {
@@ -71,6 +74,7 @@ namespace Shoes.DataAccess.Concrete
             IQueryable<GetCategoryDTO> data=_dBContext.Categories.AsNoTracking().AsSplitQuery().Select(x=> new GetCategoryDTO
             {
                 Id = x.Id,
+                IsFeatured=x.IsFeatured,
                 Content=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content
             });
             return new SuccessDataResult<IQueryable<GetCategoryDTO>>(response: data, HttpStatusCode.OK);    
@@ -82,6 +86,7 @@ namespace Shoes.DataAccess.Concrete
                 .Select(x=>new GetCategoryDTO
                 {
                     Id = x.Id,
+                    IsFeatured=x.IsFeatured,
                     Content=x.CategoryLanguages.FirstOrDefault(x=>x.LangCode==LangCode).Content
                 });
           var returnData= await PaginatedList<GetCategoryDTO>.CreateAsync(categoryQuery, page, 10);
@@ -100,6 +105,7 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessDataResult<GetCategoryDTO>(response: new GetCategoryDTO
             {
                 Id = categoryQuery.Id,
+                IsFeatured=categoryQuery.IsFeatured,
                 Content = categoryQuery.CategoryLanguages.FirstOrDefault(x => x.LangCode == LangCode).LangCode
             }, statusCode: HttpStatusCode.OK);
         }
@@ -111,6 +117,7 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessDataResult<GETCategoryForUpdateDTO>(response: new GETCategoryForUpdateDTO
             {
                 Id = category.Id,
+                IsFeatured = category.IsFeatured,
                 Content = category.CategoryLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Content)).ToDictionary<string, string>()
             }, HttpStatusCode.OK) ;
         }
@@ -120,8 +127,10 @@ namespace Shoes.DataAccess.Concrete
             try
             {
                 Category category=_dBContext.Categories.Include(X=>X.CategoryLanguages).FirstOrDefault(X=>X.Id==updateCategory.Id);
+
                 if (category is null)
                     return new ErrorResult(statusCode: HttpStatusCode.NotFound);
+                category.IsFeatured = updateCategory.IsFeatured;
                 foreach (var item in updateCategory.Lang)
                 {
                     CategoryLanguage categoryLanguage = category.CategoryLanguages.FirstOrDefault(x => x.LangCode == item.Key);

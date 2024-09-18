@@ -21,6 +21,7 @@ namespace Shoes.WebAPI.Controllers
         [HttpPost("[action]")]
         public IActionResult AddCategory([FromBody] AddCategoryDTO addCategoryDTO, [FromHeader] string LangCode)
         {
+            
             var result = _categoryService.AddCategory(addCategoryDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
