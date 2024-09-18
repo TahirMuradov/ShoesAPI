@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="Admin,SuperAdmin")]
+    [Authorize(Policy = "AllRole")]
     public class PaymentMethodController : ControllerBase
     {
         private readonly IPaymentMethodService _paymentMethodService;

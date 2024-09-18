@@ -24,7 +24,7 @@ namespace Shoes.Bussines.FluentValidations.AuthDTOValidations
             // PhoneNumber validation: +994-xx-xxx-xx-xx||xxx-xxx-xx-xx format
             RuleFor(x => x.PhoneNumber)
                 .NotEmpty().WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PhoneNumberRequired",new CultureInfo( LangCode)))
-                .Matches(@"^(?:\+994-(?:\d{2}-?\d{3}-?\d{2}-?\d{2}|\d{2}-?\d{3}-?\d{2}-?\d{2})|(\d{3}-?\d{3}-?\d{2}-?\d{2}|\d{3}-?\d{3}-?\d{2}-?\d{2}-?))$")
+                .Matches(@"^(?:\+994-?(?:\d{2}-?\d{3}-?\d{2}-?\d{2}|\d{2}-?\d{3}-?\d{2}-?\d{2})|(\d{3}-?\d{3}-?\d{2}-?\d{2}|\d{3}-?\d{3}-?\d{2}-?\d{2}-?))$")
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PhoneNumberInvalid", new CultureInfo(LangCode)));
 
             // Address validation: not null or empty

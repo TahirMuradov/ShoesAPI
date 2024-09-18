@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,SuperAdmin")]
+    [Authorize(Policy = "AllRole")]
     public class PictureController : ControllerBase
     {
         private readonly IPictureService _pictureService;

@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Bcpg;
 using Shoes.Bussines.Abstarct;
-using Shoes.Entites;
 using Shoes.Entites.DTOs.AuthDTOs;
 
 namespace Shoes.WebAPI.Controllers
@@ -19,7 +16,7 @@ namespace Shoes.WebAPI.Controllers
         }
      
         [HttpGet("[action]")]
-        [Authorize(Roles ="SuperAdmin")]
+        [Authorize(Policy = "SuperAdminRole")]
         public async Task<IActionResult> GetAllUser([FromQuery]int page)
         {
             var result=await _authService.GetAllUserAsnyc(page);
@@ -40,21 +37,21 @@ namespace Shoes.WebAPI.Controllers
         }
 
         [HttpPut("[action]")]
-        [Authorize]
+        [Authorize(Policy = "AllRole")]
         public async Task<IActionResult> EditUserProfile([FromBody] UpdateUserDTO updateUserDTO, [FromHeader] string LangCode)
         {
             var result=await _authService.EditUserProfileAsnyc(updateUserDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpDelete("[action]")]
-        [Authorize(Roles ="SuperAdmin")]
+        [Authorize(Policy = "SuperAdminRole")]
         public async Task<IActionResult> DeleteUser([FromQuery]Guid Id, [FromHeader] string LangCode)
         {
             var result=await _authService.DeleteUserAsnyc(Id, LangCode);
             return result.IsSuccess?Ok(result):BadRequest(result);
         }
         [HttpDelete("[action]")]
-        [Authorize(Roles ="SuperAdmin")]
+        [Authorize(Policy = "SuperAdminRole")]
         public async Task<IActionResult> RemoveRoleFromUser([FromBody] RemoveRoleUserDTO removeRoleUserDTO, [FromHeader] string LangCode)
         {
             var result=await _authService.RemoveRoleFromUserAsync(removeRoleUserDTO, LangCode);
@@ -68,7 +65,7 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess?Ok(result):BadRequest(result) ;
         }
         [HttpPatch("[action]")]
-        [Authorize(Roles ="SuperAdmin")]
+        [Authorize(Policy= "SuperAdminRole")]
         public async Task<IActionResult> AssignRoleToUser([FromBody]AssignRoleDTO assignRoleDTO, [FromHeader] string LangCode)
         {
             var result=await _authService.AssignRoleToUserAsnyc(assignRoleDTO, LangCode);

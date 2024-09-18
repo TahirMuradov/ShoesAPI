@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin,SuperAdmin")]
+    [Authorize(Policy = "AllRole")]
     public class SizeController : ControllerBase
     {
        private readonly ISizeService _sizeService;

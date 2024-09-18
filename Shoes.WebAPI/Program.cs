@@ -76,6 +76,15 @@ builder.Services.AddSwaggerGen(x =>
 });
 // JWT Auth
 #region JWT Auth
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AllRole", policy =>
+                     policy.RequireClaim("Roles", "Admin", "SuperAdmin")); 
+    options.AddPolicy("AdminRole", policy =>
+                     policy.RequireClaim("Roles", "Admin"));
+    options.AddPolicy("SuperAdminRole", policy =>
+                 policy.RequireClaim("Roles","SuperAdmin"));
+});
 builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

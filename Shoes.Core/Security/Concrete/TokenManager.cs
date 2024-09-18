@@ -3,14 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Security.Abstarct;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Shoes.Core.Security.Concrete
 {
@@ -33,7 +29,7 @@ namespace Shoes.Core.Security.Concrete
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("Id", User.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, User.Id.ToString()),
                 new Claim("Email", User.Email),
                 new Claim("UserName", User.UserName),
                 new Claim("FirstName", User.FirstName),

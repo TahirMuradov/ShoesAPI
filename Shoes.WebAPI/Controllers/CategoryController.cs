@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="SuperAdmin,Admin")]
+    [Authorize(Policy = "AllRole")]
     public class CategoryController : ControllerBase
 
     {
