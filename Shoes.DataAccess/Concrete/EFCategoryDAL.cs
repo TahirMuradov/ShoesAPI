@@ -14,7 +14,7 @@ namespace Shoes.DataAccess.Concrete
     public class EFCategoryDAL : ICategoryDAL
     {
         private readonly AppDBContext _dBContext;
-
+       
         public EFCategoryDAL(AppDBContext dBContext)
         {
             _dBContext = dBContext;

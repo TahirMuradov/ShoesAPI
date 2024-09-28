@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Entites;
+using Shoes.Entites.WebUIEntites;
 
 namespace Shoes.DataAccess.Concrete.SqlServer
 {
@@ -27,6 +28,13 @@ namespace Shoes.DataAccess.Concrete.SqlServer
         public DbSet<SoldProduct> SoldProducts { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductLanguage> ProductLanguages { get; set; }
+
+        public DbSet<HomeSliderItem> HomeSliderItems { get; set; }
+        public DbSet<HomeSliderLanguage> HomeSliderLanguages { get; set; }
+        public DbSet<TopCategoryArea> TopCategoryAreas { get; set; }
+        public DbSet<TopCategoryAreaLanguage> TopCategoryAreaLanguages { get; set; }
+        public DbSet<DisCountArea> DisCountAreas { get; set; }
+        public DbSet<DisCountAreaLanguage> DisCountAreaLanguages { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

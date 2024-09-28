@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Shoes.Entites.WebUIEntites
+﻿namespace Shoes.Entites.WebUIEntites
 {
-    internal class DisCountArea
+    public class DisCountArea
     {
+        public Guid Id { get; set; }   
+        public List<DisCountAreaLanguage> Languages { get; set; }
+      
     }
 }
