@@ -4,12 +4,12 @@ using Shoes.Core.Helpers.FileHelper.GenerateOrderPdfHelper.DTOs;
 
 namespace Shoes.Core.Helpers.FileHelper
 {
-    public static class FileHeleper
+    public static class FileHelper
     {
-        public static  async Task<string> SaveFileAsync(this IFormFile file, bool IsOrderPdf)
+        public static  async Task<string> SaveFileAsync(this IFormFile file, bool IsOrderPdf=false,bool IsWebUI=false)
         {
             string filePath = IsOrderPdf ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\OrderPDFs\\") :
-                Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
+            IsWebUI ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\WebUI\\"):Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
             
             if (!Directory.Exists(filePath))
             {
@@ -25,7 +25,7 @@ namespace Shoes.Core.Helpers.FileHelper
          List<string>urls = new List<string>();
         foreach (var x in file)
             {
-                urls.Add(await SaveFileAsync(x, false));
+                urls.Add(await SaveFileAsync(x, false,false));
             }
             return urls;
         }

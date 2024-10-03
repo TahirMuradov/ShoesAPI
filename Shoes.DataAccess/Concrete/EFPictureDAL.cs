@@ -27,7 +27,7 @@ namespace Shoes.DataAccess.Concrete
             var product = _appDBContext.Products.FirstOrDefault(x => x.Id == addPictureDTO.ProductId);
             if (product == null) return new ErrorResult(HttpStatusCode.NotFound);
 
-            List<string> urls = await FileHeleper.PhotoFileSaveRangeAsync(addPictureDTO.Pictures);
+            List<string> urls = await FileHelper.PhotoFileSaveRangeAsync(addPictureDTO.Pictures);
             foreach (var url in urls)
             {
 
@@ -47,7 +47,7 @@ namespace Shoes.DataAccess.Concrete
           var picture=_appDBContext.Pictures.FirstOrDefault(x=>x.Id == Id);
             if (picture is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
-       FileHeleper.RemoveFile(picture.Url);
+       FileHelper.RemoveFile(picture.Url);
          
             _appDBContext.Pictures.Remove(picture);
             _appDBContext.SaveChanges();

@@ -75,7 +75,7 @@ namespace Shoes.DataAccess.Concrete
                     await _appDBContext.SubCategoryProducts.AddAsync(subCategoryProduct);
 
                 }
-                List<string> photoUrls = await FileHeleper.PhotoFileSaveRangeAsync(addProductDTO.Pictures);
+                List<string> photoUrls = await FileHelper.PhotoFileSaveRangeAsync(addProductDTO.Pictures);
                 foreach (string url in photoUrls)
                 {
                     Picture picture = new Picture()
@@ -102,7 +102,7 @@ namespace Shoes.DataAccess.Concrete
          Product product=_appDBContext.Products.Include(x=>x.Pictures).FirstOrDefault(x => x.Id == Id);
             if (product is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
-            FileHeleper.RemoveFileRange(product.Pictures.Select(x=>x.Url).ToList());
+            FileHelper.RemoveFileRange(product.Pictures.Select(x=>x.Url).ToList());
             _appDBContext.Products.Remove(product);
             _appDBContext.SaveChanges(); 
             return new SuccessResult(HttpStatusCode.OK);
@@ -280,7 +280,7 @@ namespace Shoes.DataAccess.Concrete
                 {
                     if (!updateProductDTO.CurrentPictureUrls.Any(x => x == url.Url))
                     {
-                     bool result=   FileHeleper.RemoveFile(url.Url);
+                     bool result=   FileHelper.RemoveFile(url.Url);
                         if (result)
                         {
                             _appDBContext.Pictures.Remove(url);
@@ -290,7 +290,7 @@ namespace Shoes.DataAccess.Concrete
          
             if (updateProductDTO.NewPictures is not null)
             {
-              List<string> newUrls=  await FileHeleper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
+              List<string> newUrls=  await FileHelper.PhotoFileSaveRangeAsync(updateProductDTO.NewPictures);
            
                 foreach (string url in newUrls)
                 {

@@ -22,9 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
     <Folder Include="wwwroot\uploads\OrderPDFs\" />
     <Folder Include="wwwroot\uploads\ProductPhotos\" />
+    <Folder Include="wwwroot\uploads\WebUI\" />
   </ItemGroup>
 
 </Project>
