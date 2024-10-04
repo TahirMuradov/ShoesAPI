@@ -11,7 +11,7 @@ namespace Shoes.DataAccess.Abstarct.WebUI
         public IResult RemoveTopCategoryArea(Guid Id);
         public Task< IDataResult<PaginatedList<GetTopCategoryAreaDTO>>> GetTopCategoryAreaAsync(string LangCode,int page );
         public IDataResult<IQueryable<GetTopCategoryAreaForUIDTO>>GetTopCategoryAreaForUI(string LangCode);
-        public IDataResult<GetTopCategoryAreaForUpdateDTO> GetTpcategoryAreaForUpdate(Guid Id);
+        public IDataResult<GetTopCategoryAreaForUpdateDTO> GetTopcategoryAreaForUpdate(Guid Id);
 
     }
 }

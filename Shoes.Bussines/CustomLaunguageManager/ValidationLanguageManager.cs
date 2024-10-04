@@ -287,6 +287,9 @@ namespace Shoes.Bussines.CustomLaunguageManager
 
 
             #endregion
+            AddTranslation("az", "SubCategoryAndCategoryIdIsrequired", "Kateqoriya və ya Alt Kateqoriyadan 1-i seçilməlidir!");
+            AddTranslation("en", "SubCategoryAndCategoryIdIsrequired", "One of Category or SubCategory must be selected!");
+            AddTranslation("ru", "SubCategoryAndCategoryIdIsrequired", "Необходимо выбрать либо категорию, либо подкатегорию!");
 
         }
     }

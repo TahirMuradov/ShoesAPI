@@ -90,7 +90,7 @@ namespace Shoes.DataAccess.Concrete.WebUI
            }),HttpStatusCode.OK);
         }
 
-        public IDataResult<GetTopCategoryAreaForUpdateDTO> GetTpcategoryAreaForUpdate(Guid Id)
+        public IDataResult<GetTopCategoryAreaForUpdateDTO> GetTopcategoryAreaForUpdate(Guid Id)
         {
             var data = _appDBContext.TopCategoryAreas
                 .AsNoTracking()

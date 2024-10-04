@@ -45,7 +45,7 @@ namespace Shoes.DataAccess.Concrete.WebUI
 
         }
 
-        public IResult DeleteHomeSliderItem(Guid Id, string LangCode)
+        public IResult DeleteHomeSliderItem(Guid Id)
         {
           var checekedData=_dbContext.HomeSliderItems.FirstOrDefault(x => x.Id == Id);
             if (checekedData is { })return new ErrorResult(HttpStatusCode.NotFound);

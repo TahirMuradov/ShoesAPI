@@ -50,7 +50,7 @@ namespace Shoes.DataAccess.Concrete.WebUI
             return new SuccessResult(HttpStatusCode.OK);
         }
 
-        public IDataResult<IQueryable< GetDisCountAreaDTO>> GetDisCountArea( string LangCode)
+        public IDataResult<IQueryable< GetDisCountAreaDTO>> GetAllDisCountArea( string LangCode)
         {
             IQueryable<GetDisCountAreaDTO> query = _dbContext.DisCountAreas.AsSplitQuery().AsNoTracking().Select(x =>
             new GetDisCountAreaDTO()

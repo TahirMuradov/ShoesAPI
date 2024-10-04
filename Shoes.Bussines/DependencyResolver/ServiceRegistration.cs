@@ -7,7 +7,9 @@ using Shoes.Core.Helpers.EmailHelper.Concrete;
 using Shoes.Core.Security.Abstarct;
 using Shoes.Core.Security.Concrete;
 using Shoes.DataAccess.Abstarct;
+using Shoes.DataAccess.Abstarct.WebUI;
 using Shoes.DataAccess.Concrete;
+using Shoes.DataAccess.Concrete.WebUI;
 
 namespace Shoes.Bussines.DependencyResolver
 {
@@ -54,6 +56,13 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<IAuthService, AuthManager>();
             services.AddScoped<ITokenService, TokenManager>();
             services.AddScoped<IEmailHelper, EmailHelper>();
+            services.AddScoped<IHomeSliderItemService, HomeSliderItemManager>();
+            services.AddScoped<IHomeSliderItemDAL, EFHomeSliderItemDAL>();
+            services.AddScoped<IDisCountAreaDAL, EFDisCountAreaDAL>();
+            services.AddScoped<IDisCountAreaService, DisCountAreaManager>();
+            services.AddScoped<ITopCategoryAreaDAL, EFTopCategoryAreaDAL>();
+            services.AddScoped<ITopCategoryAreaService, TopCategoryAreaManager>();
+
 
         }
     }
