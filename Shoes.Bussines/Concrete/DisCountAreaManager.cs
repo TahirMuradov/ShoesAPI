@@ -2,6 +2,7 @@
 using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.FluentValidations.DisCountAreaDTOValidations;
 using Shoes.Core.Helpers;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.DataAccess.Abstarct.WebUI;
@@ -79,6 +80,15 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
             return _disCountAreaDAL.UpdateDisCountArea(updateDisCountAreaDTO);
 
+        }
+
+        public async Task<IDataResult<PaginatedList<GetDisCountAreaDTO>>> GetAllDisCountForTableAsync(string LangCode, int page)
+        {
+            if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
+                LangCode = DefaultLaunguage;
+            if (page < 1)
+                page = 1;
+            return await _disCountAreaDAL.GetAllDisCountForTableAsync(LangCode, page);
         }
     }
 }

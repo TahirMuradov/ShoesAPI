@@ -17,13 +17,13 @@ namespace Shoes.WebAPI.Controllers
             _countAreaService = countAreaService;
         }
         [HttpPost("[action]")]
-        public IActionResult AddDiscountArea([FromForm] AddDisCountAreaDTO addDisCountAreaDTO, [FromHeader] string LangCode)
+        public IActionResult AddDiscountArea([FromBody] AddDisCountAreaDTO addDisCountAreaDTO, [FromHeader] string LangCode)
         {
             var result = _countAreaService.AddDiscountArea(addDisCountAreaDTO,LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpPut("[action]")]
-        public IActionResult UpdateDiscountArea([FromForm] UpdateDisCountAreaDTO updateDisCountAreaDTO, [FromHeader] string LangCode)
+        public IActionResult UpdateDiscountArea([FromBody] UpdateDisCountAreaDTO updateDisCountAreaDTO, [FromHeader] string LangCode)
         {
             var result=_countAreaService.UpdateDisCountArea(updateDisCountAreaDTO,LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
@@ -44,6 +44,12 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult DeleteDisCountArea([FromQuery] Guid Id)
         {
             var result=_countAreaService.Delete(Id);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public async Task< IActionResult> GetDisCountAreaForTable([FromQuery] int page, [FromHeader] string LangCode)
+        {
+            var result=await _countAreaService.GetAllDisCountForTableAsync(LangCode, page);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
     }

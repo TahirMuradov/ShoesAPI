@@ -23,7 +23,7 @@ namespace Shoes.Bussines.FluentValidations.HomeSliderItemDTOValidatons
 
             // Validate CurrentPictureUrls and NewPictures
             RuleFor(x => x)
-                .Must(x => !(x.CurrentImage == null) || !(x.NewImage == null||x.NewImage==default))
+                .Must(x => !(x.CurrentPictureUrls == null) || !(x.NewImage == null||x.NewImage==default))
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PictureUrlsOrNewPicturesRequired", new CultureInfo(culture)));
 
             // Validate that DescriptionContent is not null and contains at least three entries

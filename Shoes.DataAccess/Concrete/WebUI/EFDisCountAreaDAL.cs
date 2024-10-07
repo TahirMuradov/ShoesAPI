@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
@@ -63,6 +64,20 @@ namespace Shoes.DataAccess.Concrete.WebUI
             return new SuccessDataResult<IQueryable<GetDisCountAreaDTO>>(query,HttpStatusCode.OK);
 
 
+        }
+
+        public async Task<IDataResult< PaginatedList<GetDisCountAreaDTO>>> GetAllDisCountForTableAsync(string LangCode, int page)
+        {
+            IQueryable<GetDisCountAreaDTO> query = _dbContext.DisCountAreas.AsSplitQuery().AsNoTracking().Select(x =>
+    new GetDisCountAreaDTO()
+    {
+        Id = x.Id,
+        Description = x.Languages.FirstOrDefault(y => y.LangCode == LangCode).Description,
+        Title = x.Languages.FirstOrDefault(y => y.LangCode == LangCode).Title,
+
+    });
+            var result = await PaginatedList<GetDisCountAreaDTO>.CreateAsync(query, page, 10);
+            return new SuccessDataResult<PaginatedList<GetDisCountAreaDTO>>(response:result,HttpStatusCode.OK);
         }
 
         public IDataResult<GETDisCountAreaForUpdateDTO> GetDisCountAreaForUpdate(Guid Id)

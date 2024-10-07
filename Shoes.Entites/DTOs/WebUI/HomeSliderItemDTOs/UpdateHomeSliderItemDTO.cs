@@ -12,6 +12,6 @@ namespace Shoes.Entites.DTOs.WebUI.HomeSliderItemDTOs
 
         public Dictionary<string,string> Description { get; set; }
         public IFormFile? NewImage { get; set; }
-        public string?   CurrentImage { get; set; }
+        public string? CurrentPictureUrls { get; set; }
     }
 }

@@ -94,7 +94,7 @@ namespace Shoes.DataAccess.Concrete.WebUI
                 Title = x.Languages.Select(y => new KeyValuePair<string, string>(y.LangCode, y.Title)).ToDictionary(),
                 ImageUrl = x.BackgroundImageUrl
             }).FirstOrDefault(x=>x.Id==Id);
-            if (dataQuery is { })
+            if (dataQuery is null)
                 return new ErrorDataResult<GetHomeSliderItemForUpdateDTO>(HttpStatusCode.NotFound);
             return new SuccessDataResult<GetHomeSliderItemForUpdateDTO>(response: dataQuery, HttpStatusCode.OK);
         }
@@ -102,19 +102,20 @@ namespace Shoes.DataAccess.Concrete.WebUI
         public async Task< IResult> UpdateHomeSliderItemAsync(UpdateHomeSliderItemDTO updateHomeSliderItemDTO)
         {
             var checkedData = _dbContext.HomeSliderItems.Include(x => x.Languages).FirstOrDefault(x => x.Id == updateHomeSliderItemDTO.Id);
-            if (checkedData is { })
+            if (checkedData is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
             foreach (var desc in updateHomeSliderItemDTO.Description)
             {
                 var langChecked = checkedData.Languages.FirstOrDefault(x => x.LangCode == desc.Key);
-                if (langChecked is { })
+                if (langChecked is null)
                     continue;
                 langChecked.Description = desc.Value;
                 langChecked.Title = updateHomeSliderItemDTO.Title.GetValueOrDefault(desc.Key);
+                _dbContext.HomeSliderLanguages.Update(langChecked);
                 
 
             }
-            if (string.IsNullOrEmpty(updateHomeSliderItemDTO.CurrentImage)&& updateHomeSliderItemDTO.NewImage is not null)
+            if (string.IsNullOrEmpty(updateHomeSliderItemDTO.CurrentPictureUrls) && updateHomeSliderItemDTO.NewImage is not null)
             {
              var removeFile=   FileHelper.RemoveFile(checkedData.BackgroundImageUrl);
                 if (removeFile)

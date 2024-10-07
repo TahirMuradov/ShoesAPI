@@ -9,13 +9,16 @@ namespace Shoes.Core.Helpers.FileHelper
         public static  async Task<string> SaveFileAsync(this IFormFile file, bool IsOrderPdf=false,bool IsWebUI=false)
         {
             string filePath = IsOrderPdf ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\OrderPDFs\\") :
-            IsWebUI ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\WebUI\\"):Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
+            IsWebUI ? Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\WebUI\\"):
+            Path.Combine(wwwrootGetPath.GetwwwrootPath, "uploads\\ProductPhotos\\");
             
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
             }
-            var path = IsOrderPdf? "/uploads/OrderPDFs/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ','_') : "/uploads/ProductPhotos/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ', '_');
+            var path = IsOrderPdf? "/uploads/OrderPDFs/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ','_') :
+              IsWebUI? "/uploads/WebUI/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ', '_')
+              : "/uploads/ProductPhotos/" + Guid.NewGuid().ToString() + file.FileName.Replace(' ', '_');
             using FileStream fileStream = new(Path.Combine(wwwrootGetPath.GetwwwrootPath + path), FileMode.Create);
             await file.CopyToAsync(fileStream);
             return path;
