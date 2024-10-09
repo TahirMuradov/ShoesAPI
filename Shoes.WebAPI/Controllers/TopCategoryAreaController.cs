@@ -17,7 +17,7 @@ namespace Shoes.WebAPI.Controllers
             _topCategoryAreaService = topCategoryAreaService;
         }
         [HttpPost("[action]")]
-        public async Task<IActionResult> AddToPCategoryArea([FromForm] AddTopCategoryAreaDTO addTopCategoryAreaDTO, [FromHeader] string LangCode)
+        public async Task<IActionResult> AddTopCategoryArea([FromForm] AddTopCategoryAreaDTO addTopCategoryAreaDTO, [FromHeader] string LangCode)
         {
             var result=await _topCategoryAreaService.AddTopCategoryAreaAsync(addTopCategoryAreaDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);

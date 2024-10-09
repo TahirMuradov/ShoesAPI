@@ -27,13 +27,13 @@ namespace Shoes.DataAccess.Concrete.WebUI
             {
                 
             var checkedCategoryId=_appDBContext.Categories.FirstOrDefault(x=>x.Id == addTopCategoryAreaDTO.CategoryId);
-            if (checkedCategoryId is { })
+            if (checkedCategoryId is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
             }
             if (addTopCategoryAreaDTO.SubCategoryId is not null || addTopCategoryAreaDTO.SubCategoryId !=default)
             {
                 var cehcekSubCategory = _appDBContext.SubCategories.FirstOrDefault(x => x.Id == addTopCategoryAreaDTO.SubCategoryId);
-                if (cehcekSubCategory is { })
+                if (cehcekSubCategory is null)
                     return new ErrorResult(HttpStatusCode.NotFound);
             }
 
@@ -111,7 +111,7 @@ namespace Shoes.DataAccess.Concrete.WebUI
         public IResult RemoveTopCategoryArea(Guid Id)
         {
         var ceheckedData=_appDBContext.TopCategoryAreas.FirstOrDefault(x=>x.Id==Id);
-            if (ceheckedData is { }) return new ErrorResult(HttpStatusCode.NotFound);
+            if (ceheckedData is null) return new ErrorResult(HttpStatusCode.NotFound);
             FileHelper.RemoveFile(ceheckedData.ImageUrl);
             _appDBContext.TopCategoryAreas.Remove(ceheckedData);
             _appDBContext.SaveChanges();
@@ -120,13 +120,13 @@ namespace Shoes.DataAccess.Concrete.WebUI
 
         public async Task<IResult> UpdateTopCategoryAreaAsync(UpdateTopCategoryAreaDTO updateTopCategoryAreaDTO)
         {var checkedData=_appDBContext.TopCategoryAreas.Include(x=>x.TopCategoryAreaLanguages).FirstOrDefault(x=>x.Id == updateTopCategoryAreaDTO.Id);
-            if (checkedData is { })
+            if (checkedData is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
 
             foreach (var title in updateTopCategoryAreaDTO.Title)
             {
                 var checkedLangcode = checkedData.TopCategoryAreaLanguages.FirstOrDefault(x => x.LangCode == title.Key);
-                if (checkedLangcode is { }) continue;
+                if (checkedLangcode is null) continue;
                 checkedLangcode.Title = title.Value;
                 checkedLangcode.Description = updateTopCategoryAreaDTO.Description.GetValueOrDefault(title.Key);
                 _appDBContext.TopCategoryAreaLanguages.Update(checkedLangcode);

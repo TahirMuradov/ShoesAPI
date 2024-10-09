@@ -109,7 +109,7 @@ namespace Shoes.Bussines.Concrete
             return _categoryDAL.GetCategoryForUpdate(Id);
         }
 
-        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode)
+        public IDataResult<IQueryable<GetCategoryForUIDTO>> GetAllCategory(string LangCode)
         {
             if (string.IsNullOrEmpty(LangCode)||!SupportedLaunguages.Contains(LangCode))
                 LangCode= DefaultLaunguage;

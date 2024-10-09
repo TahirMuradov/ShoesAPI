@@ -69,15 +69,14 @@ namespace Shoes.DataAccess.Concrete
             }
         }
 
-        public IDataResult<IQueryable<GetCategoryDTO>> GetAllCategory(string LangCode)
+        public IDataResult<IQueryable<GetCategoryForUIDTO>> GetAllCategory(string LangCode)
         {
-            IQueryable<GetCategoryDTO> data=_dBContext.Categories.AsNoTracking().AsSplitQuery().Select(x=> new GetCategoryDTO
+            IQueryable<GetCategoryForUIDTO> data=_dBContext.Categories.AsNoTracking().AsSplitQuery().Select(x=> new GetCategoryForUIDTO
             {
-                Id = x.Id,
-                IsFeatured=x.IsFeatured,
-                Content=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content
+                Id = x.Id,                
+                Name=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content
             });
-            return new SuccessDataResult<IQueryable<GetCategoryDTO>>(response: data, HttpStatusCode.OK);    
+            return new SuccessDataResult<IQueryable<GetCategoryForUIDTO>>(response: data, HttpStatusCode.OK);    
         }
 
         public async Task<IDataResult<PaginatedList<GetCategoryDTO>>> GetAllCategoryAsync(string LangCode,int page=1)

@@ -54,9 +54,8 @@ namespace Shoes.Bussines.FluentValidations.TopCategoryAreaDTOValidations
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("ContentEmpty", new CultureInfo(culture)));
 
             //// Validate Pictures
-            RuleFor(x => x.NewImage)
-                .NotNull()
-                .NotEmpty()
+            RuleFor(x => x)
+                .Must(dto=>dto.CurrentPictureUrl is null&&dto.NewImage is null )                
                 .WithMessage(ValidatorOptions.Global.LanguageManager.GetString("PictureİsRequired", new CultureInfo(culture)));
             RuleFor(x => x)
             .Must(dto => !((dto.CategoryId == null || dto.CategoryId == Guid.Empty) &&
