@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AllRole")]
+
     public class HomeSliderItemController : ControllerBase
     {
         private readonly IHomeSliderItemService _homeSliderItemService;
@@ -16,18 +16,21 @@ namespace Shoes.WebAPI.Controllers
         {
             _homeSliderItemService = homeSliderItemService;
         }
+        [Authorize(Policy = "AllRole")]
         [HttpPost("[action]")]
         public async Task<IActionResult> AddHomeSliderItem([FromForm] AddHomeSliderItemDTO addHomeSliderItemDTO, [FromHeader] string LangCode)
         {
             var result = await _homeSliderItemService.AddHomeSliderItemAsync(addHomeSliderItemDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
+        [Authorize(Policy = "AllRole")]
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateHomeSliderItem([FromForm] UpdateHomeSliderItemDTO updateHomeSliderItemDTO, [FromHeader] string LangCode)
         {
             var result = await _homeSliderItemService.UpdateHomeSliderItemAsync(updateHomeSliderItemDTO, culture: LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
+        [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult DeleteHomeSliderItem([FromQuery] Guid Id)
         {
@@ -35,12 +38,14 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpGet("[action]")]
+        [Authorize(Policy = "AllRole")]
         public async Task<IActionResult> GetAllHomeSliderItem([FromHeader] string LangCode, [FromQuery] int page)
         {
             var result = await _homeSliderItemService.GetAllHomeSliderAsync(LangCode, page);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
 
         }
+        [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public IActionResult GetHomeSliderItemForUpdate([FromQuery] Guid Id)
         {
@@ -49,7 +54,7 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpGet("[action]")]
-
+     
         public IActionResult GetHomeSliderItemForUI([FromHeader] string LangCode)
         {
             var result = _homeSliderItemService.GetHomeSliderItemForUI(LangCode);
