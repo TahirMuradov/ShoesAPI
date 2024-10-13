@@ -108,13 +108,17 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessResult(HttpStatusCode.OK);
         }
 
-        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId, Guid SizeId,string LangCode,int page, decimal minPrice=0, decimal maxPrice = 0)
+        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId,Guid CategoryId, Guid SizeId,string LangCode,int page, decimal minPrice=0, decimal maxPrice = 0)
         {
             IQueryable<Product> productQuery = _appDBContext.Products.AsNoTracking().AsQueryable();
             if (subCategoryId != default)
             {
              
                 productQuery = productQuery.Where(x => x.SubCategories.Any(y => y.SubCategoryId == subCategoryId));
+            }
+            if (CategoryId != default)
+            {
+                productQuery = productQuery.Where(x => x.SubCategories.Any(y => y.SubCategory.CategoryId == CategoryId));
             }
             if (SizeId != default)
             {

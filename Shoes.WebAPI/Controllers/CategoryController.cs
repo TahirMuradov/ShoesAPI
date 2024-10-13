@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AllRole")]
+
     public class CategoryController : ControllerBase
 
     {
@@ -19,6 +19,7 @@ namespace Shoes.WebAPI.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize(Policy = "AllRole")]
         public IActionResult AddCategory([FromBody] AddCategoryDTO addCategoryDTO, [FromHeader] string LangCode)
         {
             
@@ -26,6 +27,7 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpDelete("[action]")]
+        [Authorize(Policy = "AllRole")]
         public IActionResult DeleteCategory([FromQuery] Guid Id, [FromHeader] string LangCode)
         {
           
@@ -39,23 +41,27 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpGet("[action]")]
+        [Authorize(Policy = "AllRole")]
         public async Task<IActionResult> GetAllCategoryForTable([FromHeader] string langCode, [FromQuery] int page = 1)
         {
             var result=await _categoryService.GetAllCategoryAsync(langCode, page);
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpGet("[action]")]
+        [Authorize(Policy = "AllRole")]
         public IActionResult GetCategory([FromQuery] Guid Id, [FromHeader] string langCode) 
         { var result=_categoryService.GetCategory(Id, langCode);
             return result.IsSuccess? Ok(result):BadRequest(result); 
         }
         [HttpGet("[action]")]
+        [Authorize(Policy = "AllRole")]
         public IActionResult GetCategoryForUpdate([FromQuery] Guid Id)
         {
             var result=_categoryService.GetCategoryForUpdate(Id);
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
         [HttpPut("[action]")]
+        [Authorize(Policy = "AllRole")]
         public IActionResult UpdateCategory([FromBody]UpdateCategoryDTO updateCategoryDTO ,[FromHeader]string LangCode)
         {
             var result=_categoryService.UpdateCategory(updateCategoryDTO, LangCode);

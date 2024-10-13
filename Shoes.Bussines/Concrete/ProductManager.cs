@@ -62,7 +62,7 @@ namespace Shoes.Bussines.Concrete
             return _productDAL.DeleteProduct(Id);
         }
 
-        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId, Guid SizeId, string LangCode, int Page = 1, decimal minPrice = 0, decimal maxPrice = 0)
+        public async Task<IDataResult<PaginatedList<GetAllProductDTO>>> GetAllProductAsync(Guid subCategoryId,Guid CategoryId, Guid SizeId, string LangCode, int Page = 1, decimal minPrice = 0, decimal maxPrice = 0)
         {
             if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
                 LangCode = DefaultLaunguage;
@@ -73,7 +73,7 @@ namespace Shoes.Bussines.Concrete
          if(maxPrice<0)
                 maxPrice = 0;
          
-                return await _productDAL.GetAllProductAsync(subCategoryId, SizeId, LangCode, Page, minPrice, maxPrice);
+                return await _productDAL.GetAllProductAsync(subCategoryId,CategoryId ,SizeId, LangCode, Page, minPrice, maxPrice);
         }
 
         public async Task<IDataResult<PaginatedList<GetProductDashboardDTO>>> GetAllProductDashboardAsync(string LangCode, int page=1)

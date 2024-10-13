@@ -7,7 +7,7 @@ namespace Shoes.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "AllRole")]
+   
     public class SizeController : ControllerBase
     {
        private readonly ISizeService _sizeService;
@@ -16,31 +16,35 @@ namespace Shoes.WebAPI.Controllers
         {
             _sizeService = sizeService;
         }
-
+        [Authorize(Policy = "AllRole")]
         [HttpPost("[action]")]
         public IActionResult AddSize([FromBody] AddSizeDTO addSize,[FromHeader]string LangCode)
         {
             var result=_sizeService.AddSize(addSize, LangCode);
             return result.IsSuccess?Ok(result):BadRequest(result);
         }
+        [Authorize(Policy = "AllRole")]
         [HttpPut("[action]")]
         public IActionResult UpdateSize([FromBody] UpdateSizeDTO UpdateSize, [FromHeader] string LangCode)
         {
             var result = _sizeService.UpdateSize(UpdateSize, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest();
         }
+        [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult DeleteSize([FromQuery] Guid Id)
         {
             var result = _sizeService.DeleteSize(Id);
             return result.IsSuccess ? Ok(result) : BadRequest();
         }
+        [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public IActionResult GetSize([FromQuery] Guid Id)
         {
             var result = _sizeService.GetSize(Id);
             return result.IsSuccess ? Ok(result) : BadRequest();
         }
+        [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllSizeForTable([FromQuery] int page)
         {

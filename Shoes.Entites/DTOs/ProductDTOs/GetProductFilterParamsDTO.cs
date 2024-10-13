@@ -2,7 +2,7 @@
 {
     public class GetProductFilterParamsDTO
     {
-
+        public Guid CategoryId { get; set; }
         public Guid subCategoryId { get; set; }
         public Guid SizeId { get; set; }
         public int page { get; set; }

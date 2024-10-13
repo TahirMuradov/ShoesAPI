@@ -74,7 +74,8 @@ namespace Shoes.DataAccess.Concrete
             IQueryable<GetCategoryForUIDTO> data=_dBContext.Categories.AsNoTracking().AsSplitQuery().Select(x=> new GetCategoryForUIDTO
             {
                 Id = x.Id,                
-                Name=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content
+                Name=x.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content,
+                SubCategories=x.SubCategories.Select(y=>new KeyValuePair<Guid,string>(y.Id,y.SubCategoryLanguages.FirstOrDefault(z=>z.LangCode==LangCode).Content)).ToDictionary()
             });
             return new SuccessDataResult<IQueryable<GetCategoryForUIDTO>>(response: data, HttpStatusCode.OK);    
         }
