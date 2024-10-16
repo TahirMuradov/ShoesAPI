@@ -92,6 +92,18 @@ namespace Shoes.DataAccess.Concrete
             },HttpStatusCode.OK);
         }
 
+        public IDataResult<IQueryable<GetShippingMethodForUIDTO>> GetShippingMethodForUI(string LangCode)
+        {
+            var query = _appDBContext.ShippingMethods.AsNoTracking().AsSplitQuery().Select(x => new GetShippingMethodForUIDTO
+            {
+                Id = x.Id,
+                Content = x.ShippingMethodLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content,
+                Price = x.price,
+                DisCount=x.discountPrice
+            });
+            return new SuccessDataResult<IQueryable<GetShippingMethodForUIDTO>>(response: query, HttpStatusCode.OK);
+        }
+
         public IDataResult<GetShippingMethodForUpdateDTO> GetShippingMethodForUpdate(Guid Id)
         {
             GetShippingMethodForUpdateDTO data = _appDBContext.ShippingMethods.Include(x => x.ShippingMethodLanguages).Select(x => new GetShippingMethodForUpdateDTO

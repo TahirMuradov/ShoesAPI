@@ -159,5 +159,17 @@ namespace Shoes.DataAccess.Concrete
                 Content = checekdPaymentMethod.PaymentMethodLanguages.Select(x => new KeyValuePair<string, string>(x.LangCode, x.Content)).ToDictionary()
             }, HttpStatusCode.OK);
         }
+
+        public IDataResult<IQueryable<GetPaymentMethodForUIDTO>> GetPaymentMethodForUI(string LangCode)
+        {
+            var query = _appDBContext.PaymentMethods.AsNoTracking().AsSplitQuery().Select(x => new GetPaymentMethodForUIDTO
+            {
+                Id = x.Id,
+                Content = x.PaymentMethodLanguages.FirstOrDefault(y => y.LangCode == LangCode).LangCode,
+                IsApi=x.IsApi
+                
+            });
+            return new SuccessDataResult<IQueryable<GetPaymentMethodForUIDTO>>(response:query, HttpStatusCode.OK);
+        }
     }
 }

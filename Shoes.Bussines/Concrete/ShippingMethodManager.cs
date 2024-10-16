@@ -78,6 +78,13 @@ namespace Shoes.Bussines.Concrete
             return _shippingMethodDAL.GetShippingMethod(Id, LangCode);
         }
 
+        public IDataResult<IQueryable<GetShippingMethodForUIDTO>> GetShippingMethodForUI(string LangCode)
+        {
+            if (SupportedLaunguages.Contains(LangCode) || string.IsNullOrEmpty(LangCode))
+                LangCode = DefaultLaunguage;
+            return _shippingMethodDAL.GetShippingMethodForUI(LangCode);
+        }
+
         public IDataResult<GetShippingMethodForUpdateDTO> GetShippingMethodForUpdate(Guid Id)
         {
             if (Id == default)

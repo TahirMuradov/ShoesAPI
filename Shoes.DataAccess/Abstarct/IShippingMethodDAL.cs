@@ -8,6 +8,7 @@ namespace Shoes.DataAccess.Abstarct
     {
         public IResult AddShippingMethod(AddShippingMethodDTO addShipping);
         public IDataResult<GetShippingMethodForUpdateDTO> GetShippingMethodForUpdate(Guid Id);
+        public IDataResult<IQueryable<GetShippingMethodForUIDTO>> GetShippingMethodForUI(string LangCode);
         public IResult UpdateShippingMethod(UpdateShippingMethodDTO updateShipping);
         public IResult DeleteShippingMethod(Guid Id);
         public IDataResult<GetShippingMethodDTO> GetShippingMethod(Guid Id, string LangCode);

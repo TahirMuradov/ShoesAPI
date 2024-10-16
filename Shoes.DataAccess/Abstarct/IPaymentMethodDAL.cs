@@ -9,6 +9,7 @@ namespace Shoes.DataAccess.Abstarct
         public IResult AddPaymentMethod(AddPaymentMethodDTO addPayment);
         public IResult UpdatePaymenthod(UpdatePaymentMethodDTO updatePayment);
         public Task<IDataResult<PaginatedList<GetPaymentMethodDTO>>> GetAllPaymentmethodAsync(string LangCode,int page=1);
+        public IDataResult<IQueryable< GetPaymentMethodForUIDTO>>GetPaymentMethodForUI(string LangCode);
         public IDataResult<GetPaymentMethodDTO>GetPaymentMethod(Guid Id,string LangCode);
         public IDataResult<GetPaymentMethodForUpdateDTO> GetPaymentMethodForUpdate(Guid Id);
         public IResult DeletePaymentmethod(Guid Id);

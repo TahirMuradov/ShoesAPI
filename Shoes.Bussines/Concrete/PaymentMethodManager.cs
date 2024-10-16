@@ -102,5 +102,12 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorDataResult<GetPaymentMethodForUpdateDTO>(HttpStatusCode.BadRequest);
             return _paymentMethodDAL.GetPaymentMethodForUpdate(Id);
         }
+
+        public IDataResult<IQueryable<GetPaymentMethodForUIDTO>> GetPaymentMethodForUI(string LangCode)
+        {
+            if (SupportedLaunguages.Contains(LangCode) || string.IsNullOrEmpty(LangCode))
+                LangCode = DefaultLaunguage;
+            return _paymentMethodDAL.GetPaymentMethodForUI(LangCode);
+        }
     }
 }
