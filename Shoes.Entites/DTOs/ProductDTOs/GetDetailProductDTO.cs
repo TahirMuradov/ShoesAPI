@@ -7,6 +7,7 @@
         public string Title { get; set; }
       
         public List<string> SubCategoryName { get; set; }
+        public string ProductCode { get; set; }
         public decimal Price { get; set; }
         public decimal DisCount { get; set; }
         public List<string> ImgUrls { get; set; }

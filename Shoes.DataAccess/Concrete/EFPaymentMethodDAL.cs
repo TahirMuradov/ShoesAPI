@@ -165,7 +165,7 @@ namespace Shoes.DataAccess.Concrete
             var query = _appDBContext.PaymentMethods.AsNoTracking().AsSplitQuery().Select(x => new GetPaymentMethodForUIDTO
             {
                 Id = x.Id,
-                Content = x.PaymentMethodLanguages.FirstOrDefault(y => y.LangCode == LangCode).LangCode,
+                Content = x.PaymentMethodLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content,
                 IsApi=x.IsApi
                 
             });

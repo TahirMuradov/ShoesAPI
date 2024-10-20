@@ -184,12 +184,12 @@ namespace Shoes.DataAccess.Concrete
             var product = _appDBContext.Products
         .AsNoTracking()
         .AsSplitQuery()
-        .Where(p => p.Id == Id)
         .Select(p => new
         {
             p.Id,
             p.DiscountPrice,
             p.Price,
+            p.ProductCode,
             Pictures = p.Pictures.Select(pic => pic.Url).ToList(),
             Languages = p.ProductLanguages.FirstOrDefault(pl => pl.LangCode == LangCode),
             SubCategoryNames = p.SubCategories
@@ -214,7 +214,8 @@ namespace Shoes.DataAccess.Concrete
                         Title = scp.Product.ProductLanguages.FirstOrDefault(pl => pl.LangCode == LangCode).Title
                     })).ToList()
         })
-        .FirstOrDefault();
+        .FirstOrDefault(p => p.Id == Id);
+       
 
             if (product == null)
                 return new ErrorDataResult<GetDetailProductDTO>(HttpStatusCode.NotFound);
@@ -226,6 +227,7 @@ namespace Shoes.DataAccess.Concrete
                 Price = product.Price,
                 Title = product.Languages?.Title,
                 Description = product.Languages?.Description,
+                ProductCode=product.ProductCode,
                 SubCategoryName = product.SubCategoryNames,
                 ImgUrls = product.Pictures,
                 Size = product.Sizes,
