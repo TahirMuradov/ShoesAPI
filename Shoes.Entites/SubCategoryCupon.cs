@@ -7,5 +7,6 @@
         public SubCategory SubCategory { get; set; }
         public Guid CuponId { get; set; }
         public Cupon Cupon { get; set; }
+        public bool IsActive { get; set; }
     }
 }

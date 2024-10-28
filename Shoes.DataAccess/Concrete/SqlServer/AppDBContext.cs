@@ -6,7 +6,7 @@ using Shoes.Entites.WebUIEntites;
 
 namespace Shoes.DataAccess.Concrete.SqlServer
 {
-    public class AppDBContext:IdentityDbContext<AppUser,AppRole,Guid>
+    public class AppDBContext:IdentityDbContext<User,AppRole,Guid>
     {
         public AppDBContext(DbContextOptions<AppDBContext> options) : base(options)
         {
@@ -31,6 +31,7 @@ namespace Shoes.DataAccess.Concrete.SqlServer
         public DbSet<Cupon> Cupons { get; set; }
         public DbSet<CategoryCupon> CategoryCupons { get; set; }
         public DbSet<ProductCupon> ProductCupons { get; set; }
+        public DbSet<SubCategoryCupon> SubCategoryCupons { get; set; }
         public DbSet<UserCupon> UserCupons { get; set; }
         public DbSet<HomeSliderItem> HomeSliderItems { get; set; }
         public DbSet<HomeSliderLanguage> HomeSliderLanguages { get; set; }
@@ -41,7 +42,7 @@ namespace Shoes.DataAccess.Concrete.SqlServer
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.Entity<AppUser>().ToTable("Users");
+            builder.Entity<User>().ToTable("Users");
 
             builder.Entity<AppRole>().ToTable("Roles");
         }
