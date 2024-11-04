@@ -64,6 +64,9 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<ITopCategoryAreaService, TopCategoryAreaManager>();
             services.AddScoped<INewArriwalAreaDAL, EFNewArriwalDAL>();
             services.AddScoped<INewArriwalService, NewArriwalManager>();
+            services.AddScoped<ICuponDAL, EFCuponDAL>();
+            services.AddScoped<ICuponService,CuponManager>();
+
 
 
         }

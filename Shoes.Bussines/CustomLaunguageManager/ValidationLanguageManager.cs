@@ -291,6 +291,39 @@ namespace Shoes.Bussines.CustomLaunguageManager
             AddTranslation("en", "SubCategoryAndCategoryIdIsrequired", "One of Category or SubCategory must be selected!");
             AddTranslation("ru", "SubCategoryAndCategoryIdIsrequired", "Необходимо выбрать либо категорию, либо подкатегорию!");
 
+            #region CuponValidations
+
+            AddTranslation("az", "CategoryIdrequired", "Kateqoriya boş ola bilməz!");
+            AddTranslation("az", "SubCategoryIdrequired", "Alt Kateqoriya boş ola bilməz!");
+            AddTranslation("az", "ProductIdrequired", "Məhsul boş ola bilməz!");
+            AddTranslation("az", "UserIdrequired", "İstifadəçi boş ola bilməz!");
+            AddTranslation("az", "DisCountPrecentBeetwen", "Endirim Faizi 0-100 aralığında olmalıdır!");
+ 
+            // Russian
+            AddTranslation("ru", "CategoryIdrequired", "Категория не может быть пустой!");
+            AddTranslation("ru", "SubCategoryIdrequired", "Подкатегория не может быть пустой!");
+            AddTranslation("ru", "ProductIdrequired", "Продукт не может быть пустым!");
+            AddTranslation("ru", "UserIdrequired", "Пользователь не может быть пустым!");
+            AddTranslation("ru", "DisCountPrecentBeetwen", "Скидка должна быть в диапазоне от 0 до 100!");
+
+            // English
+            AddTranslation("en", "CategoryIdrequired", "Category cannot be empty!");
+            AddTranslation("en", "SubCategoryIdrequired", "Subcategory cannot be empty!");
+            AddTranslation("en", "ProductIdrequired", "Product cannot be empty!");
+            AddTranslation("en", "UserIdrequired", "User cannot be empty!");
+            AddTranslation("en", "DisCountPrecentBeetwen", "Discount percentage must be between 0 and 100!");
+
+
+            //update dto
+            AddTranslation("az", "CuponIdrequired", "Cupon Id boş ola bilməz!");
+            AddTranslation("az", "RealetedIdrequired", "Kateqoriya ,Alt Kateqoriya,Məhsul,Istifadəçi hər hansisa biri seçilməlidir!");
+            AddTranslation("ru", "CuponIdrequired", "ID купона не может быть пустым!");
+            AddTranslation("ru", "RealetedIdrequired", "Должен быть выбран хотя бы один: категория, подкатегория, продукт или пользователь!");
+            AddTranslation("en", "CuponIdrequired", "Cupon ID cannot be empty!");
+            AddTranslation("en", "RealetedIdrequired", "At least one must be selected: category, subcategory, product, or user!");
+
+            #endregion
+
         }
     }
 }
