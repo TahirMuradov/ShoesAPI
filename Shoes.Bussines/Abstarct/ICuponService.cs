@@ -12,7 +12,7 @@ namespace Shoes.Bussines.Abstarct
         public IResult RemoveCupon(Guid Id);
         public IResult ChangeStatusCupon(UpdateStatusCuponDTO updateStatusCuponDTO,string LangCode);
         public IResult UpdateCupon(UpdateCuponDTO updateCuponDTO,string LangCode);
-        public IDataResult<decimal> CheckedCuponCode(string cuponCode);
+        public IDataResult<GetCuponInfoDTO> CheckedCuponCode(string cuponCode);
 
 
     }

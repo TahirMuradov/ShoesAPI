@@ -175,12 +175,23 @@ namespace Shoes.DataAccess.Concrete
 
         }
 
-        public IDataResult<decimal> CheckedCuponCode(string cuponCode)
+        public IDataResult<GetCuponInfoDTO> CheckedCuponCode(string cuponCode)
         {
-            var checkedCuponCope = _appDBContext.Cupons.AsNoTracking().FirstOrDefault(x => x.Code == cuponCode);
+            var checkedCuponCope = _appDBContext.Cupons.AsSplitQuery().AsNoTracking().FirstOrDefault(x => x.Code == cuponCode);
             if (checkedCuponCope is null)
-                return new ErrorDataResult<decimal>(HttpStatusCode.NotFound);
-            return new SuccessDataResult<decimal>(response: checkedCuponCope.DisCountPercent, HttpStatusCode.OK);
+                return new ErrorDataResult<GetCuponInfoDTO>(HttpStatusCode.NotFound);
+          
+            return new SuccessDataResult<GetCuponInfoDTO>(response: new GetCuponInfoDTO
+            { 
+                CuponId=checkedCuponCope.Id,
+                CuponCode=checkedCuponCope.Code,
+                CategoriesId=checkedCuponCope.CategoryCupons is not null ?checkedCuponCope.CategoryCupons.Select(x=>x.Category.Id):null,
+              UserId= checkedCuponCope.UserCupons is not null? checkedCuponCope.UserCupons.Select(x=>x.UserId):null,
+              ProductIDs=checkedCuponCope.ProductCupons is not null ?checkedCuponCope.ProductCupons.Select(x=>x.ProductId):null,
+              SubCategories=checkedCuponCope.SubCategoryCupons is not null?checkedCuponCope.SubCategoryCupons.Select(x=>x.SubCategoryId):null,
+              DisCountPercent=checkedCuponCope.DisCountPercent
+                
+            }, HttpStatusCode.OK);
         }
 
         public IResult RemoveCupon(Guid Id)

@@ -110,10 +110,10 @@ namespace Shoes.Bussines.Concrete
             return _cuponDAL.UpdateCupon(updateCuponDTO);
         }
 
-        public IDataResult<decimal> CheckedCuponCode(string cuponCode)
+        public IDataResult<GetCuponInfoDTO> CheckedCuponCode(string cuponCode)
         {
             if (string.IsNullOrEmpty(cuponCode))
-                return new ErrorDataResult<decimal>(HttpStatusCode.BadRequest);
+                return new ErrorDataResult<GetCuponInfoDTO>(HttpStatusCode.BadRequest);
             return _cuponDAL.CheckedCuponCode(cuponCode);
         }
     }

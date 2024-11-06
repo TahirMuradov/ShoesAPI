@@ -190,11 +190,13 @@ namespace Shoes.DataAccess.Concrete
             p.DiscountPrice,
             p.Price,
             p.ProductCode,
+         
+          CategoryNames=p.SubCategories.Select(x=>new KeyValuePair<Guid,string>(x.SubCategory.CategoryId,x.SubCategory.Category.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content)).ToDictionary(),
+            SubCategoryNames = p.SubCategories
+                .Select(sc =>new KeyValuePair<Guid,string>(sc.SubCategoryId,sc.SubCategory.SubCategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content))
+                .ToDictionary(),
             Pictures = p.Pictures.Select(pic => pic.Url).ToList(),
             Languages = p.ProductLanguages.FirstOrDefault(pl => pl.LangCode == LangCode),
-            SubCategoryNames = p.SubCategories
-                .Select(sc => sc.SubCategory.SubCategoryLanguages.FirstOrDefault(scl => scl.LangCode == LangCode).Content)
-                .ToList(),
             Sizes = p.SizeProducts
                 .Select(sp => new GetProductSizeInfoDTO
                 {
@@ -228,10 +230,12 @@ namespace Shoes.DataAccess.Concrete
                 Title = product.Languages?.Title,
                 Description = product.Languages?.Description,
                 ProductCode=product.ProductCode,
-                SubCategoryName = product.SubCategoryNames,
+                SubCategories = product.SubCategoryNames,
                 ImgUrls = product.Pictures,
                 Size = product.Sizes,
-                RelatedProducts = product.RelatedProducts
+                RelatedProducts = product.RelatedProducts,
+                Categories=product.CategoryNames,
+              
             };
 
             return new SuccessDataResult<GetDetailProductDTO>(dto, HttpStatusCode.OK);

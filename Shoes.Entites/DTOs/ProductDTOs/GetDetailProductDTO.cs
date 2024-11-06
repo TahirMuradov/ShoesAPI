@@ -5,8 +5,10 @@
         public Guid Id { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
-      
-        public List<string> SubCategoryName { get; set; }
+        public Dictionary<Guid,string> Categories { get; set; }
+
+
+        public Dictionary<Guid,string> SubCategories { get; set; }
         public string ProductCode { get; set; }
         public decimal Price { get; set; }
         public decimal DisCount { get; set; }

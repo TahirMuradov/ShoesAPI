@@ -12,7 +12,7 @@ namespace Shoes.DataAccess.Abstarct
         public IResult RemoveCupon(Guid Id);
         public IResult ChangeStatusCupon(UpdateStatusCuponDTO updateStatusCuponDTO);
         public IResult UpdateCupon(UpdateCuponDTO updateCuponDTO);
-        public IDataResult<decimal> CheckedCuponCode(string cuponCode);       
+        public IDataResult<GetCuponInfoDTO> CheckedCuponCode(string cuponCode);       
 
 
     }
