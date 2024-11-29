@@ -294,6 +294,7 @@ namespace Shoes.Bussines.Concrete
         {
             if (page < 1)
                 page = 1;
+            
             IQueryable<GetAllUserDTO> query = _userManager.Users.Select(x => new GetAllUserDTO
             {
                 Id = x.Id,

@@ -180,15 +180,15 @@ namespace Shoes.DataAccess.Concrete
             var checkedCuponCope = _appDBContext.Cupons.AsSplitQuery().AsNoTracking().FirstOrDefault(x => x.Code == cuponCode);
             if (checkedCuponCope is null)
                 return new ErrorDataResult<GetCuponInfoDTO>(HttpStatusCode.NotFound);
-          
+       
             return new SuccessDataResult<GetCuponInfoDTO>(response: new GetCuponInfoDTO
             { 
                 CuponId=checkedCuponCope.Id,
                 CuponCode=checkedCuponCope.Code,
-                CategoriesId=checkedCuponCope.CategoryCupons is not null ?checkedCuponCope.CategoryCupons.Select(x=>x.Category.Id):null,
-              UserId= checkedCuponCope.UserCupons is not null? checkedCuponCope.UserCupons.Select(x=>x.UserId):null,
-              ProductIDs=checkedCuponCope.ProductCupons is not null ?checkedCuponCope.ProductCupons.Select(x=>x.ProductId):null,
-              SubCategories=checkedCuponCope.SubCategoryCupons is not null?checkedCuponCope.SubCategoryCupons.Select(x=>x.SubCategoryId):null,
+                CategoriesId=checkedCuponCope.CategoryCupons.Where(x=>x.IsActive) is not null ?checkedCuponCope.CategoryCupons.Where(x => x.IsActive).Select(x=>x.Category.Id):null,
+              UserId= checkedCuponCope.UserCupons.Where(x=>x.isActive) is not null? checkedCuponCope.UserCupons.Where(x => x.isActive).Select(x=>x.UserId):null,
+              ProductIDs=checkedCuponCope.ProductCupons.Where(x=>x.IsActive) is not null ?checkedCuponCope.ProductCupons.Where(x => x.IsActive).Select(x=>x.ProductId):null,
+              SubCategories=checkedCuponCope.SubCategoryCupons.Where(x=>x.IsActive) is not null?checkedCuponCope.SubCategoryCupons.Where(x => x.IsActive).Select(x=>x.SubCategoryId):null,
               DisCountPercent=checkedCuponCope.DisCountPercent
                 
             }, HttpStatusCode.OK);
