@@ -29,10 +29,7 @@ namespace Shoes.DataAccess.Concrete.SqlServer
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductLanguage> ProductLanguages { get; set; }
         public DbSet<Cupon> Cupons { get; set; }
-        public DbSet<CategoryCupon> CategoryCupons { get; set; }
-        public DbSet<ProductCupon> ProductCupons { get; set; }
-        public DbSet<SubCategoryCupon> SubCategoryCupons { get; set; }
-        public DbSet<UserCupon> UserCupons { get; set; }
+   
         public DbSet<HomeSliderItem> HomeSliderItems { get; set; }
         public DbSet<HomeSliderLanguage> HomeSliderLanguages { get; set; }
         public DbSet<TopCategoryArea> TopCategoryAreas { get; set; }

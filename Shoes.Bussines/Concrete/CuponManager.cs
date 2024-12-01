@@ -78,7 +78,7 @@ namespace Shoes.Bussines.Concrete
             var validationResult = validationRules.Validate(addedCuponForUserDTO);
             if (!validationResult.IsValid)
                 return new ErrorDataResult<string>(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
-            return _cuponDAL.AddSpecificCuponForUser(addedCuponForUserDTO);
+            return  _cuponDAL.AddSpecificCuponForUser(addedCuponForUserDTO);
         }
 
         public IResult RemoveCupon(Guid Id)

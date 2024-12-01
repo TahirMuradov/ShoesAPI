@@ -13,6 +13,6 @@
         public List<SizeProduct> SizeProducts { get; set; }
         public List<SubCategoryProduct> SubCategories { get; set; }
         public List<ProductLanguage> ProductLanguages { get; set; }
-        public List<ProductCupon>? ProductCupons { get; set; }
+        public List<Cupon>?Cupons { get; set; }
     }
 }

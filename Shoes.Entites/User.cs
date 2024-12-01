@@ -4,7 +4,7 @@ namespace Shoes.Entites
 {
     public class User:AppUser
     {
-        public List<UserCupon>? Cupons { get; set; }
+        public List<Cupon>? Cupons { get; set; }
 
     }
 }
