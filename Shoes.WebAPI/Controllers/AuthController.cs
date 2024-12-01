@@ -17,6 +17,8 @@ namespace Shoes.WebAPI.Controllers
      
         [HttpGet("[action]")]
         [Authorize(Policy = "SuperAdminRole")]
+      
+       
         public async Task<IActionResult> GetAllUser([FromQuery]int page)
         {
             var result=await _authService.GetAllUserAsnyc(page);

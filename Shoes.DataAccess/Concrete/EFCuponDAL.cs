@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Helpers;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
@@ -25,9 +24,6 @@ namespace Shoes.DataAccess.Concrete
 
         public IDataResult<string> AddSpecificCuponForCategory(AddCuponForCategoryDTO addCuponForCategoryDTO)
         {
-
-
-
             var checekdCategory = _appDBContext.Categories.Include(y => y.Cupons).AsNoTracking().FirstOrDefault(x => x.Id == addCuponForCategoryDTO.CategoryId);
             if (checekdCategory is null) return new ErrorDataResult<string>(HttpStatusCode.NotFound);
             var checekdPercent = checekdCategory.Cupons.FirstOrDefault(x => x.DisCountPercent == addCuponForCategoryDTO.DisCountPercent);
@@ -42,7 +38,7 @@ namespace Shoes.DataAccess.Concrete
                 Code = CuponCode,
                 IsActive = true,
                 CategoryId = checekdCategory.Id,
-                ProductId = null,
+                  ProductId = null,
                 SubCategoryId = null,
                 UserId = null,
             };

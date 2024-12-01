@@ -35,6 +35,7 @@ namespace Shoes.Core.Security.Concrete
                 new Claim("FirstName", User.FirstName),
                 new Claim("LastName", User.LastName),
                 new Claim("Roles",string.Join(",", roles)),
+                new Claim(ClaimTypes.Role,string.Join(",", roles)),
                 new Claim("Address",User.Adress),
                 new Claim("PhoneNumber",User.PhoneNumber)
             };
