@@ -157,10 +157,10 @@ namespace Shoes.DataAccess.Concrete
             {
                 CuponId = checkedCuponCope.Id,
                 CuponCode = checkedCuponCope.Code,
-                CategoriesId = checkedCuponCope.CategoryId??null,
+                CategoryId = checkedCuponCope.CategoryId??null,
                 UserId = checkedCuponCope.UserId??null,
-                ProductIDs = checkedCuponCope.ProductId??null,
-                SubCategories = checkedCuponCope.SubCategoryId ?? null,
+                ProductID = checkedCuponCope.ProductId??null,
+                SubCategoryId = checkedCuponCope.SubCategoryId ?? null,
                 DisCountPercent = checkedCuponCope.DisCountPercent
 
             }, HttpStatusCode.OK);

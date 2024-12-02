@@ -13,6 +13,9 @@ namespace Shoes.Bussines.Abstarct
         Task<IResult> DeleteUserAsnyc(Guid Id,string culture);
         Task<IResult> RegisterAsync(RegisterDTO registerDTO, string culture);
         Task<IResult> AssignRoleToUserAsnyc(AssignRoleDTO assignRoleDTO, string culture);
+        Task<IResult> SendEmailTokenForForgotPassword(string Email);
+        Task<IResult> CheckTokenForForgotPassword(string Email, string token);
+        Task<IResult> ChangePasswordForTokenForgotPassword(string Email, string token, string NewPassword);
         Task<IDataResult<string>> UpdateRefreshTokenAsnyc(string refreshToken, AppUser user, string culture);
         Task<IResult> RemoveRoleFromUserAsync(RemoveRoleUserDTO removeRoleUserDTO,string culture);
         Task<IDataResult<Token>> LoginAsync(LoginDTO loginDTO, string culture);

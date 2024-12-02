@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using MailKit;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shoes.Bussines.Abstarct;
@@ -7,6 +10,7 @@ using Shoes.Bussines.FluentValidations.AuthDTOValidations;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.EmailHelper.Abstract;
+using Shoes.Core.Helpers.EmailHelper.Concrete;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Security.Abstarct;
 using Shoes.Core.Utilites.Results.Abstract;
@@ -45,17 +49,18 @@ namespace Shoes.Bussines.Concrete
         private readonly RoleManager<AppRole> _roleManager;
         private readonly ITokenService _tokenService;
         private readonly IEmailHelper _emailHelper;
+        private readonly IConfiguration _configuration;
 
-
-        public AuthManager(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IEmailHelper emailHelper)
+        public AuthManager(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IEmailHelper emailHelper, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _tokenService = tokenService;
             _emailHelper = emailHelper;
+            _configuration = configuration;
         }
-        
+
         public async Task<IResult> AssignRoleToUserAsnyc(AssignRoleDTO assignRoleDTO, string culture)
         {
             if (!SupportedLaunguages.Contains(culture))
@@ -369,6 +374,56 @@ namespace Shoes.Bussines.Concrete
                 return new SuccessResult(HttpStatusCode.OK);
             else
                 return new ErrorResult(messages: result.Errors.Select(x => x.Description).ToList(), HttpStatusCode.BadRequest);
+
+        }
+
+        public async Task<IResult> SendEmailTokenForForgotPassword(string Email)
+        {
+            if (string.IsNullOrEmpty(Email)) return new ErrorResult(HttpStatusCode.BadRequest);
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user is null)
+                return new ErrorResult(HttpStatusCode.NotFound);
+            string token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var url = HttpUtility.UrlEncode( _configuration["Domain:Front"]+ $"/forgotpassword/confirmation/{Email}/${token}");
+          var emailResult=await  _emailHelper.SendEmailAsync(user.Email, url, user.FirstName + user.LastName);
+
+
+            if (emailResult.IsSuccess)
+        
+                return new SuccessResult(HttpStatusCode.OK);
+
+            return new ErrorResult(HttpStatusCode.BadRequest);
+        }
+
+        public async Task<IResult> CheckTokenForForgotPassword(string Email, string token)
+        {
+            if (string.IsNullOrEmpty(Email)||string.IsNullOrEmpty(token)) return new ErrorResult(HttpStatusCode.BadRequest);
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user is null)
+              return new ErrorResult(HttpStatusCode.NotFound);
+                bool tokenResult = await _userManager.VerifyUserTokenAsync(
+       user: user,
+       tokenProvider: _userManager.Options.Tokens.PasswordResetTokenProvider,
+       purpose: UserManager<User>.ResetPasswordTokenPurpose,
+       token: token
+                      );
+
+            if (tokenResult) return new SuccessResult(HttpStatusCode.OK);
+            return new ErrorResult(HttpStatusCode.BadRequest);
+        }
+
+        public async Task<IResult> ChangePasswordForTokenForgotPassword(string Email, string token, string NewPassword)
+        {
+            if (string.IsNullOrEmpty(Email)||string.IsNullOrEmpty(token)||string.IsNullOrEmpty(NewPassword))
+           return new ErrorResult(HttpStatusCode.BadRequest);
+            var user = await _userManager.FindByEmailAsync(Email);
+            if (user is null)
+                return new ErrorResult(HttpStatusCode.NotFound);
+            var tokenResult = await _userManager.ResetPasswordAsync(user, token, NewPassword);
+            if(tokenResult.Succeeded)
+                return new SuccessResult(HttpStatusCode.OK);
+            return new ErrorResult(messages:tokenResult.Errors.Select(x=>x.Description).ToList(),HttpStatusCode.BadRequest);
 
         }
     }

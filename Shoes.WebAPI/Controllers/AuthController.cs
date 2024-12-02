@@ -80,6 +80,23 @@ namespace Shoes.WebAPI.Controllers
             var result = await _authService.ChecekdConfirmedEmailTokenAsnyc(confirmedEmailDTO.Email,confirmedEmailDTO.token, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
-
+        [HttpPut("[action]")]
+        public async Task<IActionResult> SendEmailTokenForForgotPassword([FromQuery]string Email)
+        {
+            var result=await _authService.SendEmailTokenForForgotPassword(Email);
+            return result.IsSuccess?Ok(result):BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> CheckTokenForForgotPassword([FromQuery] string Email, [FromQuery]string Token)
+        {
+            var result=await _authService.CheckTokenForForgotPassword(Email, Token);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpPut("[action]")]
+        public async Task<IActionResult> ChangePasswordForTokenForgotPassword([FromQuery]string Email,[FromQuery] string Token, [FromBody] string NewPassword)
+        {
+            var result=await _authService.ChangePasswordForTokenForgotPassword(Email, Token, NewPassword);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
     }
 }
