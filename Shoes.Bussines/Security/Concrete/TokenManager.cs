@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Security.Abstarct;
+using Shoes.Entites;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -13,15 +14,15 @@ namespace Shoes.Core.Security.Concrete
     public class TokenManager : ITokenService
     {
         private readonly IConfiguration _configuration;
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
 
-        public TokenManager(IConfiguration configuration, UserManager<AppUser> userManager)
+        public TokenManager(IConfiguration configuration, UserManager<User> userManager)
         {
             _configuration = configuration;
             _userManager = userManager;
         }
-        public async Task<Token> CreateAccessTokenAsync(AppUser User, List<string> roles)
+        public async Task<Token> CreateAccessTokenAsync(User User, List<string> roles)
         {
             Token token = new();
            

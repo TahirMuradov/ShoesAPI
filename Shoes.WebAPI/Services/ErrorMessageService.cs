@@ -16,10 +16,13 @@ namespace Shoes.WebAPI.Services
             var type = typeof(IdentityErrorMessageResource);
             var assemblyName = new AssemblyName(type.GetTypeInfo().Assembly.FullName);
             _localizer = factory.Create(nameof(IdentityErrorMessageResource), assemblyName.Name);
+           
    
         }
         public LocalizedString GetKey(string key)
         {
+            Console.WriteLine(key);
+            Console.WriteLine(_localizer[key]);
             return _localizer[key];
         }
     }

@@ -6,6 +6,7 @@ namespace Shoes.Core.Entities.Concrete
     {
      
         public string? RefreshToken { get; set; }
+       
         public DateTime? RefreshTokenExpiredDate { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

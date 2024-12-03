@@ -1,7 +1,4 @@
-﻿using MailKit;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Shoes.Bussines.Abstarct;
@@ -10,7 +7,6 @@ using Shoes.Bussines.FluentValidations.AuthDTOValidations;
 using Shoes.Core.Entities.Concrete;
 using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.EmailHelper.Abstract;
-using Shoes.Core.Helpers.EmailHelper.Concrete;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Security.Abstarct;
 using Shoes.Core.Utilites.Results.Abstract;
@@ -44,14 +40,14 @@ namespace Shoes.Bussines.Concrete
                 return ConfigurationHelper.config.GetSection("SupportedLanguage:Default").Get<string>();
             }
         }
-        private readonly UserManager<AppUser> _userManager;
-        private readonly SignInManager<AppUser> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
         private readonly ITokenService _tokenService;
         private readonly IEmailHelper _emailHelper;
         private readonly IConfiguration _configuration;
 
-        public AuthManager(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IEmailHelper emailHelper, IConfiguration configuration)
+        public AuthManager(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IEmailHelper emailHelper, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -70,7 +66,7 @@ namespace Shoes.Bussines.Concrete
             if (!validationResult.IsValid)
                 return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), statusCode: HttpStatusCode.BadRequest);
 
-            AppUser user = await _userManager.FindByIdAsync(assignRoleDTO.UserId.ToString());
+            User user = await _userManager.FindByIdAsync(assignRoleDTO.UserId.ToString());
             string responseMessage = string.Empty;
             if (user == null)
                 return new ErrorResult(AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
@@ -247,7 +243,7 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorResult(messages: validationResult.Errors.Select(x => x.ErrorMessage).ToList(), HttpStatusCode.BadRequest);
 
 
-            AppUser user = await _userManager.FindByIdAsync(removeRoleUserDTO.UserId.ToString());
+            User user = await _userManager.FindByIdAsync(removeRoleUserDTO.UserId.ToString());
             string responseMessage = string.Empty;
             if (user == null)
                 return new ErrorResult(AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
@@ -272,7 +268,7 @@ namespace Shoes.Bussines.Concrete
             }
         }
 
-        public async Task<IDataResult<string>> UpdateRefreshTokenAsnyc(string refreshToken, AppUser user, string culture)
+        public async Task<IDataResult<string>> UpdateRefreshTokenAsnyc(string refreshToken, User user, string culture)
         {
             if (!SupportedLaunguages.Contains(culture))
                 culture = DefaultLaunguage;
@@ -367,7 +363,7 @@ namespace Shoes.Bussines.Concrete
 
         public async Task<IResult> DeleteUserAsnyc(Guid Id, string culture)
         {
-            AppUser ChecekdUSerId = await _userManager.FindByIdAsync(Id.ToString());
+            User ChecekdUSerId = await _userManager.FindByIdAsync(Id.ToString());
             if (ChecekdUSerId == null) return new ErrorResult(message: AuthStatusMessage.UserNotFound[culture], HttpStatusCode.NotFound);
             IdentityResult result = await _userManager.DeleteAsync(ChecekdUSerId);
             if (result.Succeeded)
@@ -385,7 +381,7 @@ namespace Shoes.Bussines.Concrete
                 return new ErrorResult(HttpStatusCode.NotFound);
             string token = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-            var url = HttpUtility.UrlEncode( _configuration["Domain:Front"]+ $"/forgotpassword/confirmation/{Email}/${token}");
+            var url = _configuration["Domain:Front"]+ $"/auth/forgotpassword/confirmation/{HttpUtility.UrlEncode(Email)}/{HttpUtility.UrlEncode(token)}";
           var emailResult=await  _emailHelper.SendEmailAsync(user.Email, url, user.FirstName + user.LastName);
 
 
@@ -399,6 +395,9 @@ namespace Shoes.Bussines.Concrete
         public async Task<IResult> CheckTokenForForgotPassword(string Email, string token)
         {
             if (string.IsNullOrEmpty(Email)||string.IsNullOrEmpty(token)) return new ErrorResult(HttpStatusCode.BadRequest);
+            
+            Email=HttpUtility.UrlDecode(Email);
+            token=HttpUtility.UrlDecode(token);
             var user = await _userManager.FindByEmailAsync(Email);
             if (user is null)
               return new ErrorResult(HttpStatusCode.NotFound);
@@ -417,9 +416,13 @@ namespace Shoes.Bussines.Concrete
         {
             if (string.IsNullOrEmpty(Email)||string.IsNullOrEmpty(token)||string.IsNullOrEmpty(NewPassword))
            return new ErrorResult(HttpStatusCode.BadRequest);
+            Email = HttpUtility.UrlDecode(Email);
             var user = await _userManager.FindByEmailAsync(Email);
             if (user is null)
                 return new ErrorResult(HttpStatusCode.NotFound);
+
+            token = HttpUtility.UrlDecode(token);
+            NewPassword= HttpUtility.UrlDecode(NewPassword);
             var tokenResult = await _userManager.ResetPasswordAsync(user, token, NewPassword);
             if(tokenResult.Succeeded)
                 return new SuccessResult(HttpStatusCode.OK);

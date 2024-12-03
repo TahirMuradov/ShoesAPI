@@ -12,8 +12,8 @@ using Shoes.DataAccess.Concrete.SqlServer;
 namespace Shoes.DataAccess.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20240830121041_ProductLaunguageEntitesAddedProductIdprop")]
-    partial class ProductLaunguageEntitesAddedProductIdprop
+    [Migration("20241203174704_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -156,83 +156,14 @@ namespace Shoes.DataAccess.Migrations
                     b.ToTable("Roles", (string)null);
                 });
 
-            modelBuilder.Entity("Shoes.Core.Entities.Concrete.AppUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiredDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("Users", (string)null);
-                });
-
             modelBuilder.Entity("Shoes.Entites.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsFeatured")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -261,6 +192,47 @@ namespace Shoes.DataAccess.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("CategoryLanguages");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.Cupon", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DisCountPercent")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Cupons");
                 });
 
             modelBuilder.Entity("Shoes.Entites.Order", b =>
@@ -398,6 +370,9 @@ namespace Shoes.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("YeastCost")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
@@ -409,7 +384,7 @@ namespace Shoes.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Information")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -614,6 +589,224 @@ namespace Shoes.DataAccess.Migrations
                     b.ToTable("SubCategoryProducts");
                 });
 
+            modelBuilder.Entity("Shoes.Entites.User", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Adress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiredDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.DisCountArea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DisCountAreas");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.DisCountAreaLanguage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("DisCountAreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LangCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DisCountAreaId");
+
+                    b.ToTable("DisCountAreaLanguages");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.HomeSliderItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BackgroundImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HomeSliderItems");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.HomeSliderLanguage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("HomeSliderItemId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("LangCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HomeSliderItemId");
+
+                    b.ToTable("HomeSliderLanguages");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.TopCategoryArea", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("SubCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("TopCategoryAreas");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.TopCategoryAreaLanguage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LangCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("TopCategoryAreaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TopCategoryAreaId");
+
+                    b.ToTable("TopCategoryAreaLanguages");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Shoes.Core.Entities.Concrete.AppRole", null)
@@ -625,7 +818,7 @@ namespace Shoes.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Shoes.Core.Entities.Concrete.AppUser", null)
+                    b.HasOne("Shoes.Entites.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -634,7 +827,7 @@ namespace Shoes.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Shoes.Core.Entities.Concrete.AppUser", null)
+                    b.HasOne("Shoes.Entites.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -649,7 +842,7 @@ namespace Shoes.DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Shoes.Core.Entities.Concrete.AppUser", null)
+                    b.HasOne("Shoes.Entites.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -658,7 +851,7 @@ namespace Shoes.DataAccess.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Shoes.Core.Entities.Concrete.AppUser", null)
+                    b.HasOne("Shoes.Entites.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -674,6 +867,33 @@ namespace Shoes.DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.Cupon", b =>
+                {
+                    b.HasOne("Shoes.Entites.Category", "Category")
+                        .WithMany("Cupons")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Shoes.Entites.Product", "Product")
+                        .WithMany("Cupons")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("Shoes.Entites.SubCategory", "SubCategory")
+                        .WithMany("Cupons")
+                        .HasForeignKey("SubCategoryId");
+
+                    b.HasOne("Shoes.Entites.User", "User")
+                        .WithMany("Cupons")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("SubCategory");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Shoes.Entites.Order", b =>
@@ -816,7 +1036,7 @@ namespace Shoes.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("Shoes.Entites.SubCategory", "SubCategory")
-                        .WithMany()
+                        .WithMany("SubCategoryProducts")
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -826,9 +1046,59 @@ namespace Shoes.DataAccess.Migrations
                     b.Navigation("SubCategory");
                 });
 
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.DisCountAreaLanguage", b =>
+                {
+                    b.HasOne("Shoes.Entites.WebUIEntites.DisCountArea", "DisCountArea")
+                        .WithMany("Languages")
+                        .HasForeignKey("DisCountAreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DisCountArea");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.HomeSliderLanguage", b =>
+                {
+                    b.HasOne("Shoes.Entites.WebUIEntites.HomeSliderItem", "HomeSliderItem")
+                        .WithMany("Languages")
+                        .HasForeignKey("HomeSliderItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HomeSliderItem");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.TopCategoryArea", b =>
+                {
+                    b.HasOne("Shoes.Entites.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Shoes.Entites.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.TopCategoryAreaLanguage", b =>
+                {
+                    b.HasOne("Shoes.Entites.WebUIEntites.TopCategoryArea", "TopCategoryArea")
+                        .WithMany("TopCategoryAreaLanguages")
+                        .HasForeignKey("TopCategoryAreaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TopCategoryArea");
+                });
+
             modelBuilder.Entity("Shoes.Entites.Category", b =>
                 {
                     b.Navigation("CategoryLanguages");
+
+                    b.Navigation("Cupons");
 
                     b.Navigation("SubCategories");
                 });
@@ -847,6 +1117,8 @@ namespace Shoes.DataAccess.Migrations
 
             modelBuilder.Entity("Shoes.Entites.Product", b =>
                 {
+                    b.Navigation("Cupons");
+
                     b.Navigation("Pictures");
 
                     b.Navigation("ProductLanguages");
@@ -872,7 +1144,31 @@ namespace Shoes.DataAccess.Migrations
 
             modelBuilder.Entity("Shoes.Entites.SubCategory", b =>
                 {
+                    b.Navigation("Cupons");
+
                     b.Navigation("SubCategoryLanguages");
+
+                    b.Navigation("SubCategoryProducts");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.User", b =>
+                {
+                    b.Navigation("Cupons");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.DisCountArea", b =>
+                {
+                    b.Navigation("Languages");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.HomeSliderItem", b =>
+                {
+                    b.Navigation("Languages");
+                });
+
+            modelBuilder.Entity("Shoes.Entites.WebUIEntites.TopCategoryArea", b =>
+                {
+                    b.Navigation("TopCategoryAreaLanguages");
                 });
 #pragma warning restore 612, 618
         }

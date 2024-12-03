@@ -15,11 +15,35 @@ namespace Shoes.DataAccess.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsFeatured = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DisCountAreas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DisCountAreas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HomeSliderItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BackgroundImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeSliderItems", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -35,17 +59,18 @@ namespace Shoes.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Product",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiscountPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    YeastCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Product", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,8 +117,6 @@ namespace Shoes.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -107,7 +130,12 @@ namespace Shoes.DataAccess.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adress = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,6 +158,66 @@ namespace Shoes.DataAccess.Migrations
                         name: "FK_CategoryLanguages_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DisCountAreaLanguages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LangCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DisCountAreaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DisCountAreaLanguages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DisCountAreaLanguages_DisCountAreas_DisCountAreaId",
+                        column: x => x.DisCountAreaId,
+                        principalTable: "DisCountAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "HomeSliderLanguages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LangCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HomeSliderItemId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HomeSliderLanguages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_HomeSliderLanguages_HomeSliderItems_HomeSliderItemId",
+                        column: x => x.HomeSliderItemId,
+                        principalTable: "HomeSliderItems",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -166,55 +254,32 @@ namespace Shoes.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Pictures", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Pictures_Product_ProductId",
+                        name: "FK_Pictures_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductLanguage",
+                name: "ProductLanguages",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LangCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Information = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductLanguage", x => x.Id);
+                    table.PrimaryKey("PK_ProductLanguages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductLanguage_Product_ProductId",
+                        name: "FK_ProductLanguages_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubCategories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubCategories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SubCategories_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_SubCategories_Product_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Product",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -281,14 +346,14 @@ namespace Shoes.DataAccess.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LangCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DeliveryMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    ShippingMethodId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ShippingMethodLanguages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ShippingMethodLanguages_ShippingMethods_DeliveryMethodId",
-                        column: x => x.DeliveryMethodId,
+                        name: "FK_ShippingMethodLanguages_ShippingMethods_ShippingMethodId",
+                        column: x => x.ShippingMethodId,
                         principalTable: "ShippingMethods",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -307,9 +372,9 @@ namespace Shoes.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_SizeProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SizeProducts_Product_ProductId",
+                        name: "FK_SizeProducts_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -406,6 +471,44 @@ namespace Shoes.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cupons",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DisCountPercent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cupons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cupons_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cupons_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cupons_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Cupons_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SubCategoryLanguages",
                 columns: table => new
                 {
@@ -437,9 +540,9 @@ namespace Shoes.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_SubCategoryProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SubCategoryProducts_Product_ProductId",
+                        name: "FK_SubCategoryProducts_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -448,6 +551,30 @@ namespace Shoes.DataAccess.Migrations
                         principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TopCategoryAreas",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TopCategoryAreas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TopCategoryAreas_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_TopCategoryAreas_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -474,15 +601,36 @@ namespace Shoes.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SoldProducts_Product_ProductId",
+                        name: "FK_SoldProducts_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Product",
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_SoldProducts_Sizes_SizeId",
                         column: x => x.SizeId,
                         principalTable: "Sizes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TopCategoryAreaLanguages",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LangCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TopCategoryAreaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TopCategoryAreaLanguages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TopCategoryAreaLanguages_TopCategoryAreas_TopCategoryAreaId",
+                        column: x => x.TopCategoryAreaId,
+                        principalTable: "TopCategoryAreas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -513,6 +661,36 @@ namespace Shoes.DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cupons_CategoryId",
+                table: "Cupons",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupons_ProductId",
+                table: "Cupons",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupons_SubCategoryId",
+                table: "Cupons",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cupons_UserId",
+                table: "Cupons",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DisCountAreaLanguages_DisCountAreaId",
+                table: "DisCountAreaLanguages",
+                column: "DisCountAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HomeSliderLanguages_HomeSliderItemId",
+                table: "HomeSliderLanguages",
+                column: "HomeSliderItemId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_PaymentMethodId",
                 table: "Orders",
                 column: "PaymentMethodId");
@@ -533,8 +711,8 @@ namespace Shoes.DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductLanguage_ProductId",
-                table: "ProductLanguage",
+                name: "IX_ProductLanguages_ProductId",
+                table: "ProductLanguages",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
@@ -545,9 +723,9 @@ namespace Shoes.DataAccess.Migrations
                 filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ShippingMethodLanguages_DeliveryMethodId",
+                name: "IX_ShippingMethodLanguages_ShippingMethodId",
                 table: "ShippingMethodLanguages",
-                column: "DeliveryMethodId");
+                column: "ShippingMethodId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SizeProducts_ProductId",
@@ -580,11 +758,6 @@ namespace Shoes.DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SubCategories_ProductId",
-                table: "SubCategories",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SubCategoryLanguages_SubCategoryId",
                 table: "SubCategoryLanguages",
                 column: "SubCategoryId");
@@ -597,6 +770,21 @@ namespace Shoes.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_SubCategoryProducts_SubCategoryId",
                 table: "SubCategoryProducts",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopCategoryAreaLanguages_TopCategoryAreaId",
+                table: "TopCategoryAreaLanguages",
+                column: "TopCategoryAreaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopCategoryAreas_CategoryId",
+                table: "TopCategoryAreas",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TopCategoryAreas_SubCategoryId",
+                table: "TopCategoryAreas",
                 column: "SubCategoryId");
 
             migrationBuilder.CreateIndex(
@@ -634,13 +822,22 @@ namespace Shoes.DataAccess.Migrations
                 name: "CategoryLanguages");
 
             migrationBuilder.DropTable(
+                name: "Cupons");
+
+            migrationBuilder.DropTable(
+                name: "DisCountAreaLanguages");
+
+            migrationBuilder.DropTable(
+                name: "HomeSliderLanguages");
+
+            migrationBuilder.DropTable(
                 name: "PaymentMethodLanguages");
 
             migrationBuilder.DropTable(
                 name: "Pictures");
 
             migrationBuilder.DropTable(
-                name: "ProductLanguage");
+                name: "ProductLanguages");
 
             migrationBuilder.DropTable(
                 name: "ShippingMethodLanguages");
@@ -658,10 +855,19 @@ namespace Shoes.DataAccess.Migrations
                 name: "SubCategoryProducts");
 
             migrationBuilder.DropTable(
+                name: "TopCategoryAreaLanguages");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "DisCountAreas");
+
+            migrationBuilder.DropTable(
+                name: "HomeSliderItems");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -670,7 +876,10 @@ namespace Shoes.DataAccess.Migrations
                 name: "Sizes");
 
             migrationBuilder.DropTable(
-                name: "SubCategories");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "TopCategoryAreas");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethods");
@@ -679,10 +888,10 @@ namespace Shoes.DataAccess.Migrations
                 name: "ShippingMethods");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
-                name: "Product");
+                name: "Categories");
         }
     }
 }

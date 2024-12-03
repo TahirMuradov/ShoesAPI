@@ -61,7 +61,7 @@ namespace Shoes.WebAPI.Controllers
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Register([FromBody]RegisterDTO registerDTO, [FromHeader] string LangCode)
-        {
+            {
             
             var result=await _authService.RegisterAsync(registerDTO, LangCode);
             return result.IsSuccess?Ok(result):BadRequest(result) ;
@@ -93,7 +93,7 @@ namespace Shoes.WebAPI.Controllers
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpPut("[action]")]
-        public async Task<IActionResult> ChangePasswordForTokenForgotPassword([FromQuery]string Email,[FromQuery] string Token, [FromBody] string NewPassword)
+        public async Task<IActionResult> ChangePasswordForTokenForgotPassword([FromQuery]string Email,[FromQuery] string Token, [FromQuery] string NewPassword)
         {
             var result=await _authService.ChangePasswordForTokenForgotPassword(Email, Token, NewPassword);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
