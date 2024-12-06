@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Helpers;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.Core.Utilites.Results.Concrete.SuccessResults;
@@ -7,6 +9,7 @@ using Shoes.DataAccess.Abstarct;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
 using Shoes.Entites.DTOs.CuponDTOs;
+using Shoes.Entites.DTOs.PaymentMethodDTOs;
 using System.Net;
 
 namespace Shoes.DataAccess.Concrete
@@ -164,6 +167,42 @@ namespace Shoes.DataAccess.Concrete
                 DisCountPercent = checkedCuponCope.DisCountPercent
 
             }, HttpStatusCode.OK);
+        }
+
+        public async Task<IDataResult<PaginatedList<GetAllCuponDTO>>> GetAllCuponAsync(int page,string LangCode)
+        {
+            var query = _appDBContext.Cupons.AsSplitQuery().AsNoTracking().Select(x => new GetAllCuponDTO
+            {
+                CuponId = x.Id,
+                CuponCode = x.Code,
+                IsActive = x.IsActive,
+                DisCountPercent = x.DisCountPercent,
+                ProductCode = x.Product.ProductCode,
+                CategoryName = x.Category.CategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content,
+                SubCategoryName = x.SubCategory.SubCategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content,
+                UserEmail = x.User.Email,
+
+            });
+            var resultData = await PaginatedList<GetAllCuponDTO>.CreateAsync(query,page , 10);
+            return new SuccessDataResult<PaginatedList<GetAllCuponDTO>>(resultData, HttpStatusCode.OK);
+        }
+
+        public IDataResult<GetCuponDetailDTO> GetCuponDetail(Guid CuponId,string LangCode)
+        {
+            var query = _appDBContext.Cupons.AsSplitQuery().AsNoTracking().Select(x => new GetCuponDetailDTO
+            {
+                CuponId=x.Id,
+                IsActive=x.IsActive,
+                CuponCode=x.Code,
+                DisCountPercent=x.DisCountPercent,
+                Category=new KeyValuePair<Guid, string>(x.Category.Id,x.Category.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content),
+                SubCategory=new KeyValuePair<Guid, string>(x.SubCategory.Id,x.SubCategory.SubCategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content),
+                Product=new KeyValuePair<Guid, string>(x.Product.Id,x.Product.ProductCode),
+                User=new KeyValuePair<Guid, string>(x.User.Id,x.User.Email),
+                
+            }).FirstOrDefault(x => x.CuponId == CuponId);
+            if (query is null) return new ErrorDataResult<GetCuponDetailDTO>(HttpStatusCode.NotFound);
+            return new SuccessDataResult<GetCuponDetailDTO>(query, HttpStatusCode.OK);
         }
 
         public IResult RemoveCupon(Guid Id)

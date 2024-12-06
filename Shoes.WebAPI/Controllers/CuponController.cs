@@ -81,5 +81,17 @@ namespace Shoes.WebAPI.Controllers
                   
             }
         }
+        [HttpGet("[action]")]
+        public IActionResult GetCuponDetail([FromQuery]Guid CuponId, [FromHeader]string LangCode)
+        {
+            var result = _cuponService.GetCuponDetail(CuponId, LangCode);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllCupon([FromQuery]int Page, [FromHeader] string LangCode)
+        {
+            var result = await _cuponService.GetAllCuponAsync(Page, LangCode);
+            return result.IsSuccess ? Ok(result) : BadRequest(result);
+        }
     }
 }

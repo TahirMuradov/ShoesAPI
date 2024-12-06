@@ -2,6 +2,7 @@
 using Shoes.Bussines.Abstarct;
 using Shoes.Bussines.FluentValidations.CuponDTOValidations;
 using Shoes.Core.Helpers;
+using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
 using Shoes.Core.Utilites.Results.Concrete.ErrorResults;
 using Shoes.DataAccess.Abstarct;
@@ -115,6 +116,22 @@ namespace Shoes.Bussines.Concrete
             if (string.IsNullOrEmpty(cuponCode))
                 return new ErrorDataResult<GetCuponInfoDTO>(HttpStatusCode.BadRequest);
             return _cuponDAL.CheckedCuponCode(cuponCode);
+        }
+
+        public IDataResult<GetCuponDetailDTO> GetCuponDetail(Guid CuponId, string LangCode)
+        {
+            if (CuponId == default)
+                return new ErrorDataResult<GetCuponDetailDTO>(HttpStatusCode.BadRequest);
+            if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode))
+                LangCode = DefaultLaunguage;
+            return _cuponDAL.GetCuponDetail(CuponId, LangCode);
+        }
+
+        public async Task<IDataResult<PaginatedList<GetAllCuponDTO>>> GetAllCuponAsync(int page, string LangCode)
+        {
+            if (page < 1) page = 1;
+            if (string.IsNullOrEmpty(LangCode) || !SupportedLaunguages.Contains(LangCode)) LangCode = DefaultLaunguage;
+            return await _cuponDAL.GetAllCuponAsync(page, LangCode);
         }
     }
 }
