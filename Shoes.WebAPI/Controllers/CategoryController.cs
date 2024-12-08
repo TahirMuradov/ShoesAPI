@@ -67,5 +67,12 @@ namespace Shoes.WebAPI.Controllers
             var result=_categoryService.UpdateCategory(updateCategoryDTO, LangCode);
             return result.IsSuccess? Ok(result):BadRequest(result);
         }
+        [HttpGet("[action]")]
+        [Authorize(Policy ="AllRole")]
+    public IActionResult GetAllCategoryForSelect([FromHeader]string LangCode)
+        {
+            var result=_categoryService.GetAllCategoryForSelect(LangCode);
+            return result.IsSuccess ? Ok(result):BadRequest(result);    
+        }
     }
 }

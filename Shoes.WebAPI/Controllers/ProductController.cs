@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using iText.IO.Util;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shoes.Bussines.Abstarct;
 using Shoes.Entites.DTOs.ProductDTOs;
@@ -45,7 +46,14 @@ namespace Shoes.WebAPI.Controllers
             var result = await _productService.GetAllProductDashboardAsync(LangCode, page);
             return result.IsSuccess?Ok(result):BadRequest(result);
         }
-    
+        [Authorize(Policy ="AllRole")]
+        [HttpGet("[action]")]
+        public IActionResult GetAllProductForSelect()
+        {
+            var result=_productService.GetAllProductForSelect();
+            return result.IsSuccess?Ok(result):BadRequest(result);
+        }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllProduct([FromQuery] GetProductFilterParamsDTO filterParamsDTO ,[FromHeader] string LangCode)
         {

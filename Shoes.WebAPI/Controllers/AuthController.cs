@@ -14,7 +14,14 @@ namespace Shoes.WebAPI.Controllers
         {
             _authService = authService;
         }
-     
+        [HttpGet("[action]")]
+        [Authorize(Policy = "AllRole")]
+        public IActionResult GetAllUserForSelect()
+        {
+            var result=_authService.GetAllUserForSelect();  
+            return result.IsSuccess?Ok(result):BadRequest(result);
+
+        }
         [HttpGet("[action]")]
         [Authorize(Policy = "SuperAdminRole")]
       

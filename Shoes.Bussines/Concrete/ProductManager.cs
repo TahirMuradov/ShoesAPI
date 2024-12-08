@@ -114,5 +114,10 @@ namespace Shoes.Bussines.Concrete
             return await _productDAL.UpdateProductAsync(updateProductDTO);
 
         }
+
+        public IDataResult<IQueryable<GetAllProductForSelectDTO>> GetAllProductForSelect()
+        {
+          return _productDAL.GetAllProductForSelect();
+        }
     }
 }

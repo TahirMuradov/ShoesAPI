@@ -32,14 +32,14 @@ namespace Shoes.WebAPI.Controllers
         }
         [HttpPost("[action]")]
         [Authorize(Policy = "AllRole")]
-        public IActionResult AddSpecificCuponForSubCategory(AddCuponForSubCategoryDTO addCuponForSubCategoryDTO, string LangCode)
+        public IActionResult AddSpecificCuponForSubCategory([FromBody]AddCuponForSubCategoryDTO addCuponForSubCategoryDTO, [FromHeader]string LangCode)
         {
             var result=_cuponService.AddSpecificCuponForSubCategory(addCuponForSubCategoryDTO, LangCode);
             return result.IsSuccess?Ok(result):BadRequest(result);
         }
         [HttpPost("[action]")]
         [Authorize(Policy = "AllRole")]
-        public IActionResult AddSpecificCuponForProduct(AddCuponForProductDTO addCuponForProductDTO, string LangCode)
+        public IActionResult AddSpecificCuponForProduct([FromBody]AddCuponForProductDTO addCuponForProductDTO, [FromHeader]string LangCode)
         {
             var result= _cuponService.AddSpecificCuponForProduct(addCuponForProductDTO, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);

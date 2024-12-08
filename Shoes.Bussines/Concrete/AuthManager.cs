@@ -429,6 +429,12 @@ namespace Shoes.Bussines.Concrete
             return new ErrorResult(messages:tokenResult.Errors.Select(x=>x.Description).ToList(),HttpStatusCode.BadRequest);
 
         }
+
+        public IDataResult<IQueryable<GetAllUserForSelectDTO>> GetAllUserForSelect()
+        {
+            var query=_userManager.Users.Select(x=>new GetAllUserForSelectDTO { Userid=x.Id,Email=x.Email}).AsNoTracking().AsQueryable();
+            return new SuccessDataResult<IQueryable<GetAllUserForSelectDTO>>(response:query,HttpStatusCode.OK);
+        }
     }
 }
 

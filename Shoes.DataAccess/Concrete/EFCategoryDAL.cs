@@ -110,6 +110,16 @@ namespace Shoes.DataAccess.Concrete
             }, statusCode: HttpStatusCode.OK);
         }
 
+        public IDataResult<IQueryable< GetAllCategoryForSelectDTO>> GetAllCategoryForSelect( string LangCode)
+        {
+            var query = _dBContext.Categories.Include(x => x.CategoryLanguages).AsNoTracking().Select(x => new GetAllCategoryForSelectDTO
+            {
+                Id = x.Id,
+                Name = x.CategoryLanguages.FirstOrDefault(y => y.LangCode == LangCode).Content
+            });
+            return new SuccessDataResult<IQueryable<GetAllCategoryForSelectDTO>>(response: query, HttpStatusCode.OK);
+        }
+
         public IDataResult<GETCategoryForUpdateDTO> GetCategoryForUpdate(Guid Id)
         {
             var category = _dBContext.Categories.Include(x=>x.CategoryLanguages).FirstOrDefault(x => x.Id == Id);

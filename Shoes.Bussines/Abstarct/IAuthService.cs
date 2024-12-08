@@ -17,6 +17,7 @@ namespace Shoes.Bussines.Abstarct
         Task<IResult> SendEmailTokenForForgotPassword(string Email);
         Task<IResult> CheckTokenForForgotPassword(string Email, string token);
         Task<IResult> ChangePasswordForTokenForgotPassword(string Email, string token, string NewPassword);
+       IDataResult<IQueryable<GetAllUserForSelectDTO>> GetAllUserForSelect();
         Task<IDataResult<string>> UpdateRefreshTokenAsnyc(string refreshToken, User user, string culture);
         Task<IResult> RemoveRoleFromUserAsync(RemoveRoleUserDTO removeRoleUserDTO,string culture);
         Task<IDataResult<Token>> LoginAsync(LoginDTO loginDTO, string culture);

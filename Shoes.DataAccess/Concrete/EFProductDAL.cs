@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using iText.Commons.Bouncycastle.Asn1.Esf;
+using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Helpers.FileHelper;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
@@ -177,6 +178,16 @@ namespace Shoes.DataAccess.Concrete
                  }) ;
             var resultData = await PaginatedList<GetProductDashboardDTO>.CreateAsync(productQuery, page, 10);
             return new SuccessDataResult<PaginatedList<GetProductDashboardDTO>>(response: resultData, HttpStatusCode.OK);
+        }
+
+        public IDataResult<IQueryable<GetAllProductForSelectDTO>> GetAllProductForSelect()
+        {
+         var query=_appDBContext.Products.Select(x=>new GetAllProductForSelectDTO
+         {
+             Id=x.Id,
+             ProductCode=x.ProductCode,
+         }).AsNoTracking();
+            return new SuccessDataResult<IQueryable<GetAllProductForSelectDTO>>(query, HttpStatusCode.OK);
         }
 
         public IDataResult<GetDetailProductDTO> GetProductDetail(Guid Id, string LangCode)
