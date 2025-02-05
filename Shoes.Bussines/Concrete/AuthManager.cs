@@ -47,6 +47,8 @@ namespace Shoes.Bussines.Concrete
         private readonly IEmailHelper _emailHelper;
         private readonly IConfiguration _configuration;
 
+
+
         public AuthManager(UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<AppRole> roleManager, ITokenService tokenService, IEmailHelper emailHelper, IConfiguration configuration)
         {
             _userManager = userManager;
@@ -129,6 +131,7 @@ namespace Shoes.Bussines.Concrete
             findUser.RefreshToken = null;
             findUser.RefreshTokenExpiredDate = null;
             var result = await _userManager.UpdateAsync(findUser);
+            await _signInManager.SignOutAsync();
             if (result.Succeeded)
             {
                 return new SuccessResult(statusCode: HttpStatusCode.OK);

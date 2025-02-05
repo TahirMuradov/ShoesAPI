@@ -126,17 +126,17 @@ builder.Services/*.AddControllers(options => options.Filters.Add<ValidationFilte
 #endregion
 var corsRuls = builder.Configuration.GetValue<string>("Domain:Front");
 
-
-builder.Services.AddCors(o =>
+Console.WriteLine(corsRuls);
+builder.Services.AddCors(options =>
 {
-    o.AddPolicy(corsRuls,
-         p =>
-         {
-             p.AllowAnyHeader();
-             p.AllowAnyMethod();
-             p.AllowAnyOrigin();
-         }
-        );
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            //builder.WithOrigins(corsRuls) // Specify the allowed origin
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader() // Allow any headers (like Content-Type)
+                   .AllowAnyMethod(); // Allow any HTTP methods (GET, POST, etc.)
+        });
 });
 
 var app = builder.Build();
@@ -150,7 +150,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseCors(corsRuls);
+app.UseCors("AllowSpecificOrigin");
 //get in ui culture Accept-Language: 
 app.UseRequestLocalization();
 app.UseAuthentication();
