@@ -114,12 +114,12 @@ namespace Shoes.DataAccess.Concrete
 
         public IDataResult<string>AddSpecificCuponForUser(AddCuponForUserDTO addedCuponForUserDTO)
         {
-            var checekdUser =  _appDBContext.Users.AsNoTracking().FirstOrDefault ( x=>x.Id==addedCuponForUserDTO.UserId);
+            var checekdUser =  _appDBContext.Users.Include(x=>x.Cupons).AsNoTracking().FirstOrDefault ( x=>x.Id==addedCuponForUserDTO.UserId);
             if (checekdUser is null) return new ErrorDataResult<string>(HttpStatusCode.NotFound);
             var checekdPercent = checekdUser.Cupons.FirstOrDefault(x => x.DisCountPercent == addedCuponForUserDTO.DisCountPercent);
             if (checekdPercent is not null) return new ErrorDataResult<string>(response: checekdPercent.Code, HttpStatusCode.AlreadyReported);
             codeGenerate: string CuponCode = GenerateCouponCode.GenerateCouponCodeFromGuid();
-            if (!_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
+            if (_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
                 goto codeGenerate;
 
             Cupon cupon = new Cupon()
