@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Shoes.Core.Helpers;
 using Shoes.Core.Helpers.PageHelper;
 using Shoes.Core.Utilites.Results.Abstract;
@@ -9,7 +8,6 @@ using Shoes.DataAccess.Abstarct;
 using Shoes.DataAccess.Concrete.SqlServer;
 using Shoes.Entites;
 using Shoes.Entites.DTOs.CuponDTOs;
-using Shoes.Entites.DTOs.PaymentMethodDTOs;
 using System.Net;
 
 namespace Shoes.DataAccess.Concrete
@@ -32,7 +30,7 @@ namespace Shoes.DataAccess.Concrete
             var checekdPercent = checekdCategory.Cupons.FirstOrDefault(x => x.DisCountPercent == addCuponForCategoryDTO.DisCountPercent);
             if (checekdPercent is not null) return new ErrorDataResult<string>(response: checekdPercent.Code, HttpStatusCode.AlreadyReported);
             codeGenerate: string CuponCode = GenerateCouponCode.GenerateCouponCodeFromGuid();
-            if (!_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
+            if (_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
                 goto codeGenerate;
 
             Cupon cupon = new Cupon()
@@ -62,7 +60,7 @@ namespace Shoes.DataAccess.Concrete
 
 
             codeGenerate: string CuponCode = GenerateCouponCode.GenerateCouponCodeFromGuid();
-            if (!_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
+            if (_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
                 goto codeGenerate;
 
             Cupon cupon = new Cupon()
@@ -92,7 +90,7 @@ namespace Shoes.DataAccess.Concrete
             if (checekdPercent is not null) return new ErrorDataResult<string>(response: checekdPercent.Code, HttpStatusCode.AlreadyReported);
 
             codeGenerate: string CuponCode = GenerateCouponCode.GenerateCouponCodeFromGuid();
-            if (!_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
+            if (_appDBContext.Cupons.AsNoTracking().Any(x => x.Code == CuponCode))
                 goto codeGenerate;
 
             Cupon cupon = new Cupon()
