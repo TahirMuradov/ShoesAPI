@@ -41,7 +41,19 @@ namespace Shoes.DataAccess.Concrete.SqlServer
             base.OnModelCreating(builder);
             builder.Entity<User>().ToTable("Users");
 
-            builder.Entity<AppRole>().ToTable("Roles");
+            builder.Entity<AppRole>().ToTable("Roles");         
+            builder.Entity<SubCategory>()
+                .HasOne(x => x.Category)
+                .WithMany(x => x.SubCategories)
+                .HasForeignKey(x => x.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+            builder.Entity<Cupon>()
+                .HasOne(Cupon => Cupon.Category)
+                .WithMany(Category => Category.Cupons)
+                .HasForeignKey(Cupon => Cupon.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+            ;
+
         }
     }
 }

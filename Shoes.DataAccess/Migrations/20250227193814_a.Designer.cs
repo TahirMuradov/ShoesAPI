@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Shoes.DataAccess.Concrete.SqlServer;
 
@@ -11,9 +12,11 @@ using Shoes.DataAccess.Concrete.SqlServer;
 namespace Shoes.DataAccess.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    partial class AppDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250227193814_a")]
+    partial class a
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -531,7 +534,7 @@ namespace Shoes.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -870,8 +873,7 @@ namespace Shoes.DataAccess.Migrations
                 {
                     b.HasOne("Shoes.Entites.Category", "Category")
                         .WithMany("Cupons")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("CategoryId");
 
                     b.HasOne("Shoes.Entites.Product", "Product")
                         .WithMany("Cupons")
@@ -1008,7 +1010,8 @@ namespace Shoes.DataAccess.Migrations
                     b.HasOne("Shoes.Entites.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Category");
                 });

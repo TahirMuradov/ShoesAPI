@@ -68,6 +68,8 @@ namespace Shoes.Bussines.DependencyResolver
             services.AddScoped<ICuponService,CuponManager>();
             services.AddScoped<ICartDAl, EFCartDAL>();
             services.AddScoped<ICartService, CartManager>();
+            services.AddScoped<IHomeService, HomeManager>();
+            services.AddScoped<IHomeDAL, EFHomeDAL>();
 
 
 

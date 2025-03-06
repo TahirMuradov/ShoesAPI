@@ -9,12 +9,13 @@ using Shoes.Entites;
 using Shoes.Entites.DTOs.SubCategoryDTOs;
 using System.Net;
 
+
 namespace Shoes.DataAccess.Concrete
 {
     public class EFSubCategoryDAL:ISubCategoryDAL
     {
         private readonly AppDBContext _appDBContext;
-
+       
         public EFSubCategoryDAL(AppDBContext appDBContext)
         {
             _appDBContext = appDBContext;
@@ -164,6 +165,9 @@ namespace Shoes.DataAccess.Concrete
               return new ErrorResult(HttpStatusCode.NotFound);
                 if (data.CategoryId!=updateCategory.CategoryId)
                 {
+                    Category checekdCategoryId = _appDBContext.Categories.FirstOrDefault(x => x.Id == updateCategory.CategoryId);
+                    if (checekdCategoryId is null)
+                        return new ErrorResult(HttpStatusCode.NotFound);
                     data.CategoryId = updateCategory.CategoryId;
                     _appDBContext.SubCategories.Update(data);
                 }

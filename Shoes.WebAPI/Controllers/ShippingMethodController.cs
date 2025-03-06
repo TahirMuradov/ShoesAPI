@@ -19,7 +19,7 @@ namespace Shoes.WebAPI.Controllers
         [Authorize(Policy = "AllRole")]
         [HttpPost("[action]")]
         public IActionResult AddShippingMethod([FromBody]AddShippingMethodDTO addShipping,[FromHeader] string LangCode)
-        {
+        {           
             var result=_shippingMethodService.AddShippingMethod(addShipping, LangCode); 
             return result.IsSuccess? Ok(result):BadRequest(result);
         }

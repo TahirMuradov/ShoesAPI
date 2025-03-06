@@ -85,10 +85,10 @@ namespace Shoes.Bussines.Concrete
            return await _productDAL.GetAllProductDashboardAsync(LangCode, page);
         }
 
-        public IDataResult<GetDetailProductDTO> GetProductDetail(Guid Id, string LangCode)
+        public IDataResult<GetDetailProductDTO> GetProductDetail(Guid? Id, string LangCode)
         {
-            if (Id==default) return new ErrorDataResult<GetDetailProductDTO>(HttpStatusCode.BadRequest);
-           if (!string.IsNullOrEmpty(LangCode)|| !SupportedLaunguages.Contains(LangCode))
+            if (Id==default||Id is null) return new ErrorDataResult<GetDetailProductDTO>(HttpStatusCode.BadRequest);
+           if (string.IsNullOrEmpty(LangCode)|| !SupportedLaunguages.Contains(LangCode))
                 LangCode= DefaultLaunguage;
            return _productDAL.GetProductDetail(Id, LangCode);
         }

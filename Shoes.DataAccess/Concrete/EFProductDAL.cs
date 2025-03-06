@@ -190,7 +190,7 @@ namespace Shoes.DataAccess.Concrete
             return new SuccessDataResult<IQueryable<GetAllProductForSelectDTO>>(query, HttpStatusCode.OK);
         }
 
-        public IDataResult<GetDetailProductDTO> GetProductDetail(Guid Id, string LangCode)
+        public IDataResult<GetDetailProductDTO> GetProductDetail(Guid? Id, string LangCode)
         {
             var product = _appDBContext.Products
         .AsNoTracking()
@@ -202,7 +202,7 @@ namespace Shoes.DataAccess.Concrete
             p.Price,
             p.ProductCode,
          
-          CategoryNames=p.SubCategories.Select(x=>new KeyValuePair<Guid,string>(x.SubCategory.CategoryId,x.SubCategory.Category.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content)).ToDictionary(),
+          CategoryNames=p.SubCategories.Select(x=>new KeyValuePair<string?,string>(x.SubCategory.CategoryId.ToString(),x.SubCategory.Category.CategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content)).ToDictionary(),
             SubCategoryNames = p.SubCategories
                 .Select(sc =>new KeyValuePair<Guid,string>(sc.SubCategoryId,sc.SubCategory.SubCategoryLanguages.FirstOrDefault(y=>y.LangCode==LangCode).Content))
                 .ToDictionary(),

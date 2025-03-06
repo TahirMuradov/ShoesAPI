@@ -20,9 +20,7 @@ namespace Shoes.WebAPI.Services
    
         }
         public LocalizedString GetKey(string key)
-        {
-            Console.WriteLine(key);
-            Console.WriteLine(_localizer[key]);
+        {          
             return _localizer[key];
         }
     }

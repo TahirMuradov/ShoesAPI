@@ -6,7 +6,7 @@
         public List<SubCategoryLanguage> SubCategoryLanguages { get; set; }
         public List<SubCategoryProduct> SubCategoryProducts { get; set; }
         public List<Cupon>? Cupons { get; set; }
-        public Guid CategoryId { get; set; }
-        public Category Category { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }

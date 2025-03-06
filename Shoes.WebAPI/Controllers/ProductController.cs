@@ -62,7 +62,7 @@ namespace Shoes.WebAPI.Controllers
         }
         
         [HttpGet("[action]")]
-        public IActionResult GetProductDetail([FromQuery] Guid Id, [FromHeader] string LangCode)
+        public IActionResult GetProductDetail([FromQuery] Guid? Id, [FromHeader] string LangCode)
         {
             var result = _productService.GetProductDetail(Id, LangCode);
             return result.IsSuccess ? Ok(result) :BadRequest(result);

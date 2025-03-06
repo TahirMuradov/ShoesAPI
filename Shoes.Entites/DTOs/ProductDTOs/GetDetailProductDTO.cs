@@ -5,7 +5,7 @@
         public Guid Id { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
-        public Dictionary<Guid,string> Categories { get; set; }
+        public Dictionary<string?,string> Categories { get; set; }
 
 
         public Dictionary<Guid,string> SubCategories { get; set; }
