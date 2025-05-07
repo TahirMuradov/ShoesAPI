@@ -65,7 +65,7 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult GetProductDetail([FromQuery] Guid? Id, [FromHeader] string LangCode)
         {
             var result = _productService.GetProductDetail(Id, LangCode);
-            return result.IsSuccess ? Ok(result) :BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
@@ -73,7 +73,7 @@ namespace Shoes.WebAPI.Controllers
         {
 
             var result=_productService.GetProductDetailDashboard(id);
-            return result.IsSuccess?Ok(result):BadRequest(result) ;
+            return StatusCode((int)result.StatusCode, result);
         }
     
     }

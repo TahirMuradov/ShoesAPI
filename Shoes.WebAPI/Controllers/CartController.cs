@@ -20,7 +20,7 @@ namespace Shoes.WebAPI.Controllers
         {
             var result=_cartService.CheckCartData(getCartDataDTO);
 
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

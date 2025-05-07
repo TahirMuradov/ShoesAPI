@@ -24,7 +24,7 @@ namespace Shoes.WebAPI.Controllers
         {
             
             var result = _categoryService.AddCategory(addCategoryDTO, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpDelete("[action]")]
         [Authorize(Policy = "AllRole")]
@@ -32,47 +32,47 @@ namespace Shoes.WebAPI.Controllers
         {
           
             var result = _categoryService.DeleteCategory(Id, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public IActionResult GetAllCategory([FromHeader] string LangCode)
         {
             var result= _categoryService.GetAllCategory(LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         [Authorize(Policy = "AllRole")]
         public async Task<IActionResult> GetAllCategoryForTable([FromHeader] string langCode, [FromQuery] int page = 1)
         {
             var result=await _categoryService.GetAllCategoryAsync(langCode, page);
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         [Authorize(Policy = "AllRole")]
         public IActionResult GetCategory([FromQuery] Guid Id, [FromHeader] string langCode) 
         { var result=_categoryService.GetCategory(Id, langCode);
-            return result.IsSuccess? Ok(result):BadRequest(result); 
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         [Authorize(Policy = "AllRole")]
         public IActionResult GetCategoryForUpdate([FromQuery] Guid Id)
         {
             var result=_categoryService.GetCategoryForUpdate(Id);
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpPut("[action]")]
         [Authorize(Policy = "AllRole")]
         public IActionResult UpdateCategory([FromBody]UpdateCategoryDTO updateCategoryDTO ,[FromHeader]string LangCode)
         {
             var result=_categoryService.UpdateCategory(updateCategoryDTO, LangCode);
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         [Authorize(Policy ="AllRole")]
     public IActionResult GetAllCategoryForSelect([FromHeader]string LangCode)
         {
             var result=_categoryService.GetAllCategoryForSelect(LangCode);
-            return result.IsSuccess ? Ok(result):BadRequest(result);    
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

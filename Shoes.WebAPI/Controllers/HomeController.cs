@@ -17,7 +17,7 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult GetAllData([FromHeader] string LangCode)
         {
             var result = _homeService.GetHomeAllData(LangCode);
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
 
 
         }

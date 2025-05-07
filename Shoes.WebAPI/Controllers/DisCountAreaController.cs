@@ -55,7 +55,7 @@ namespace Shoes.WebAPI.Controllers
         public async Task< IActionResult> GetDisCountAreaForTable([FromQuery] int page, [FromHeader] string LangCode)
         {
             var result=await _countAreaService.GetAllDisCountForTableAsync(LangCode, page);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

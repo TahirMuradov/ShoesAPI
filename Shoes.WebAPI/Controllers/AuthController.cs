@@ -37,11 +37,6 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDTO, [FromHeader] string LangCode)
         {
             var result = await _authService.LoginAsync(loginDTO, LangCode);
-
-
-
-
-
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }
         [HttpPut("[action]")]
@@ -91,7 +86,6 @@ namespace Shoes.WebAPI.Controllers
         [HttpPut("[action]")]
         public async Task<IActionResult> ChecekdConfirmedEmailToken([FromBody] ConfirmedEmailDTO confirmedEmailDTO, [FromHeader] string LangCode)
         {
-            if (string.IsNullOrEmpty(confirmedEmailDTO.Email) || string.IsNullOrEmpty(confirmedEmailDTO.token) || string.IsNullOrEmpty(LangCode)) return BadRequest();
             var result = await _authService.ChecekdConfirmedEmailTokenAsnyc(confirmedEmailDTO.Email, confirmedEmailDTO.token, LangCode);
             return result.IsSuccess ? Ok(result) : BadRequest(result);
         }

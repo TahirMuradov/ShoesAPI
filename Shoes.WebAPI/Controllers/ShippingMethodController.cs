@@ -20,29 +20,29 @@ namespace Shoes.WebAPI.Controllers
         [HttpPost("[action]")]
         public IActionResult AddShippingMethod([FromBody]AddShippingMethodDTO addShipping,[FromHeader] string LangCode)
         {           
-            var result=_shippingMethodService.AddShippingMethod(addShipping, LangCode); 
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            var result=_shippingMethodService.AddShippingMethod(addShipping, LangCode);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpPut("[action]")]
         public IActionResult UpdateShippingMethod([FromBody]UpdateShippingMethodDTO updateShipping,[FromHeader] string LangCode)
         {
             var result = _shippingMethodService.UpdateShippingMethod(updateShipping, LangCode);
-            return result.IsSuccess ? Ok(result):BadRequest(result);    
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult DeleteShippingMethod([FromQuery]Guid Id)
         {
             var result = _shippingMethodService.DeleteShippingMethod(Id);
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public IActionResult GetShippingMethodForUpdate([FromQuery]Guid Id) 
         {
             var result=_shippingMethodService.GetShippingMethodForUpdate(Id);
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
 
         }
         [Authorize(Policy = "AllRole")]
@@ -50,20 +50,20 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult GetShippingMethod([FromQuery]Guid Id, [FromHeader]string LangCode)
         {
             var result = _shippingMethodService.GetShippingMethod(Id, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllShippingMethodAsync([FromHeader]string LangCode,[FromQuery] int page = 1)
         {
             var result=await _shippingMethodService.GetAllShippingMethodAsync(LangCode, page);
-            return result.IsSuccess? Ok(result) :BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public IActionResult GetShippingMethodForUI([FromHeader] string LangCode)
         {
             var result=_shippingMethodService.GetShippingMethodForUI(LangCode);
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

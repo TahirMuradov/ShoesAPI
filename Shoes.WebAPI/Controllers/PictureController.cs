@@ -20,19 +20,19 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> AddPicture([FromQuery] Guid ProductId, [FromForm] IFormFileCollection Pictures, [FromHeader] String LangCode)
         {
             var result = await _pictureService.AddPictureAsync(new AddPictureDTO { ProductId = ProductId, Pictures = Pictures }, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpDelete("[action]")]
         public IActionResult DeletePicture([FromQuery] Guid PictureId)
         {
             var result = _pictureService.DeletePicture(PictureId);
-            return result.IsSuccess? Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllPicture([FromQuery] int page)
         {
             var result = await _pictureService.GetAllPictureAsync(page);
-            return result.IsSuccess? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

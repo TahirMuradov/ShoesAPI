@@ -17,13 +17,13 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult GetNewArriwalProduct([FromHeader] string LangCode)
         {
             var result=_arriwalService.GetNewArriwalProducts(LangCode);
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public IActionResult GetNewArriwalCategories([FromHeader] string LangCode)
         {
             var result=_arriwalService.GetNewArriwalCategories(LangCode);
-            return result.IsSuccess?Ok(result):BadRequest(result) ;
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

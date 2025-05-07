@@ -21,28 +21,28 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> AddHomeSliderItem([FromForm] AddHomeSliderItemDTO addHomeSliderItemDTO, [FromHeader] string LangCode)
         {
             var result = await _homeSliderItemService.AddHomeSliderItemAsync(addHomeSliderItemDTO, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpPut("[action]")]
         public async Task<IActionResult> UpdateHomeSliderItem([FromForm] UpdateHomeSliderItemDTO updateHomeSliderItemDTO, [FromHeader] string LangCode)
         {
             var result = await _homeSliderItemService.UpdateHomeSliderItemAsync(updateHomeSliderItemDTO, culture: LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult DeleteHomeSliderItem([FromQuery] Guid Id)
         {
             var result = _homeSliderItemService.DeleteHomeSliderItem(Id);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         [Authorize(Policy = "AllRole")]
         public async Task<IActionResult> GetAllHomeSliderItem([FromHeader] string LangCode, [FromQuery] int page)
         {
             var result = await _homeSliderItemService.GetAllHomeSliderAsync(LangCode, page);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
 
         }
         [Authorize(Policy = "AllRole")]
@@ -51,14 +51,14 @@ namespace Shoes.WebAPI.Controllers
         {
             var result = _homeSliderItemService.GetHomeSliderItemForUpdate(Id);
 
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
      
         public IActionResult GetHomeSliderItemForUI([FromHeader] string LangCode)
         {
             var result = _homeSliderItemService.GetHomeSliderItemForUI(LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
 
 

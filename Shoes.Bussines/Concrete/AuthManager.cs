@@ -318,6 +318,8 @@ namespace Shoes.Bussines.Concrete
 
         public async Task<IResult> ChecekdConfirmedEmailTokenAsnyc(string email, string token, string culture)
         {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token) || string.IsNullOrEmpty(culture)) return new ErrorResult(HttpStatusCode.BadRequest);
+
             var checekedEmail = await _userManager.FindByEmailAsync(email);
             if (checekedEmail is null) return new ErrorResult(message: AuthStatusMessage.UserNotFound.GetValueOrDefault(culture), HttpStatusCode.NotFound);
 

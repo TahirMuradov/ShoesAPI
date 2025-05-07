@@ -21,35 +21,35 @@ namespace Shoes.WebAPI.Controllers
         public IActionResult AddSize([FromBody] AddSizeDTO addSize,[FromHeader]string LangCode)
         {
             var result=_sizeService.AddSize(addSize, LangCode);
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpPut("[action]")]
         public IActionResult UpdateSize([FromBody] UpdateSizeDTO UpdateSize, [FromHeader] string LangCode)
         {
             var result = _sizeService.UpdateSize(UpdateSize, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest();
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult DeleteSize([FromQuery] Guid Id)
         {
             var result = _sizeService.DeleteSize(Id);
-            return result.IsSuccess ? Ok(result) : BadRequest();
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public IActionResult GetSize([FromQuery] Guid Id)
         {
             var result = _sizeService.GetSize(Id);
-            return result.IsSuccess ? Ok(result) : BadRequest();
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetAllSizeForTable([FromQuery] int page)
         {
             var result = await _sizeService.GetAllSizeForTableAsync(page);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public IActionResult GetAllSize()
@@ -57,7 +57,7 @@ namespace Shoes.WebAPI.Controllers
         {
             var result = _sizeService.GetAllSize();
 
-            return result.IsSuccess?Ok(result):BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
     }
 }

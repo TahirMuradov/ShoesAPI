@@ -21,7 +21,7 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> AddTopCategoryArea([FromForm] AddTopCategoryAreaDTO addTopCategoryAreaDTO, [FromHeader] string LangCode)
         {
             var result=await _topCategoryAreaService.AddTopCategoryAreaAsync(addTopCategoryAreaDTO, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
 
         }
         [Authorize(Policy = "AllRole")]
@@ -29,34 +29,34 @@ namespace Shoes.WebAPI.Controllers
         public async Task<IActionResult> UpdateTopCategoryArea([FromForm] UpdateTopCategoryAreaDTO updateTopCategoryAreaDTO, [FromHeader] string LangCode)
         {
             var result = await _topCategoryAreaService.UpdateTopCategoryAreaAsync(updateTopCategoryAreaDTO, LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpDelete("[action]")]
         public IActionResult RemoveTopCategoryArea([FromQuery]Guid Id)
         {
             var result=_topCategoryAreaService.RemoveTopCategoryArea(Id);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetTopCategoryArea([FromQuery] int page, [FromHeader] string LangCode)
         {
             var result = await _topCategoryAreaService.GetTopCategoryAreaAsync(LangCode, page);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [HttpGet("[action]")]
         public IActionResult GetTopCategoryAreaForUI([FromHeader] string LangCode)
         {
             var result=_topCategoryAreaService.GetTopCategoryAreaForUI(LangCode);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
         [Authorize(Policy = "AllRole")]
         [HttpGet("[action]")]
         public IActionResult GetTopCategoryAreaForUpdate([FromQuery]Guid Id)
         {
             var result=_topCategoryAreaService.GetTopcategoryAreaForUpdate(Id);
-            return result.IsSuccess ? Ok(result) : BadRequest(result);
+            return StatusCode((int)result.StatusCode, result);
         }
 
     }
